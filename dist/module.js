@@ -12342,69 +12342,76 @@ var Xg, Zg, Qg, $g, e_, t_, n_, r_, i_, a_, o_, s_, c_ = e((() => {
 		}
 	};
 })), f_, p_ = e((() => {
-	f_ = class extends Dialog {
+	f_ = class {
 		constructor(e) {
-			super({
-				title: "Runarcana Sync Login",
-				content: "\n        <form>\n          <p>Entre com email e senha ou use a conta Google habilitada no Firebase Authentication.</p>\n          <div class=\"form-group\">\n            <label>Email:</label>\n            <input type=\"text\" name=\"email\" />\n          </div>\n          <div class=\"form-group\">\n            <label>Senha:</label>\n            <input type=\"password\" name=\"password\" />\n          </div>\n        </form>\n      ",
-				buttons: {
-					google: {
-						icon: "<i class=\"fab fa-google\"></i>",
-						label: "Google",
-						callback: async () => {
-							try {
-								await e.loginWithGoogle(), ui.notifications.info("Runarcana Sync: Login com Google realizado com sucesso!");
-							} catch (e) {
-								ui.notifications.error("Erro no login com Google: " + e.message);
-							}
-						}
-					},
-					login: {
-						icon: "<i class=\"fas fa-check\"></i>",
-						label: "Login",
-						callback: async (t) => {
-							let n = t.find("[name=\"email\"]").val(), r = t.find("[name=\"password\"]").val();
-							try {
-								await e.login(n, r), ui.notifications.info("Runarcana Sync: Login realizado com sucesso!");
-							} catch (e) {
-								ui.notifications.error("Erro no login: " + e.message);
-							}
+			this.firebaseClient = e;
+		}
+		async render(e = !0) {
+			let { DialogV2: t } = foundry.applications.api;
+			return t.wait({
+				window: { title: "Runarcana Sync Login" },
+				content: "\n        <form>\n          <p>Entre com email e senha ou use a conta Google habilitada no Firebase Authentication.</p>\n          <div class=\"form-group\">\n            <label>Email:</label>\n            <input type=\"text\" name=\"email\" autofocus />\n          </div>\n          <div class=\"form-group\">\n            <label>Senha:</label>\n            <input type=\"password\" name=\"password\" />\n          </div>\n        </form>\n      ",
+				buttons: [{
+					action: "google",
+					label: "Google",
+					icon: "fab fa-google",
+					callback: async (e, t, n) => {
+						try {
+							await this.firebaseClient.loginWithGoogle(), ui.notifications.info("Runarcana Sync: Login com Google realizado com sucesso!");
+						} catch (e) {
+							ui.notifications.error("Erro no login com Google: " + e.message);
 						}
 					}
-				}
+				}, {
+					action: "login",
+					label: "Login",
+					icon: "fas fa-check",
+					default: !0,
+					callback: async (e, t, n) => {
+						let r = n.element.querySelector("[name=\"email\"]").value, i = n.element.querySelector("[name=\"password\"]").value;
+						try {
+							await this.firebaseClient.login(r, i), ui.notifications.info("Runarcana Sync: Login realizado com sucesso!");
+						} catch (e) {
+							ui.notifications.error("Erro no login: " + e.message);
+						}
+					}
+				}]
 			});
 		}
 	};
 })), m_, h_ = e((() => {
-	l_(), m_ = class extends Dialog {
+	l_(), m_ = class {
 		constructor(e, t, n) {
-			super({
-				title: "Vincular Ficha Runarcana",
-				content: "<p>Carregando fichas...</p>",
-				buttons: {}
-			}), this.firebaseClient = e, this.actor = t, this.syncManager = n;
+			this.firebaseClient = e, this.actor = t, this.syncManager = n;
 		}
-		async render(e, t) {
-			super.render(e, t), await this.loadDrafts();
-		}
-		async loadDrafts() {
+		async render(e = !0) {
+			let { DialogV2: t } = foundry.applications.api;
 			try {
 				let e = (await Gg(zg(lf(this.firebaseClient.db, "character_drafts"), Bg("ownerId", "==", this.firebaseClient.auth.currentUser.uid)))).docs.map((e) => ({
 					id: e.id,
 					...e.data()
-				})), t = "<form><div class=\"form-group\"><label>Ficha:</label><select name=\"draftId\">";
-				e.forEach((e) => {
-					t += `<option value="${e.id}">${e.concept?.name || "Sem Nome"} (${e.classBuild?.classId || "Sem Classe"})</option>`;
-				}), t += "</select></div></form>", this.data.content = t, this.data.buttons = { link: {
-					icon: "<i class=\"fas fa-link\"></i>",
-					label: "Vincular",
-					callback: async (e) => {
-						let t = e.find("[name=\"draftId\"]").val();
-						await this.actor.setFlag("runarcana-sync", "draftId", t), ui.notifications.info(`Actor vinculado à ficha ${t}`), this.syncManager && this.syncManager.startListening(this.actor);
-					}
-				} }, super.render(!0);
+				})), n = "<form><div class=\"form-group\"><label>Ficha:</label><select name=\"draftId\">";
+				return e.length === 0 ? n += "<option value=\"\">Nenhuma ficha encontrada</option>" : e.forEach((e) => {
+					n += `<option value="${e.id}">${e.concept?.name || "Sem Nome"} (${e.classBuild?.classId || "Sem Classe"})</option>`;
+				}), n += "</select></div></form>", t.wait({
+					window: { title: "Vincular Ficha Runarcana" },
+					content: n,
+					buttons: [{
+						action: "link",
+						label: "Vincular",
+						icon: "fas fa-link",
+						callback: async (e, t, n) => {
+							let r = n.element.querySelector("[name=\"draftId\"]").value;
+							r && (await this.actor.setFlag("runarcana-sync", "draftId", r), ui.notifications.info(`Actor vinculado à ficha ${r}`), this.syncManager && this.syncManager.startListening(this.actor));
+						}
+					}]
+				});
 			} catch (e) {
-				this.data.content = `<p>Erro ao carregar fichas: ${e.message}</p>`, super.render(!0);
+				return t.prompt({
+					window: { title: "Erro" },
+					content: `<p>Erro ao carregar fichas: ${e.message}</p>`,
+					ok: { label: "Fechar" }
+				});
 			}
 		}
 	};

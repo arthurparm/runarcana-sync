@@ -36,46 +36,132 @@ export class DraftSelectorDialog {
     this.syncManager = syncManager;
   }
 
+  getDraftDisplayName(draft) {
+    return draft?.concept?.name || draft?.title || 'Sem Nome';
+  }
+
+  getDraftClassLabel(draft) {
+    return draft?.classBuild?.classId || draft?.classId || 'Sem Classe';
+  }
+
+  async loadDrafts() {
+    const user = await this.firebaseClient.waitForAuthReady({ requireUser: true });
+    const q = query(
+      collection(this.firebaseClient.db, 'character_drafts'),
+      where('ownerId', '==', user.uid)
+    );
+    const snap = await getDocs(q);
+
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+
+  buildDialogContent(drafts) {
+    let html = `<form><div class="form-group"><label>Ficha:</label><select name="draftId">`;
+    if (drafts.length === 0) {
+      html += `<option value="">Nenhuma ficha encontrada</option>`;
+    } else {
+      drafts.forEach(draft => {
+        html += `<option value="${draft.id}">${escapeHtml(this.getDraftDisplayName(draft))} (${escapeHtml(this.getDraftClassLabel(draft))})</option>`;
+      });
+    }
+    html += `</select></div>`;
+
+    if (this.actor) {
+      html += `<p class="notes">Selecione uma ficha para vincular ao actor atual ou crie uma nova ficha Foundry já conectada ao draft.</p>`;
+    } else {
+      html += `<p class="notes">Selecione uma ficha para criar um novo actor do Foundry já vinculado ao draft.</p>`;
+    }
+
+    html += `</form>`;
+    return html;
+  }
+
+  getDialogElement(dialog) {
+    if (dialog?.element instanceof HTMLElement) return dialog.element;
+    if (dialog?.element?.[0] instanceof HTMLElement) return dialog.element[0];
+    return null;
+  }
+
+  getSelectedDraft(dialog, drafts) {
+    const root = this.getDialogElement(dialog);
+    const select = root?.querySelector('[name="draftId"]');
+    const draftId = select?.value;
+    if (!draftId) return null;
+
+    return drafts.find(draft => draft.id === draftId) ?? null;
+  }
+
+  async linkDraftToActor(draftId) {
+    if (!this.actor) return;
+
+    await this.actor.setFlag('runarcana-sync', 'draftId', draftId);
+    ui.notifications.info(`Actor vinculado à ficha ${draftId}`);
+
+    if (this.syncManager) {
+      this.syncManager.startListening(this.actor);
+    }
+  }
+
+  async createActorFromDraft(draft) {
+    const actorName = this.getDraftDisplayName(draft);
+    const actor = await Actor.create({
+      name: actorName,
+      type: 'character'
+    });
+
+    await actor.setFlag('runarcana-sync', 'draftId', draft.id);
+    ui.notifications.info(`Ficha ${actorName} criada e vinculada ao draft ${draft.id}`);
+
+    if (this.syncManager) {
+      this.syncManager.startListening(actor);
+    }
+
+    actor.sheet?.render(true);
+    return actor;
+  }
+
   async render(force = true) {
     const { DialogV2 } = foundry.applications.api;
 
     try {
-      const user = await this.firebaseClient.waitForAuthReady({ requireUser: true });
-      const q = query(
-        collection(this.firebaseClient.db, 'character_drafts'),
-        where('ownerId', '==', user.uid)
-      );
-      const snap = await getDocs(q);
-      const drafts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      
-      let html = `<form><div class="form-group"><label>Ficha:</label><select name="draftId">`;
-      if (drafts.length === 0) {
-        html += `<option value="">Nenhuma ficha encontrada</option>`;
-      } else {
-        drafts.forEach(d => {
-          html += `<option value="${d.id}">${d.concept?.name || 'Sem Nome'} (${d.classBuild?.classId || 'Sem Classe'})</option>`;
+      const drafts = await this.loadDrafts();
+      const html = this.buildDialogContent(drafts);
+      const buttons = [];
+
+      if (this.actor) {
+        buttons.push({
+          action: "link",
+          label: "Vincular Atual",
+          icon: "fas fa-link",
+          callback: async (event, button, dialog) => {
+            const draft = this.getSelectedDraft(dialog, drafts);
+            if (!draft) {
+              ui.notifications.warn('Selecione uma ficha válida para vincular.');
+              return;
+            }
+            await this.linkDraftToActor(draft.id);
+          }
         });
       }
-      html += `</select></div></form>`;
+
+      buttons.push({
+        action: "create",
+        label: "Criar Nova Ficha",
+        icon: "fas fa-user-plus",
+        callback: async (event, button, dialog) => {
+          const draft = this.getSelectedDraft(dialog, drafts);
+          if (!draft) {
+            ui.notifications.warn('Selecione uma ficha válida para criar o actor.');
+            return;
+          }
+          await this.createActorFromDraft(draft);
+        }
+      });
 
       return DialogV2.wait({
         window: { title: "Vincular Ficha Runarcana" },
         content: html,
-        buttons: [{
-          action: "link",
-          label: "Vincular",
-          icon: "fas fa-link",
-          callback: async (event, button, dialog) => {
-            const select = dialog.element.querySelector('[name="draftId"]');
-            const draftId = select.value;
-            if (!draftId) return;
-            await this.actor.setFlag('runarcana-sync', 'draftId', draftId);
-            ui.notifications.info(`Actor vinculado à ficha ${draftId}`);
-            if (this.syncManager) {
-              this.syncManager.startListening(this.actor);
-            }
-          }
-        }]
+        buttons
       });
     } catch(err) {
       return DialogV2.prompt({

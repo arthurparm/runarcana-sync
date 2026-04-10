@@ -7,6 +7,55 @@ import { SyncManager } from './sync-manager.js';
 let firebaseClient = null;
 let syncManager = null;
 
+function openDraftSelector(actor = null) {
+  if (!firebaseClient) {
+    return ui.notifications.warn('Configure o Firebase nas configurações do módulo primeiro.');
+  }
+
+  if (!firebaseClient.auth.currentUser) {
+    return new RunarcanaLoginDialog(firebaseClient).render(true);
+  }
+
+  return new DraftSelectorDialog(firebaseClient, actor, syncManager).render(true);
+}
+
+function canCreateActors() {
+  if (typeof game.user?.can === 'function') {
+    return game.user.can('ACTOR_CREATE');
+  }
+
+  return true;
+}
+
+function getRenderableElement(html) {
+  if (html?.[0] instanceof HTMLElement) return html[0];
+  if (html instanceof HTMLElement) return html;
+  if (html?.element instanceof HTMLElement) return html.element;
+  if (html?.element?.[0] instanceof HTMLElement) return html.element[0];
+  return null;
+}
+
+function injectDirectoryButton(html) {
+  if (!canCreateActors()) return;
+
+  const root = getRenderableElement(html);
+  if (!root) return;
+  if (root.querySelector('.runarcana-sync-directory-btn')) return;
+
+  const header =
+    root.querySelector('.directory-header .header-actions') ||
+    root.querySelector('.directory-header');
+
+  if (!header) return;
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'runarcana-sync-directory-btn';
+  button.innerHTML = '<i class="fas fa-user-plus"></i> Importar do Runarcana';
+  button.addEventListener('click', () => openDraftSelector());
+  header.prepend(button);
+}
+
 function getStringSetting(key) {
   const value = game.settings.get('runarcana-sync', key);
   return typeof value === 'string' ? value.trim() : '';
@@ -225,16 +274,7 @@ Hooks.on('getActorSheetHeaderButtons', (app, buttons) => {
     class: 'runarcana-sync-btn',
     icon: 'fas fa-sync',
     label: isLinked ? 'Runarcana (Vinculado)' : 'Runarcana Sync',
-    onclick: () => {
-      if (!firebaseClient) {
-        return ui.notifications.warn('Configure o Firebase nas configurações do módulo primeiro.');
-      }
-      if (!firebaseClient.auth.currentUser) {
-        new RunarcanaLoginDialog(firebaseClient).render(true);
-      } else {
-        new DraftSelectorDialog(firebaseClient, actor, syncManager).render(true);
-      }
-    }
+    onclick: () => openDraftSelector(actor)
   });
 });
 
@@ -250,15 +290,10 @@ Hooks.on('getHeaderControlsActorSheetV2', (app, controls) => {
     icon: 'fas fa-sync',
     label: isLinked ? 'Runarcana (Vinculado)' : 'Runarcana Sync',
     class: 'runarcana-sync-btn',
-    onClick: () => {
-      if (!firebaseClient) {
-        return ui.notifications.warn('Configure o Firebase nas configurações do módulo primeiro.');
-      }
-      if (!firebaseClient.auth.currentUser) {
-        new RunarcanaLoginDialog(firebaseClient).render(true);
-      } else {
-        new DraftSelectorDialog(firebaseClient, actor, syncManager).render(true);
-      }
-    }
+    onClick: () => openDraftSelector(actor)
   });
+});
+
+Hooks.on('renderActorDirectory', (app, html) => {
+  injectDirectoryButton(html);
 });

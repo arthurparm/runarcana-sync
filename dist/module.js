@@ -54,39 +54,39 @@ function f() {
 	});
 }
 function ee(e, t) {
-	return e.replace(Te, (e, n) => {
+	return e.replace(we, (e, n) => {
 		let r = t[n];
 		return r == null ? `<${n}?>` : String(r);
 	});
 }
-function te(e) {
+function p(e) {
 	for (let t in e) if (Object.prototype.hasOwnProperty.call(e, t)) return !1;
 	return !0;
 }
-function p(e, t) {
+function m(e, t) {
 	if (e === t) return !0;
 	let n = Object.keys(e), r = Object.keys(t);
 	for (let i of n) {
 		if (!r.includes(i)) return !1;
 		let n = e[i], a = t[i];
-		if (ne(n) && ne(a)) {
-			if (!p(n, a)) return !1;
+		if (te(n) && te(a)) {
+			if (!m(n, a)) return !1;
 		} else if (n !== a) return !1;
 	}
 	for (let e of r) if (!n.includes(e)) return !1;
 	return !0;
 }
-function ne(e) {
+function te(e) {
 	return typeof e == "object" && !!e;
 }
-function m(e) {
+function h(e) {
 	let t = [];
 	for (let [n, r] of Object.entries(e)) Array.isArray(r) ? r.forEach((e) => {
 		t.push(encodeURIComponent(n) + "=" + encodeURIComponent(e));
 	}) : t.push(encodeURIComponent(n) + "=" + encodeURIComponent(r));
 	return t.length ? "&" + t.join("&") : "";
 }
-function re(e) {
+function g(e) {
 	let t = {};
 	return e.replace(/^\?/, "").split("&").forEach((e) => {
 		if (e) {
@@ -95,44 +95,44 @@ function re(e) {
 		}
 	}), t;
 }
-function h(e) {
+function ne(e) {
 	let t = e.indexOf("?");
 	if (!t) return "";
 	let n = e.indexOf("#", t);
 	return e.substring(t, n > 0 ? n : void 0);
 }
-function ie(e, t) {
-	let n = new Ee(e, t);
+function re(e, t) {
+	let n = new Te(e, t);
 	return n.subscribe.bind(n);
 }
-function ae(e, t) {
+function ie(e, t) {
 	if (typeof e != "object" || !e) return !1;
 	for (let n of t) if (n in e && typeof e[n] == "function") return !0;
 	return !1;
 }
-function oe() {}
-function g(e) {
+function ae() {}
+function _(e) {
 	return e && e._delegate ? e._delegate : e;
 }
-function se(e) {
+function oe(e) {
 	try {
 		return (e.startsWith("http://") || e.startsWith("https://") ? new URL(e).hostname : e).endsWith(".cloudworkstations.dev");
 	} catch {
 		return !1;
 	}
 }
-async function ce(e) {
+async function se(e) {
 	return (await fetch(e, { credentials: "include" })).ok;
 }
-var le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, _, v, Te, Ee, De = e((() => {
-	r(), le = function(e) {
+var ce, le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, v, y, we, Te, Ee = e((() => {
+	r(), ce = function(e) {
 		let t = [], n = 0;
 		for (let r = 0; r < e.length; r++) {
 			let i = e.charCodeAt(r);
 			i < 128 ? t[n++] = i : i < 2048 ? (t[n++] = i >> 6 | 192, t[n++] = i & 63 | 128) : (i & 64512) == 55296 && r + 1 < e.length && (e.charCodeAt(r + 1) & 64512) == 56320 ? (i = 65536 + ((i & 1023) << 10) + (e.charCodeAt(++r) & 1023), t[n++] = i >> 18 | 240, t[n++] = i >> 12 & 63 | 128, t[n++] = i >> 6 & 63 | 128, t[n++] = i & 63 | 128) : (t[n++] = i >> 12 | 224, t[n++] = i >> 6 & 63 | 128, t[n++] = i & 63 | 128);
 		}
 		return t;
-	}, ue = function(e) {
+	}, le = function(e) {
 		let t = [], n = 0, r = 0;
 		for (; n < e.length;) {
 			let i = e[n++];
@@ -149,7 +149,7 @@ var le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, _, v, Te, Ee
 			}
 		}
 		return t.join("");
-	}, de = {
+	}, ue = {
 		byteToCharMap_: null,
 		charToByteMap_: null,
 		byteToCharMapWebSafe_: null,
@@ -173,10 +173,10 @@ var le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, _, v, Te, Ee
 			return r.join("");
 		},
 		encodeString(e, t) {
-			return this.HAS_NATIVE_SUPPORT && !t ? btoa(e) : this.encodeByteArray(le(e), t);
+			return this.HAS_NATIVE_SUPPORT && !t ? btoa(e) : this.encodeByteArray(ce(e), t);
 		},
 		decodeString(e, t) {
-			return this.HAS_NATIVE_SUPPORT && !t ? atob(e) : ue(this.decodeStringToByteArray(e, t));
+			return this.HAS_NATIVE_SUPPORT && !t ? atob(e) : le(this.decodeStringToByteArray(e, t));
 		},
 		decodeStringToByteArray(e, t) {
 			this.init_();
@@ -187,7 +187,7 @@ var le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, _, v, Te, Ee
 				let o = t < e.length ? n[e.charAt(t)] : 64;
 				++t;
 				let s = t < e.length ? n[e.charAt(t)] : 64;
-				if (++t, i == null || a == null || o == null || s == null) throw new fe();
+				if (++t, i == null || a == null || o == null || s == null) throw new de();
 				let c = i << 2 | a >> 4;
 				if (r.push(c), o !== 64) {
 					let e = a << 4 & 240 | o >> 2;
@@ -205,27 +205,27 @@ var le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, _, v, Te, Ee
 				for (let e = 0; e < this.ENCODED_VALS.length; e++) this.byteToCharMap_[e] = this.ENCODED_VALS.charAt(e), this.charToByteMap_[this.byteToCharMap_[e]] = e, this.byteToCharMapWebSafe_[e] = this.ENCODED_VALS_WEBSAFE.charAt(e), this.charToByteMapWebSafe_[this.byteToCharMapWebSafe_[e]] = e, e >= this.ENCODED_VALS_BASE.length && (this.charToByteMap_[this.ENCODED_VALS_WEBSAFE.charAt(e)] = e, this.charToByteMapWebSafe_[this.ENCODED_VALS.charAt(e)] = e);
 			}
 		}
-	}, fe = class extends Error {
+	}, de = class extends Error {
 		constructor() {
 			super(...arguments), this.name = "DecodeBase64StringError";
 		}
+	}, fe = function(e) {
+		let t = ce(e);
+		return ue.encodeByteArray(t, !0);
 	}, pe = function(e) {
-		let t = le(e);
-		return de.encodeByteArray(t, !0);
+		return fe(e).replace(/\./g, "");
 	}, me = function(e) {
-		return pe(e).replace(/\./g, "");
-	}, he = function(e) {
 		try {
-			return de.decodeString(e, !0);
+			return ue.decodeString(e, !0);
 		} catch (e) {
 			console.error("base64Decode failed: ", e);
 		}
 		return null;
-	}, ge = () => i().__FIREBASE_DEFAULTS__, _e = () => {
+	}, he = () => i().__FIREBASE_DEFAULTS__, ge = () => {
 		if (typeof process > "u" || process.env === void 0) return;
 		let e = process.env.__FIREBASE_DEFAULTS__;
 		if (e) return JSON.parse(e);
-	}, ve = () => {
+	}, _e = () => {
 		if (typeof document > "u") return;
 		let e;
 		try {
@@ -233,16 +233,16 @@ var le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, _, v, Te, Ee
 		} catch {
 			return;
 		}
-		let t = e && he(e[1]);
+		let t = e && me(e[1]);
 		return t && JSON.parse(t);
-	}, ye = () => {
+	}, ve = () => {
 		try {
-			return n() || ge() || _e() || ve();
+			return n() || he() || ge() || _e();
 		} catch (e) {
 			console.info(`Unable to get __FIREBASE_DEFAULTS__ due to: ${e}`);
 			return;
 		}
-	}, be = (e) => ye()?.emulatorHosts?.[e], xe = () => ye()?.config, Se = (e) => ye()?.[`_${e}`], Ce = class {
+	}, ye = (e) => ve()?.emulatorHosts?.[e], be = () => ve()?.config, xe = (e) => ve()?.[`_${e}`], Se = class {
 		constructor() {
 			this.reject = () => {}, this.resolve = () => {}, this.promise = new Promise((e, t) => {
 				this.resolve = e, this.reject = t;
@@ -253,19 +253,19 @@ var le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, _, v, Te, Ee
 				t ? this.reject(t) : this.resolve(n), typeof e == "function" && (this.promise.catch(() => {}), e.length === 1 ? e(t) : e(t, n));
 			};
 		}
-	}, we = "FirebaseError", _ = class e extends Error {
+	}, Ce = "FirebaseError", v = class e extends Error {
 		constructor(t, n, r) {
-			super(n), this.code = t, this.customData = r, this.name = we, Object.setPrototypeOf(this, e.prototype), Error.captureStackTrace && Error.captureStackTrace(this, v.prototype.create);
+			super(n), this.code = t, this.customData = r, this.name = Ce, Object.setPrototypeOf(this, e.prototype), Error.captureStackTrace && Error.captureStackTrace(this, y.prototype.create);
 		}
-	}, v = class {
+	}, y = class {
 		constructor(e, t, n) {
 			this.service = e, this.serviceName = t, this.errors = n;
 		}
 		create(e, ...t) {
 			let n = t[0] || {}, r = `${this.service}/${e}`, i = this.errors[e], a = i ? ee(i, n) : "Error";
-			return new _(r, `${this.serviceName}: ${a} (${r}).`, n);
+			return new v(r, `${this.serviceName}: ${a} (${r}).`, n);
 		}
-	}, Te = /\{\$([^}]+)}/g, Ee = class {
+	}, we = /\{\$([^}]+)}/g, Te = class {
 		constructor(e, t) {
 			this.observers = [], this.unsubscribes = [], this.observerCount = 0, this.task = Promise.resolve(), this.finalized = !1, this.onNoObservers = t, this.task.then(() => {
 				e(this);
@@ -291,7 +291,7 @@ var le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, _, v, Te, Ee
 		subscribe(e, t, n) {
 			let r;
 			if (e === void 0 && t === void 0 && n === void 0) throw Error("Missing Observer.");
-			r = ae(e, [
+			r = ie(e, [
 				"next",
 				"error",
 				"complete"
@@ -299,7 +299,7 @@ var le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, _, v, Te, Ee
 				next: e,
 				error: t,
 				complete: n
-			}, r.next === void 0 && (r.next = oe), r.error === void 0 && (r.error = oe), r.complete === void 0 && (r.complete = oe);
+			}, r.next === void 0 && (r.next = ae), r.error === void 0 && (r.error = ae), r.complete === void 0 && (r.complete = ae);
 			let i = this.unsubscribeOne.bind(this, this.observers.length);
 			return this.finalized && this.task.then(() => {
 				try {
@@ -331,14 +331,14 @@ var le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, _, v, Te, Ee
 }));
 //#endregion
 //#region node_modules/@firebase/component/dist/esm/index.esm.js
-function Oe(e) {
-	return e === b ? void 0 : e;
+function De(e) {
+	return e === x ? void 0 : e;
 }
-function ke(e) {
+function Oe(e) {
 	return e.instantiationMode === "EAGER";
 }
-var y, b, Ae, je, Me = e((() => {
-	De(), y = class {
+var b, x, ke, Ae, je = e((() => {
+	Ee(), b = class {
 		constructor(e, t, n) {
 			this.name = e, this.instanceFactory = t, this.type = n, this.multipleInstances = !1, this.serviceProps = {}, this.instantiationMode = "LAZY", this.onInstanceCreated = null;
 		}
@@ -354,14 +354,14 @@ var y, b, Ae, je, Me = e((() => {
 		setInstanceCreatedCallback(e) {
 			return this.onInstanceCreated = e, this;
 		}
-	}, b = "[DEFAULT]", Ae = class {
+	}, x = "[DEFAULT]", ke = class {
 		constructor(e, t) {
 			this.name = e, this.container = t, this.component = null, this.instances = /* @__PURE__ */ new Map(), this.instancesDeferred = /* @__PURE__ */ new Map(), this.instancesOptions = /* @__PURE__ */ new Map(), this.onInitCallbacks = /* @__PURE__ */ new Map();
 		}
 		get(e) {
 			let t = this.normalizeInstanceIdentifier(e);
 			if (!this.instancesDeferred.has(t)) {
-				let e = new Ce();
+				let e = new Se();
 				if (this.instancesDeferred.set(t, e), this.isInitialized(t) || this.shouldAutoInitialize()) try {
 					let n = this.getOrInitializeService({ instanceIdentifier: t });
 					n && e.resolve(n);
@@ -387,8 +387,8 @@ var y, b, Ae, je, Me = e((() => {
 			if (e.name !== this.name) throw Error(`Mismatching Component ${e.name} for Provider ${this.name}.`);
 			if (this.component) throw Error(`Component for ${this.name} has already been provided`);
 			if (this.component = e, this.shouldAutoInitialize()) {
-				if (ke(e)) try {
-					this.getOrInitializeService({ instanceIdentifier: b });
+				if (Oe(e)) try {
+					this.getOrInitializeService({ instanceIdentifier: x });
 				} catch {}
 				for (let [e, t] of this.instancesDeferred.entries()) {
 					let n = this.normalizeInstanceIdentifier(e);
@@ -399,7 +399,7 @@ var y, b, Ae, je, Me = e((() => {
 				}
 			}
 		}
-		clearInstance(e = b) {
+		clearInstance(e = x) {
 			this.instancesDeferred.delete(e), this.instancesOptions.delete(e), this.instances.delete(e);
 		}
 		async delete() {
@@ -409,10 +409,10 @@ var y, b, Ae, je, Me = e((() => {
 		isComponentSet() {
 			return this.component != null;
 		}
-		isInitialized(e = b) {
+		isInitialized(e = x) {
 			return this.instances.has(e);
 		}
-		getOptions(e = b) {
+		getOptions(e = x) {
 			return this.instancesOptions.get(e) || {};
 		}
 		initialize(e = {}) {
@@ -443,20 +443,20 @@ var y, b, Ae, je, Me = e((() => {
 		getOrInitializeService({ instanceIdentifier: e, options: t = {} }) {
 			let n = this.instances.get(e);
 			if (!n && this.component && (n = this.component.instanceFactory(this.container, {
-				instanceIdentifier: Oe(e),
+				instanceIdentifier: De(e),
 				options: t
 			}), this.instances.set(e, n), this.instancesOptions.set(e, t), this.invokeOnInitCallbacks(n, e), this.component.onInstanceCreated)) try {
 				this.component.onInstanceCreated(this.container, e, n);
 			} catch {}
 			return n || null;
 		}
-		normalizeInstanceIdentifier(e = b) {
-			return this.component ? this.component.multipleInstances ? e : b : e;
+		normalizeInstanceIdentifier(e = x) {
+			return this.component ? this.component.multipleInstances ? e : x : e;
 		}
 		shouldAutoInitialize() {
 			return !!this.component && this.component.instantiationMode !== "EXPLICIT";
 		}
-	}, je = class {
+	}, Ae = class {
 		constructor(e) {
 			this.name = e, this.providers = /* @__PURE__ */ new Map();
 		}
@@ -470,47 +470,47 @@ var y, b, Ae, je, Me = e((() => {
 		}
 		getProvider(e) {
 			if (this.providers.has(e)) return this.providers.get(e);
-			let t = new Ae(e, this);
+			let t = new ke(e, this);
 			return this.providers.set(e, t), t;
 		}
 		getProviders() {
 			return Array.from(this.providers.values());
 		}
 	};
-})), Ne, x, Pe, Fe, Ie, Le, Re, ze = e((() => {
-	Ne = [], (function(e) {
+})), Me, S, Ne, Pe, Fe, Ie, Le, Re = e((() => {
+	Me = [], (function(e) {
 		e[e.DEBUG = 0] = "DEBUG", e[e.VERBOSE = 1] = "VERBOSE", e[e.INFO = 2] = "INFO", e[e.WARN = 3] = "WARN", e[e.ERROR = 4] = "ERROR", e[e.SILENT = 5] = "SILENT";
-	})(x ||= {}), Pe = {
-		debug: x.DEBUG,
-		verbose: x.VERBOSE,
-		info: x.INFO,
-		warn: x.WARN,
-		error: x.ERROR,
-		silent: x.SILENT
-	}, Fe = x.INFO, Ie = {
-		[x.DEBUG]: "log",
-		[x.VERBOSE]: "log",
-		[x.INFO]: "info",
-		[x.WARN]: "warn",
-		[x.ERROR]: "error"
-	}, Le = (e, t, ...n) => {
+	})(S ||= {}), Ne = {
+		debug: S.DEBUG,
+		verbose: S.VERBOSE,
+		info: S.INFO,
+		warn: S.WARN,
+		error: S.ERROR,
+		silent: S.SILENT
+	}, Pe = S.INFO, Fe = {
+		[S.DEBUG]: "log",
+		[S.VERBOSE]: "log",
+		[S.INFO]: "info",
+		[S.WARN]: "warn",
+		[S.ERROR]: "error"
+	}, Ie = (e, t, ...n) => {
 		if (t < e.logLevel) return;
-		let r = (/* @__PURE__ */ new Date()).toISOString(), i = Ie[t];
+		let r = (/* @__PURE__ */ new Date()).toISOString(), i = Fe[t];
 		if (i) console[i](`[${r}]  ${e.name}:`, ...n);
 		else throw Error(`Attempted to log a message with an invalid logType (value: ${t})`);
-	}, Re = class {
+	}, Le = class {
 		constructor(e) {
-			this.name = e, this._logLevel = Fe, this._logHandler = Le, this._userLogHandler = null, Ne.push(this);
+			this.name = e, this._logLevel = Pe, this._logHandler = Ie, this._userLogHandler = null, Me.push(this);
 		}
 		get logLevel() {
 			return this._logLevel;
 		}
 		set logLevel(e) {
-			if (!(e in x)) throw TypeError(`Invalid value "${e}" assigned to \`logLevel\``);
+			if (!(e in S)) throw TypeError(`Invalid value "${e}" assigned to \`logLevel\``);
 			this._logLevel = e;
 		}
 		setLogLevel(e) {
-			this._logLevel = typeof e == "string" ? Pe[e] : e;
+			this._logLevel = typeof e == "string" ? Ne[e] : e;
 		}
 		get logHandler() {
 			return this._logHandler;
@@ -526,26 +526,26 @@ var y, b, Ae, je, Me = e((() => {
 			this._userLogHandler = e;
 		}
 		debug(...e) {
-			this._userLogHandler && this._userLogHandler(this, x.DEBUG, ...e), this._logHandler(this, x.DEBUG, ...e);
+			this._userLogHandler && this._userLogHandler(this, S.DEBUG, ...e), this._logHandler(this, S.DEBUG, ...e);
 		}
 		log(...e) {
-			this._userLogHandler && this._userLogHandler(this, x.VERBOSE, ...e), this._logHandler(this, x.VERBOSE, ...e);
+			this._userLogHandler && this._userLogHandler(this, S.VERBOSE, ...e), this._logHandler(this, S.VERBOSE, ...e);
 		}
 		info(...e) {
-			this._userLogHandler && this._userLogHandler(this, x.INFO, ...e), this._logHandler(this, x.INFO, ...e);
+			this._userLogHandler && this._userLogHandler(this, S.INFO, ...e), this._logHandler(this, S.INFO, ...e);
 		}
 		warn(...e) {
-			this._userLogHandler && this._userLogHandler(this, x.WARN, ...e), this._logHandler(this, x.WARN, ...e);
+			this._userLogHandler && this._userLogHandler(this, S.WARN, ...e), this._logHandler(this, S.WARN, ...e);
 		}
 		error(...e) {
-			this._userLogHandler && this._userLogHandler(this, x.ERROR, ...e), this._logHandler(this, x.ERROR, ...e);
+			this._userLogHandler && this._userLogHandler(this, S.ERROR, ...e), this._logHandler(this, S.ERROR, ...e);
 		}
 	};
 }));
 //#endregion
 //#region node_modules/idb/build/wrap-idb-value.js
-function Be() {
-	return Je ||= [
+function ze() {
+	return qe ||= [
 		IDBDatabase,
 		IDBObjectStore,
 		IDBIndex,
@@ -553,30 +553,30 @@ function Be() {
 		IDBTransaction
 	];
 }
-function Ve() {
-	return Ye ||= [
+function Be() {
+	return Je ||= [
 		IDBCursor.prototype.advance,
 		IDBCursor.prototype.continue,
 		IDBCursor.prototype.continuePrimaryKey
 	];
 }
-function He(e) {
+function Ve(e) {
 	let t = new Promise((t, n) => {
 		let r = () => {
 			e.removeEventListener("success", i), e.removeEventListener("error", a);
 		}, i = () => {
-			t(S(e.result)), r();
+			t(C(e.result)), r();
 		}, a = () => {
 			n(e.error), r();
 		};
 		e.addEventListener("success", i), e.addEventListener("error", a);
 	});
 	return t.then((t) => {
-		t instanceof IDBCursor && Xe.set(t, e);
-	}).catch(() => {}), et.set(t, e), t;
+		t instanceof IDBCursor && Ye.set(t, e);
+	}).catch(() => {}), $e.set(t, e), t;
 }
-function Ue(e) {
-	if (Ze.has(e)) return;
+function He(e) {
+	if (Xe.has(e)) return;
 	let t = new Promise((t, n) => {
 		let r = () => {
 			e.removeEventListener("complete", i), e.removeEventListener("error", a), e.removeEventListener("abort", a);
@@ -587,39 +587,39 @@ function Ue(e) {
 		};
 		e.addEventListener("complete", i), e.addEventListener("error", a), e.addEventListener("abort", a);
 	});
-	Ze.set(e, t);
+	Xe.set(e, t);
+}
+function Ue(e) {
+	et = e(et);
 }
 function We(e) {
-	tt = e(tt);
-}
-function Ge(e) {
 	return e === IDBDatabase.prototype.transaction && !("objectStoreNames" in IDBTransaction.prototype) ? function(t, ...n) {
-		let r = e.call(nt(this), t, ...n);
-		return Qe.set(r, t.sort ? t.sort() : [t]), S(r);
-	} : Ve().includes(e) ? function(...t) {
-		return e.apply(nt(this), t), S(Xe.get(this));
+		let r = e.call(tt(this), t, ...n);
+		return Ze.set(r, t.sort ? t.sort() : [t]), C(r);
+	} : Be().includes(e) ? function(...t) {
+		return e.apply(tt(this), t), C(Ye.get(this));
 	} : function(...t) {
-		return S(e.apply(nt(this), t));
+		return C(e.apply(tt(this), t));
 	};
 }
-function Ke(e) {
-	return typeof e == "function" ? Ge(e) : (e instanceof IDBTransaction && Ue(e), qe(e, Be()) ? new Proxy(e, tt) : e);
+function Ge(e) {
+	return typeof e == "function" ? We(e) : (e instanceof IDBTransaction && He(e), Ke(e, ze()) ? new Proxy(e, et) : e);
 }
-function S(e) {
-	if (e instanceof IDBRequest) return He(e);
-	if ($e.has(e)) return $e.get(e);
-	let t = Ke(e);
-	return t !== e && ($e.set(e, t), et.set(t, e)), t;
+function C(e) {
+	if (e instanceof IDBRequest) return Ve(e);
+	if (Qe.has(e)) return Qe.get(e);
+	let t = Ge(e);
+	return t !== e && (Qe.set(e, t), $e.set(t, e)), t;
 }
-var qe, Je, Ye, Xe, Ze, Qe, $e, et, tt, nt, rt = e((() => {
-	qe = (e, t) => t.some((t) => e instanceof t), Xe = /* @__PURE__ */ new WeakMap(), Ze = /* @__PURE__ */ new WeakMap(), Qe = /* @__PURE__ */ new WeakMap(), $e = /* @__PURE__ */ new WeakMap(), et = /* @__PURE__ */ new WeakMap(), tt = {
+var Ke, qe, Je, Ye, Xe, Ze, Qe, $e, et, tt, nt = e((() => {
+	Ke = (e, t) => t.some((t) => e instanceof t), Ye = /* @__PURE__ */ new WeakMap(), Xe = /* @__PURE__ */ new WeakMap(), Ze = /* @__PURE__ */ new WeakMap(), Qe = /* @__PURE__ */ new WeakMap(), $e = /* @__PURE__ */ new WeakMap(), et = {
 		get(e, t, n) {
 			if (e instanceof IDBTransaction) {
-				if (t === "done") return Ze.get(e);
-				if (t === "objectStoreNames") return e.objectStoreNames || Qe.get(e);
+				if (t === "done") return Xe.get(e);
+				if (t === "objectStoreNames") return e.objectStoreNames || Ze.get(e);
 				if (t === "store") return n.objectStoreNames[1] ? void 0 : n.objectStore(n.objectStoreNames[0]);
 			}
-			return S(e[t]);
+			return C(e[t]);
 		},
 		set(e, t, n) {
 			return e[t] = n, !0;
@@ -627,116 +627,116 @@ var qe, Je, Ye, Xe, Ze, Qe, $e, et, tt, nt, rt = e((() => {
 		has(e, t) {
 			return e instanceof IDBTransaction && (t === "done" || t === "store") ? !0 : t in e;
 		}
-	}, nt = (e) => et.get(e);
+	}, tt = (e) => $e.get(e);
 }));
 //#endregion
 //#region node_modules/idb/build/index.js
-function it(e, t, { blocked: n, upgrade: r, blocking: i, terminated: a } = {}) {
-	let o = indexedDB.open(e, t), s = S(o);
+function rt(e, t, { blocked: n, upgrade: r, blocking: i, terminated: a } = {}) {
+	let o = indexedDB.open(e, t), s = C(o);
 	return r && o.addEventListener("upgradeneeded", (e) => {
-		r(S(o.result), e.oldVersion, e.newVersion, S(o.transaction), e);
+		r(C(o.result), e.oldVersion, e.newVersion, C(o.transaction), e);
 	}), n && o.addEventListener("blocked", (e) => n(e.oldVersion, e.newVersion, e)), s.then((e) => {
 		a && e.addEventListener("close", () => a()), i && e.addEventListener("versionchange", (e) => i(e.oldVersion, e.newVersion, e));
 	}).catch(() => {}), s;
 }
-function at(e, t) {
+function it(e, t) {
 	if (!(e instanceof IDBDatabase && !(t in e) && typeof t == "string")) return;
-	if (ct.get(t)) return ct.get(t);
-	let n = t.replace(/FromIndex$/, ""), r = t !== n, i = st.includes(n);
-	if (!(n in (r ? IDBIndex : IDBObjectStore).prototype) || !(i || ot.includes(n))) return;
+	if (st.get(t)) return st.get(t);
+	let n = t.replace(/FromIndex$/, ""), r = t !== n, i = ot.includes(n);
+	if (!(n in (r ? IDBIndex : IDBObjectStore).prototype) || !(i || at.includes(n))) return;
 	let a = async function(e, ...t) {
 		let a = this.transaction(e, i ? "readwrite" : "readonly"), o = a.store;
 		return r && (o = o.index(t.shift())), (await Promise.all([o[n](...t), i && a.done]))[0];
 	};
-	return ct.set(t, a), a;
+	return st.set(t, a), a;
 }
-var ot, st, ct, lt = e((() => {
-	rt(), ot = [
+var at, ot, st, ct = e((() => {
+	nt(), at = [
 		"get",
 		"getKey",
 		"getAll",
 		"getAllKeys",
 		"count"
-	], st = [
+	], ot = [
 		"put",
 		"add",
 		"delete",
 		"clear"
-	], ct = /* @__PURE__ */ new Map(), We((e) => ({
+	], st = /* @__PURE__ */ new Map(), Ue((e) => ({
 		...e,
-		get: (t, n, r) => at(t, n) || e.get(t, n, r),
-		has: (t, n) => !!at(t, n) || e.has(t, n)
+		get: (t, n, r) => it(t, n) || e.get(t, n, r),
+		has: (t, n) => !!it(t, n) || e.has(t, n)
 	}));
 }));
 //#endregion
 //#region node_modules/@firebase/app/dist/esm/index.esm.js
-function ut(e) {
+function lt(e) {
 	return e.getComponent()?.type === "VERSION";
 }
-function dt(e, t) {
+function ut(e, t) {
 	try {
 		e.container.addComponent(t);
 	} catch (n) {
-		T.debug(`Component ${t.name} failed to register with FirebaseApp ${e.name}`, n);
+		E.debug(`Component ${t.name} failed to register with FirebaseApp ${e.name}`, n);
 	}
 }
-function ft(e) {
+function dt(e) {
 	let t = e.name;
-	if (an.has(t)) return T.debug(`There were multiple attempts to register component ${t}.`), !1;
+	if (an.has(t)) return E.debug(`There were multiple attempts to register component ${t}.`), !1;
 	an.set(t, e);
-	for (let t of E.values()) dt(t, e);
-	for (let t of rn.values()) dt(t, e);
+	for (let t of nn.values()) ut(t, e);
+	for (let t of rn.values()) ut(t, e);
 	return !0;
 }
-function pt(e, t) {
+function ft(e, t) {
 	let n = e.container.getProvider("heartbeat").getImmediate({ optional: !0 });
 	return n && n.triggerHeartbeat(), e.container.getProvider(t);
 }
-function C(e) {
+function w(e) {
 	return e == null ? !1 : e.settings !== void 0;
 }
-function mt(e, t = {}) {
+function pt(e, t = {}) {
 	let n = e;
 	typeof t != "object" && (t = { name: t });
 	let r = {
-		name: tn,
+		name: en,
 		automaticDataCollectionEnabled: !0,
 		...t
 	}, i = r.name;
 	if (typeof i != "string" || !i) throw D.create("bad-app-name", { appName: String(i) });
-	if (n ||= xe(), !n) throw D.create("no-options");
-	let a = E.get(i);
+	if (n ||= be(), !n) throw D.create("no-options");
+	let a = nn.get(i);
 	if (a) {
-		if (p(n, a.options) && p(r, a.config)) return a;
+		if (m(n, a.options) && m(r, a.config)) return a;
 		throw D.create("duplicate-app", { appName: i });
 	}
-	let o = new je(i);
+	let o = new Ae(i);
 	for (let e of an.values()) o.addComponent(e);
 	let s = new on(n, r, o);
-	return E.set(i, s), s;
+	return nn.set(i, s), s;
 }
-function ht(e = tn) {
-	let t = E.get(e);
-	if (!t && e === "[DEFAULT]" && xe()) return mt();
+function mt(e = en) {
+	let t = nn.get(e);
+	if (!t && e === "[DEFAULT]" && be()) return pt();
 	if (!t) throw D.create("no-app", { appName: e });
 	return t;
 }
-function w(e, t, n) {
-	let r = nn[e] ?? e;
+function T(e, t, n) {
+	let r = tn[e] ?? e;
 	n && (r += `-${n}`);
 	let i = r.match(/\s|\//), a = t.match(/\s|\//);
 	if (i || a) {
 		let e = [`Unable to register library "${r}" with version "${t}":`];
-		i && e.push(`library name "${r}" contains illegal characters (whitespace or "/")`), i && a && e.push("and"), a && e.push(`version name "${t}" contains illegal characters (whitespace or "/")`), T.warn(e.join(" "));
+		i && e.push(`library name "${r}" contains illegal characters (whitespace or "/")`), i && a && e.push("and"), a && e.push(`version name "${t}" contains illegal characters (whitespace or "/")`), E.warn(e.join(" "));
 		return;
 	}
-	ft(new y(`${r}-version`, () => ({
+	dt(new b(`${r}-version`, () => ({
 		library: r,
 		version: t
 	}), "VERSION"));
 }
-function gt() {
-	return ln ||= it(sn, cn, { upgrade: (e, t) => {
+function ht() {
+	return ln ||= rt(sn, cn, { upgrade: (e, t) => {
 		switch (t) {
 			case 0: try {
 				e.createObjectStore(k);
@@ -748,37 +748,37 @@ function gt() {
 		throw D.create("idb-open", { originalErrorMessage: e.message });
 	}), ln;
 }
-async function _t(e) {
+async function gt(e) {
 	try {
-		let t = (await gt()).transaction(k), n = await t.objectStore(k).get(yt(e));
+		let t = (await ht()).transaction(k), n = await t.objectStore(k).get(vt(e));
 		return await t.done, n;
 	} catch (e) {
-		if (e instanceof _) T.warn(e.message);
+		if (e instanceof v) E.warn(e.message);
 		else {
 			let t = D.create("idb-get", { originalErrorMessage: e?.message });
-			T.warn(t.message);
+			E.warn(t.message);
 		}
 	}
 }
-async function vt(e, t) {
+async function _t(e, t) {
 	try {
-		let n = (await gt()).transaction(k, "readwrite");
-		await n.objectStore(k).put(t, yt(e)), await n.done;
+		let n = (await ht()).transaction(k, "readwrite");
+		await n.objectStore(k).put(t, vt(e)), await n.done;
 	} catch (e) {
-		if (e instanceof _) T.warn(e.message);
+		if (e instanceof v) E.warn(e.message);
 		else {
 			let t = D.create("idb-set", { originalErrorMessage: e?.message });
-			T.warn(t.message);
+			E.warn(t.message);
 		}
 	}
 }
-function yt(e) {
+function vt(e) {
 	return `${e.name}!${e.options.appId}`;
 }
-function bt() {
+function yt() {
 	return (/* @__PURE__ */ new Date()).toISOString().substring(0, 10);
 }
-function xt(e, t = un) {
+function bt(e, t = un) {
 	let n = [], r = e.slice();
 	for (let i of e) {
 		let e = n.find((e) => e.agent === i.agent);
@@ -786,11 +786,11 @@ function xt(e, t = un) {
 			if (n.push({
 				agent: i.agent,
 				dates: [i.date]
-			}), St(n) > t) {
+			}), xt(n) > t) {
 				n.pop();
 				break;
 			}
-		} else if (e.dates.push(i.date), St(n) > t) {
+		} else if (e.dates.push(i.date), xt(n) > t) {
 			e.dates.pop();
 			break;
 		}
@@ -801,64 +801,64 @@ function xt(e, t = un) {
 		unsentEntries: r
 	};
 }
-function St(e) {
-	return me(JSON.stringify({
+function xt(e) {
+	return pe(JSON.stringify({
 		version: 2,
 		heartbeats: e
 	})).length;
 }
-function Ct(e) {
+function St(e) {
 	if (e.length === 0) return -1;
 	let t = 0, n = e[0].date;
 	for (let r = 1; r < e.length; r++) e[r].date < n && (n = e[r].date, t = r);
 	return t;
 }
-function wt(e) {
-	ft(new y("platform-logger", (e) => new Tt(e), "PRIVATE")), ft(new y("heartbeat", (e) => new fn(e), "PRIVATE")), w(Et, Dt, e), w(Et, Dt, "esm2020"), w("fire-js", "");
+function Ct(e) {
+	dt(new b("platform-logger", (e) => new wt(e), "PRIVATE")), dt(new b("heartbeat", (e) => new fn(e), "PRIVATE")), T(Tt, Et, e), T(Tt, Et, "esm2020"), T("fire-js", "");
 }
-var Tt, Et, Dt, T, Ot, kt, At, jt, Mt, Nt, Pt, Ft, It, Lt, Rt, zt, Bt, Vt, Ht, Ut, Wt, Gt, Kt, qt, Jt, Yt, Xt, Zt, Qt, $t, en, tn, nn, E, rn, an, D, on, O, sn, cn, k, ln, un, dn, fn, pn, mn = e((() => {
-	Me(), ze(), De(), lt(), Tt = class {
+var wt, Tt, Et, E, Dt, Ot, kt, At, jt, Mt, Nt, Pt, Ft, It, Lt, Rt, zt, Bt, Vt, Ht, Ut, Wt, Gt, Kt, qt, Jt, Yt, Xt, Zt, Qt, $t, en, tn, nn, rn, an, D, on, O, sn, cn, k, ln, un, dn, fn, pn, mn = e((() => {
+	je(), Re(), Ee(), ct(), wt = class {
 		constructor(e) {
 			this.container = e;
 		}
 		getPlatformInfoString() {
 			return this.container.getProviders().map((e) => {
-				if (ut(e)) {
+				if (lt(e)) {
 					let t = e.getImmediate();
 					return `${t.library}/${t.version}`;
 				} else return null;
 			}).filter((e) => e).join(" ");
 		}
-	}, Et = "@firebase/app", Dt = "0.14.10", T = new Re("@firebase/app"), Ot = "@firebase/app-compat", kt = "@firebase/analytics-compat", At = "@firebase/analytics", jt = "@firebase/app-check-compat", Mt = "@firebase/app-check", Nt = "@firebase/auth", Pt = "@firebase/auth-compat", Ft = "@firebase/database", It = "@firebase/data-connect", Lt = "@firebase/database-compat", Rt = "@firebase/functions", zt = "@firebase/functions-compat", Bt = "@firebase/installations", Vt = "@firebase/installations-compat", Ht = "@firebase/messaging", Ut = "@firebase/messaging-compat", Wt = "@firebase/performance", Gt = "@firebase/performance-compat", Kt = "@firebase/remote-config", qt = "@firebase/remote-config-compat", Jt = "@firebase/storage", Yt = "@firebase/storage-compat", Xt = "@firebase/firestore", Zt = "@firebase/ai", Qt = "@firebase/firestore-compat", $t = "firebase", en = "12.11.0", tn = "[DEFAULT]", nn = {
-		[Et]: "fire-core",
-		[Ot]: "fire-core-compat",
-		[At]: "fire-analytics",
-		[kt]: "fire-analytics-compat",
-		[Mt]: "fire-app-check",
-		[jt]: "fire-app-check-compat",
-		[Nt]: "fire-auth",
-		[Pt]: "fire-auth-compat",
-		[Ft]: "fire-rtdb",
-		[It]: "fire-data-connect",
-		[Lt]: "fire-rtdb-compat",
-		[Rt]: "fire-fn",
-		[zt]: "fire-fn-compat",
-		[Bt]: "fire-iid",
-		[Vt]: "fire-iid-compat",
-		[Ht]: "fire-fcm",
-		[Ut]: "fire-fcm-compat",
-		[Wt]: "fire-perf",
-		[Gt]: "fire-perf-compat",
-		[Kt]: "fire-rc",
-		[qt]: "fire-rc-compat",
-		[Jt]: "fire-gcs",
-		[Yt]: "fire-gcs-compat",
-		[Xt]: "fire-fst",
-		[Qt]: "fire-fst-compat",
-		[Zt]: "fire-vertex",
+	}, Tt = "@firebase/app", Et = "0.14.10", E = new Le("@firebase/app"), Dt = "@firebase/app-compat", Ot = "@firebase/analytics-compat", kt = "@firebase/analytics", At = "@firebase/app-check-compat", jt = "@firebase/app-check", Mt = "@firebase/auth", Nt = "@firebase/auth-compat", Pt = "@firebase/database", Ft = "@firebase/data-connect", It = "@firebase/database-compat", Lt = "@firebase/functions", Rt = "@firebase/functions-compat", zt = "@firebase/installations", Bt = "@firebase/installations-compat", Vt = "@firebase/messaging", Ht = "@firebase/messaging-compat", Ut = "@firebase/performance", Wt = "@firebase/performance-compat", Gt = "@firebase/remote-config", Kt = "@firebase/remote-config-compat", qt = "@firebase/storage", Jt = "@firebase/storage-compat", Yt = "@firebase/firestore", Xt = "@firebase/ai", Zt = "@firebase/firestore-compat", Qt = "firebase", $t = "12.11.0", en = "[DEFAULT]", tn = {
+		[Tt]: "fire-core",
+		[Dt]: "fire-core-compat",
+		[kt]: "fire-analytics",
+		[Ot]: "fire-analytics-compat",
+		[jt]: "fire-app-check",
+		[At]: "fire-app-check-compat",
+		[Mt]: "fire-auth",
+		[Nt]: "fire-auth-compat",
+		[Pt]: "fire-rtdb",
+		[Ft]: "fire-data-connect",
+		[It]: "fire-rtdb-compat",
+		[Lt]: "fire-fn",
+		[Rt]: "fire-fn-compat",
+		[zt]: "fire-iid",
+		[Bt]: "fire-iid-compat",
+		[Vt]: "fire-fcm",
+		[Ht]: "fire-fcm-compat",
+		[Ut]: "fire-perf",
+		[Wt]: "fire-perf-compat",
+		[Gt]: "fire-rc",
+		[Kt]: "fire-rc-compat",
+		[qt]: "fire-gcs",
+		[Jt]: "fire-gcs-compat",
+		[Yt]: "fire-fst",
+		[Zt]: "fire-fst-compat",
+		[Xt]: "fire-vertex",
 		"fire-js": "fire-js",
-		[$t]: "fire-js-all"
-	}, E = /* @__PURE__ */ new Map(), rn = /* @__PURE__ */ new Map(), an = /* @__PURE__ */ new Map(), D = new v("app", "Firebase", {
+		[Qt]: "fire-js-all"
+	}, nn = /* @__PURE__ */ new Map(), rn = /* @__PURE__ */ new Map(), an = /* @__PURE__ */ new Map(), D = new y("app", "Firebase", {
 		"no-app": "No Firebase App '{$appName}' has been created - call initializeApp() first",
 		"bad-app-name": "Illegal App name: '{$appName}'",
 		"duplicate-app": "Firebase App named '{$appName}' already exists with different options or config",
@@ -875,7 +875,7 @@ var Tt, Et, Dt, T, Ot, kt, At, jt, Mt, Nt, Pt, Ft, It, Lt, Rt, zt, Bt, Vt, Ht, U
 		"invalid-server-app-environment": "FirebaseServerApp is not for use in browser environments."
 	}), on = class {
 		constructor(e, t, n) {
-			this._isDeleted = !1, this._options = { ...e }, this._config = { ...t }, this._name = t.name, this._automaticDataCollectionEnabled = t.automaticDataCollectionEnabled, this._container = n, this.container.addComponent(new y("app", () => this, "PUBLIC"));
+			this._isDeleted = !1, this._options = { ...e }, this._config = { ...t }, this._name = t.name, this._automaticDataCollectionEnabled = t.automaticDataCollectionEnabled, this._container = n, this.container.addComponent(new b("app", () => this, "PUBLIC"));
 		}
 		get automaticDataCollectionEnabled() {
 			return this.checkDestroyed(), this._automaticDataCollectionEnabled;
@@ -904,36 +904,36 @@ var Tt, Et, Dt, T, Ot, kt, At, jt, Mt, Nt, Pt, Ft, It, Lt, Rt, zt, Bt, Vt, Ht, U
 		checkDestroyed() {
 			if (this.isDeleted) throw D.create("app-deleted", { appName: this._name });
 		}
-	}, O = en, sn = "firebase-heartbeat-database", cn = 1, k = "firebase-heartbeat-store", ln = null, un = 1024, dn = 30, fn = class {
+	}, O = $t, sn = "firebase-heartbeat-database", cn = 1, k = "firebase-heartbeat-store", ln = null, un = 1024, dn = 30, fn = class {
 		constructor(e) {
 			this.container = e, this._heartbeatsCache = null, this._storage = new pn(this.container.getProvider("app").getImmediate()), this._heartbeatsCachePromise = this._storage.read().then((e) => (this._heartbeatsCache = e, e));
 		}
 		async triggerHeartbeat() {
 			try {
-				let e = this.container.getProvider("platform-logger").getImmediate().getPlatformInfoString(), t = bt();
+				let e = this.container.getProvider("platform-logger").getImmediate().getPlatformInfoString(), t = yt();
 				if (this._heartbeatsCache?.heartbeats == null && (this._heartbeatsCache = await this._heartbeatsCachePromise, this._heartbeatsCache?.heartbeats == null) || this._heartbeatsCache.lastSentHeartbeatDate === t || this._heartbeatsCache.heartbeats.some((e) => e.date === t)) return;
 				if (this._heartbeatsCache.heartbeats.push({
 					date: t,
 					agent: e
 				}), this._heartbeatsCache.heartbeats.length > dn) {
-					let e = Ct(this._heartbeatsCache.heartbeats);
+					let e = St(this._heartbeatsCache.heartbeats);
 					this._heartbeatsCache.heartbeats.splice(e, 1);
 				}
 				return this._storage.overwrite(this._heartbeatsCache);
 			} catch (e) {
-				T.warn(e);
+				E.warn(e);
 			}
 		}
 		async getHeartbeatsHeader() {
 			try {
 				if (this._heartbeatsCache === null && await this._heartbeatsCachePromise, this._heartbeatsCache?.heartbeats == null || this._heartbeatsCache.heartbeats.length === 0) return "";
-				let e = bt(), { heartbeatsToSend: t, unsentEntries: n } = xt(this._heartbeatsCache.heartbeats), r = me(JSON.stringify({
+				let e = yt(), { heartbeatsToSend: t, unsentEntries: n } = bt(this._heartbeatsCache.heartbeats), r = pe(JSON.stringify({
 					version: 2,
 					heartbeats: t
 				}));
 				return this._heartbeatsCache.lastSentHeartbeatDate = e, n.length > 0 ? (this._heartbeatsCache.heartbeats = n, await this._storage.overwrite(this._heartbeatsCache)) : (this._heartbeatsCache.heartbeats = [], this._storage.overwrite(this._heartbeatsCache)), r;
 			} catch (e) {
-				return T.warn(e), "";
+				return E.warn(e), "";
 			}
 		}
 	}, pn = class {
@@ -945,14 +945,14 @@ var Tt, Et, Dt, T, Ot, kt, At, jt, Mt, Nt, Pt, Ft, It, Lt, Rt, zt, Bt, Vt, Ht, U
 		}
 		async read() {
 			if (await this._canUseIndexedDBPromise) {
-				let e = await _t(this.app);
+				let e = await gt(this.app);
 				return e?.heartbeats ? e : { heartbeats: [] };
 			} else return { heartbeats: [] };
 		}
 		async overwrite(e) {
 			if (await this._canUseIndexedDBPromise) {
 				let t = await this.read();
-				return vt(this.app, {
+				return _t(this.app, {
 					lastSentHeartbeatDate: e.lastSentHeartbeatDate ?? t.lastSentHeartbeatDate,
 					heartbeats: e.heartbeats
 				});
@@ -961,15 +961,15 @@ var Tt, Et, Dt, T, Ot, kt, At, jt, Mt, Nt, Pt, Ft, It, Lt, Rt, zt, Bt, Vt, Ht, U
 		async add(e) {
 			if (await this._canUseIndexedDBPromise) {
 				let t = await this.read();
-				return vt(this.app, {
+				return _t(this.app, {
 					lastSentHeartbeatDate: e.lastSentHeartbeatDate ?? t.lastSentHeartbeatDate,
 					heartbeats: [...t.heartbeats, ...e.heartbeats]
 				});
 			} else return;
 		}
-	}, wt("");
+	}, Ct("");
 })), hn = e((() => {
-	mn(), mn(), w("firebase", "12.11.0", "app");
+	mn(), mn(), T("firebase", "12.11.0", "app");
 }));
 //#endregion
 //#region node_modules/@firebase/auth/dist/esm/index-dfb5c973.js
@@ -977,10 +977,10 @@ function gn() {
 	return { "dependent-sdk-initialized-before-auth": "Another Firebase SDK was initialized and is trying to use Auth before Auth is initialized. Please be sure to call `initializeAuth` or `getAuth` before starting any other Firebase SDK." };
 }
 function _n(e, ...t) {
-	Ji.logLevel <= x.WARN && Ji.warn(`Auth (${O}): ${e}`, ...t);
+	W.logLevel <= S.WARN && W.warn(`Auth (${O}): ${e}`, ...t);
 }
 function vn(e, ...t) {
-	Ji.logLevel <= x.ERROR && Ji.error(`Auth (${O}): ${e}`, ...t);
+	W.logLevel <= S.ERROR && W.error(`Auth (${O}): ${e}`, ...t);
 }
 function A(e, ...t) {
 	throw xn(e, ...t);
@@ -989,8 +989,8 @@ function j(e, ...t) {
 	return xn(e, ...t);
 }
 function yn(e, t, n) {
-	return new v("auth", "Firebase", {
-		...Ki(),
+	return new y("auth", "Firebase", {
+		...Xi(),
 		[t]: n
 	}).create(t, { appName: e.name });
 }
@@ -1006,7 +1006,7 @@ function xn(e, ...t) {
 		let n = t[0], r = [...t.slice(1)];
 		return r[0] && (r[0].appName = e.name), e._errorFactory.create(n, ...r);
 	}
-	return qi.create(e, ...t);
+	return Zi.create(e, ...t);
 }
 function N(e, t, ...n) {
 	if (!e) throw xn(t, ...n);
@@ -1050,7 +1050,7 @@ async function L(e, t, n, r, i = {}) {
 	return On(e, i, async () => {
 		let i = {}, a = {};
 		r && (t === "GET" ? a = r : i = { body: JSON.stringify(r) });
-		let o = m({
+		let o = h({
 			key: e.config.apiKey,
 			...a
 		}).slice(1), c = await e._getAdditionalHeaders();
@@ -1060,17 +1060,17 @@ async function L(e, t, n, r, i = {}) {
 			headers: c,
 			...i
 		};
-		return s() || (l.referrerPolicy = "no-referrer"), e.emulatorConfig && se(e.emulatorConfig.host) && (l.credentials = "include"), Yi.fetch()(await kn(e, e.config.apiHost, n, o), l);
+		return s() || (l.referrerPolicy = "no-referrer"), e.emulatorConfig && oe(e.emulatorConfig.host) && (l.credentials = "include"), Qi.fetch()(await kn(e, e.config.apiHost, n, o), l);
 	});
 }
 async function On(e, t, n) {
 	e._canInitEmulator = !1;
 	let r = {
-		...Xi,
+		...$i,
 		...t
 	};
 	try {
-		let t = new $i(e), i = await Promise.race([n(), t.promise]);
+		let t = new na(e), i = await Promise.race([n(), t.promise]);
 		t.clearNetworkTimeout();
 		let a = await i.json();
 		if ("needConfirmation" in a) throw jn(e, "account-exists-with-different-credential", a);
@@ -1085,7 +1085,7 @@ async function On(e, t, n) {
 			A(e, o);
 		}
 	} catch (t) {
-		if (t instanceof _) throw t;
+		if (t instanceof v) throw t;
 		A(e, "network-request-failed", { message: String(t) });
 	}
 }
@@ -1095,7 +1095,7 @@ async function R(e, t, n, r, i = {}) {
 }
 async function kn(e, t, n, r) {
 	let i = `${t}${n}?${r}`, a = e, o = a.config.emulator ? Dn(e.config, i) : `${e.config.apiScheme}://${i}`;
-	return Zi.includes(n) && (await a._persistenceManagerAvailable, a._getPersistenceType() === "COOKIE") ? a._getPersistence()._getFinalTarget(o).toString() : o;
+	return ea.includes(n) && (await a._persistenceManagerAvailable, a._getPersistenceType() === "COOKIE") ? a._getPersistence()._getFinalTarget(o).toString() : o;
 }
 function An(e) {
 	switch (e) {
@@ -1123,60 +1123,60 @@ async function Pn(e, t) {
 async function Fn(e, t) {
 	return L(e, "POST", "/v1/accounts:lookup", t);
 }
-function z(e) {
+function In(e) {
 	if (e) try {
 		let t = new Date(Number(e));
 		if (!isNaN(t.getTime())) return t.toUTCString();
 	} catch {}
 }
-async function In(e, t = !1) {
-	let n = g(e), r = await n.getIdToken(t), i = Rn(r);
+async function Ln(e, t = !1) {
+	let n = _(e), r = await n.getIdToken(t), i = zn(r);
 	N(i && i.exp && i.auth_time && i.iat, n.auth, "internal-error");
 	let a = typeof i.firebase == "object" ? i.firebase : void 0, o = a?.sign_in_provider;
 	return {
 		claims: i,
 		token: r,
-		authTime: z(Ln(i.auth_time)),
-		issuedAtTime: z(Ln(i.iat)),
-		expirationTime: z(Ln(i.exp)),
+		authTime: In(Rn(i.auth_time)),
+		issuedAtTime: In(Rn(i.iat)),
+		expirationTime: In(Rn(i.exp)),
 		signInProvider: o || null,
 		signInSecondFactor: a?.sign_in_second_factor || null
 	};
 }
-function Ln(e) {
+function Rn(e) {
 	return Number(e) * 1e3;
 }
-function Rn(e) {
+function zn(e) {
 	let [t, n, r] = e.split(".");
 	if (t === void 0 || n === void 0 || r === void 0) return vn("JWT malformed, contained fewer than 3 sections"), null;
 	try {
-		let e = he(n);
+		let e = me(n);
 		return e ? JSON.parse(e) : (vn("Failed to decode base64 JWT payload"), null);
 	} catch (e) {
 		return vn("Caught error parsing JWT payload as JSON", e?.toString()), null;
 	}
 }
-function zn(e) {
-	let t = Rn(e);
+function Bn(e) {
+	let t = zn(e);
 	return N(t, "internal-error"), N(t.exp !== void 0, "internal-error"), N(t.iat !== void 0, "internal-error"), Number(t.exp) - Number(t.iat);
 }
-async function B(e, t, n = !1) {
+async function Vn(e, t, n = !1) {
 	if (n) return t;
 	try {
 		return await t;
 	} catch (t) {
-		throw t instanceof _ && Bn(t) && e.auth.currentUser === e && await e.auth.signOut(), t;
+		throw t instanceof v && Hn(t) && e.auth.currentUser === e && await e.auth.signOut(), t;
 	}
 }
-function Bn({ code: e }) {
+function Hn({ code: e }) {
 	return e === "auth/user-disabled" || e === "auth/user-token-expired";
 }
-async function Vn(e) {
-	let t = e.auth, n = await B(e, Fn(t, { idToken: await e.getIdToken() }));
+async function Un(e) {
+	let t = e.auth, n = await Vn(e, Fn(t, { idToken: await e.getIdToken() }));
 	N(n?.users.length, t, "internal-error");
 	let r = n.users[0];
 	e._notifyReloadListener(r);
-	let i = r.providerUserInfo?.length ? Wn(r.providerUserInfo) : [], a = Un(e.providerData, i), o = e.isAnonymous, s = !(e.email && r.passwordHash) && !a?.length, c = o ? s : !1, l = {
+	let i = r.providerUserInfo?.length ? Kn(r.providerUserInfo) : [], a = Gn(e.providerData, i), o = e.isAnonymous, s = !(e.email && r.passwordHash) && !a?.length, c = o ? s : !1, l = {
 		uid: r.localId,
 		displayName: r.displayName || null,
 		photoURL: r.photoUrl || null,
@@ -1185,19 +1185,19 @@ async function Vn(e) {
 		phoneNumber: r.phoneNumber || null,
 		tenantId: r.tenantId || null,
 		providerData: a,
-		metadata: new na(r.createdAt, r.lastLoginAt),
+		metadata: new aa(r.createdAt, r.lastLoginAt),
 		isAnonymous: c
 	};
 	Object.assign(e, l);
 }
-async function Hn(e) {
-	let t = g(e);
-	await Vn(t), await t.auth._persistUserIfCurrent(t), t.auth._notifyListenersIfCurrent(t);
+async function Wn(e) {
+	let t = _(e);
+	await Un(t), await t.auth._persistUserIfCurrent(t), t.auth._notifyListenersIfCurrent(t);
 }
-function Un(e, t) {
+function Gn(e, t) {
 	return [...e.filter((e) => !t.some((t) => t.providerId === e.providerId)), ...t];
 }
-function Wn(e) {
+function Kn(e) {
 	return e.map(({ providerId: e, ...t }) => ({
 		providerId: e,
 		uid: t.rawId || "",
@@ -1207,9 +1207,9 @@ function Wn(e) {
 		photoURL: t.photoUrl || null
 	}));
 }
-async function Gn(e, t) {
+async function qn(e, t) {
 	let n = await On(e, {}, async () => {
-		let n = m({
+		let n = h({
 			grant_type: "refresh_token",
 			refresh_token: t
 		}).slice(1), { tokenApiHost: r, apiKey: i } = e.config, a = await kn(e, r, "/v1/token", `key=${i}`), o = await e._getAdditionalHeaders();
@@ -1219,7 +1219,7 @@ async function Gn(e, t) {
 			headers: o,
 			body: n
 		};
-		return e.emulatorConfig && se(e.emulatorConfig.host) && (s.credentials = "include"), Yi.fetch()(a, s);
+		return e.emulatorConfig && oe(e.emulatorConfig.host) && (s.credentials = "include"), Qi.fetch()(a, s);
 	});
 	return {
 		accessToken: n.access_token,
@@ -1227,111 +1227,111 @@ async function Gn(e, t) {
 		refreshToken: n.refresh_token
 	};
 }
-async function Kn(e, t) {
+async function Jn(e, t) {
 	return L(e, "POST", "/v2/accounts:revokeToken", I(e, t));
 }
-function V(e, t) {
+function z(e, t) {
 	N(typeof e == "string" || e === void 0, "internal-error", { appName: t });
 }
-function H(e) {
+function B(e) {
 	F(e instanceof Function, "Expected a class definition");
-	let t = ia.get(e);
-	return t ? (F(t instanceof e, "Instance stored in cache mismatched with class"), t) : (t = new e(), ia.set(e, t), t);
+	let t = sa.get(e);
+	return t ? (F(t instanceof e, "Instance stored in cache mismatched with class"), t) : (t = new e(), sa.set(e, t), t);
 }
-function qn(e, t, n) {
+function Yn(e, t, n) {
 	return `firebase:${e}:${t}:${n}`;
 }
-function Jn(e) {
+function Xn(e) {
 	let t = e.toLowerCase();
 	if (t.includes("opera/") || t.includes("opr/") || t.includes("opios/")) return "Opera";
-	if (Qn(t)) return "IEMobile";
+	if (er(t)) return "IEMobile";
 	if (t.includes("msie") || t.includes("trident/")) return "IE";
 	if (t.includes("edge/")) return "Edge";
-	if (Yn(t)) return "Firefox";
+	if (Zn(t)) return "Firefox";
 	if (t.includes("silk/")) return "Silk";
-	if (er(t)) return "Blackberry";
-	if (tr(t)) return "Webos";
-	if (Xn(t)) return "Safari";
-	if ((t.includes("chrome/") || Zn(t)) && !t.includes("edge/")) return "Chrome";
-	if ($n(t)) return "Android";
+	if (nr(t)) return "Blackberry";
+	if (rr(t)) return "Webos";
+	if (Qn(t)) return "Safari";
+	if ((t.includes("chrome/") || $n(t)) && !t.includes("edge/")) return "Chrome";
+	if (tr(t)) return "Android";
 	{
 		let t = e.match(/([a-zA-Z\d\.]+)\/[a-zA-Z\d\.]*$/);
 		if (t?.length === 2) return t[1];
 	}
 	return "Other";
 }
-function Yn(e = a()) {
+function Zn(e = a()) {
 	return /firefox\//i.test(e);
 }
-function Xn(e = a()) {
+function Qn(e = a()) {
 	let t = e.toLowerCase();
 	return t.includes("safari/") && !t.includes("chrome/") && !t.includes("crios/") && !t.includes("android");
 }
-function Zn(e = a()) {
+function $n(e = a()) {
 	return /crios\//i.test(e);
 }
-function Qn(e = a()) {
+function er(e = a()) {
 	return /iemobile/i.test(e);
 }
-function $n(e = a()) {
+function tr(e = a()) {
 	return /android/i.test(e);
 }
-function er(e = a()) {
+function nr(e = a()) {
 	return /blackberry/i.test(e);
 }
-function tr(e = a()) {
+function rr(e = a()) {
 	return /webos/i.test(e);
 }
-function nr(e = a()) {
+function ir(e = a()) {
 	return /iphone|ipad|ipod/i.test(e) || /macintosh/i.test(e) && /mobile/i.test(e);
 }
-function rr(e = a()) {
-	return nr(e) && !!window.navigator?.standalone;
+function ar(e = a()) {
+	return ir(e) && !!window.navigator?.standalone;
 }
-function ir() {
+function or() {
 	return u() && document.documentMode === 10;
 }
-function ar(e = a()) {
-	return nr(e) || $n(e) || tr(e) || er(e) || /windows phone/i.test(e) || Qn(e);
+function sr(e = a()) {
+	return ir(e) || tr(e) || rr(e) || nr(e) || /windows phone/i.test(e) || er(e);
 }
-function or(e, t = []) {
+function cr(e, t = []) {
 	let n;
 	switch (e) {
 		case "Browser":
-			n = Jn(a());
+			n = Xn(a());
 			break;
 		case "Worker":
-			n = `${Jn(a())}-${e}`;
+			n = `${Xn(a())}-${e}`;
 			break;
 		default: n = e;
 	}
 	let r = t.length ? t.join(",") : "FirebaseCore-web";
 	return `${n}/JsCore/${O}/${r}`;
 }
-async function sr(e, t = {}) {
+async function lr(e, t = {}) {
 	return L(e, "GET", "/v2/passwordPolicy", I(e, t));
 }
-function U(e) {
-	return g(e);
+function V(e) {
+	return _(e);
 }
-function cr(e) {
-	pa = e;
+function ur(e) {
+	ga = e;
 }
-function lr(e) {
-	return pa.loadJS(e);
+function dr(e) {
+	return ga.loadJS(e);
 }
-function ur() {
-	return pa.recaptchaEnterpriseScript;
+function fr() {
+	return ga.recaptchaEnterpriseScript;
 }
-function dr() {
-	return pa.gapiScript;
+function pr() {
+	return ga.gapiScript;
 }
-function fr(e) {
+function mr(e) {
 	return `__${e}${Math.floor(Math.random() * 1e6)}`;
 }
-async function W(e, t, n, r = !1, i = !1) {
-	let a = new _a(e), o;
-	if (i) o = X;
+async function hr(e, t, n, r = !1, i = !1) {
+	let a = new ba(e), o;
+	if (i) o = q;
 	else try {
 		o = await a.verify(n);
 	} catch {
@@ -1361,50 +1361,50 @@ async function W(e, t, n, r = !1, i = !1) {
 	}
 	return r ? Object.assign(s, { captchaResp: o }) : Object.assign(s, { captchaResponse: o }), Object.assign(s, { clientType: "CLIENT_TYPE_WEB" }), Object.assign(s, { recaptchaVersion: "RECAPTCHA_ENTERPRISE" }), s;
 }
-async function G(e, t, n, r, i) {
-	return i === "EMAIL_PASSWORD_PROVIDER" ? e._getRecaptchaConfig()?.isProviderEnabled("EMAIL_PASSWORD_PROVIDER") ? r(e, await W(e, t, n, n === "getOobCode")) : r(e, t).catch(async (i) => i.code === "auth/missing-recaptcha-token" ? (console.log(`${n} is protected by reCAPTCHA Enterprise for this project. Automatically triggering the reCAPTCHA flow and restarting the flow.`), r(e, await W(e, t, n, n === "getOobCode"))) : Promise.reject(i)) : i === "PHONE_PROVIDER" ? e._getRecaptchaConfig()?.isProviderEnabled("PHONE_PROVIDER") ? r(e, await W(e, t, n)).catch(async (i) => e._getRecaptchaConfig()?.getProviderEnforcementState("PHONE_PROVIDER") === "AUDIT" && (i.code === "auth/missing-recaptcha-token" || i.code === "auth/invalid-app-credential") ? (console.log(`Failed to verify with reCAPTCHA Enterprise. Automatically triggering the reCAPTCHA v2 flow to complete the ${n} flow.`), r(e, await W(e, t, n, !1, !0))) : Promise.reject(i)) : r(e, await W(e, t, n, !1, !0)) : Promise.reject(i + " provider is not supported.");
+async function gr(e, t, n, r, i) {
+	return i === "EMAIL_PASSWORD_PROVIDER" ? e._getRecaptchaConfig()?.isProviderEnabled("EMAIL_PASSWORD_PROVIDER") ? r(e, await hr(e, t, n, n === "getOobCode")) : r(e, t).catch(async (i) => i.code === "auth/missing-recaptcha-token" ? (console.log(`${n} is protected by reCAPTCHA Enterprise for this project. Automatically triggering the reCAPTCHA flow and restarting the flow.`), r(e, await hr(e, t, n, n === "getOobCode"))) : Promise.reject(i)) : i === "PHONE_PROVIDER" ? e._getRecaptchaConfig()?.isProviderEnabled("PHONE_PROVIDER") ? r(e, await hr(e, t, n)).catch(async (i) => e._getRecaptchaConfig()?.getProviderEnforcementState("PHONE_PROVIDER") === "AUDIT" && (i.code === "auth/missing-recaptcha-token" || i.code === "auth/invalid-app-credential") ? (console.log(`Failed to verify with reCAPTCHA Enterprise. Automatically triggering the reCAPTCHA v2 flow to complete the ${n} flow.`), r(e, await hr(e, t, n, !1, !0))) : Promise.reject(i)) : r(e, await hr(e, t, n, !1, !0)) : Promise.reject(i + " provider is not supported.");
 }
-async function pr(e) {
-	let t = U(e), n = new ea(await Nn(t, {
+async function _r(e) {
+	let t = V(e), n = new ra(await Nn(t, {
 		clientType: "CLIENT_TYPE_WEB",
 		version: "RECAPTCHA_ENTERPRISE"
 	}));
-	t.tenantId == null ? t._agentRecaptchaConfig = n : t._tenantRecaptchaConfigs[t.tenantId] = n, n.isAnyProviderEnabled() && new _a(t).verify();
+	t.tenantId == null ? t._agentRecaptchaConfig = n : t._tenantRecaptchaConfigs[t.tenantId] = n, n.isAnyProviderEnabled() && new ba(t).verify();
 }
-function mr(e, t) {
-	let n = pt(e, "auth");
+function vr(e, t) {
+	let n = ft(e, "auth");
 	if (n.isInitialized()) {
 		let e = n.getImmediate();
-		if (p(n.getOptions(), t ?? {})) return e;
+		if (m(n.getOptions(), t ?? {})) return e;
 		A(e, "already-initialized");
 	}
 	return n.initialize({ options: t });
 }
-function hr(e, t) {
-	let n = t?.persistence || [], r = (Array.isArray(n) ? n : [n]).map(H);
+function yr(e, t) {
+	let n = t?.persistence || [], r = (Array.isArray(n) ? n : [n]).map(B);
 	t?.errorMap && e._updateErrorMap(t.errorMap), e._initializeWithPersistence(r, t?.popupRedirectResolver);
 }
-function gr(e, t, n) {
-	let r = U(e);
+function br(e, t, n) {
+	let r = V(e);
 	N(/^https?:\/\//.test(t), r, "invalid-emulator-scheme");
-	let i = !!n?.disableWarnings, a = _r(t), { host: o, port: s } = vr(t), c = s === null ? "" : `:${s}`, l = { url: `${a}//${o}${c}/` }, u = Object.freeze({
+	let i = !!n?.disableWarnings, a = xr(t), { host: o, port: s } = Sr(t), c = s === null ? "" : `:${s}`, l = { url: `${a}//${o}${c}/` }, u = Object.freeze({
 		host: o,
 		port: s,
 		protocol: a.replace(":", ""),
 		options: Object.freeze({ disableWarnings: i })
 	});
 	if (!r._canInitEmulator) {
-		N(r.config.emulator && r.emulatorConfig, r, "emulator-config-failed"), N(p(l, r.config.emulator) && p(u, r.emulatorConfig), r, "emulator-config-failed");
+		N(r.config.emulator && r.emulatorConfig, r, "emulator-config-failed"), N(m(l, r.config.emulator) && m(u, r.emulatorConfig), r, "emulator-config-failed");
 		return;
 	}
-	r.config.emulator = l, r.emulatorConfig = u, r.settings.appVerificationDisabledForTesting = !0, se(o) ? ce(`${a}//${o}${c}`) : i || br();
+	r.config.emulator = l, r.emulatorConfig = u, r.settings.appVerificationDisabledForTesting = !0, oe(o) ? se(`${a}//${o}${c}`) : i || wr();
 }
-function _r(e) {
+function xr(e) {
 	let t = e.indexOf(":");
 	return t < 0 ? "" : e.substr(0, t + 1);
 }
-function vr(e) {
-	let t = _r(e), n = /(\/\/)?([^?#/]+)/.exec(e.substr(t.length));
+function Sr(e) {
+	let t = xr(e), n = /(\/\/)?([^?#/]+)/.exec(e.substr(t.length));
 	if (!n) return {
 		host: "",
 		port: null
@@ -1414,61 +1414,61 @@ function vr(e) {
 		let e = i[1];
 		return {
 			host: e,
-			port: yr(r.substr(e.length + 1))
+			port: Cr(r.substr(e.length + 1))
 		};
 	} else {
 		let [e, t] = r.split(":");
 		return {
 			host: e,
-			port: yr(t)
+			port: Cr(t)
 		};
 	}
 }
-function yr(e) {
+function Cr(e) {
 	if (!e) return null;
 	let t = Number(e);
 	return isNaN(t) ? null : t;
 }
-function br() {
+function wr() {
 	function e() {
 		let e = document.createElement("p"), t = e.style;
 		e.innerText = "Running in emulator mode. Do not use with production credentials.", t.position = "fixed", t.width = "100%", t.backgroundColor = "#ffffff", t.border = ".1em solid #000000", t.color = "#b50000", t.bottom = "0px", t.left = "0px", t.margin = "0px", t.zIndex = "10000", t.textAlign = "center", e.classList.add("firebase-emulator-warning"), document.body.appendChild(e);
 	}
 	typeof console < "u" && typeof console.info == "function" && console.info("WARNING: You are using the Auth Emulator, which is intended for local testing only.  Do not use with production credentials."), typeof window < "u" && typeof document < "u" && (document.readyState === "loading" ? window.addEventListener("DOMContentLoaded", e) : e());
 }
-async function xr(e, t) {
+async function Tr(e, t) {
 	return L(e, "POST", "/v1/accounts:signUp", t);
 }
-async function Sr(e, t) {
+async function Er(e, t) {
 	return R(e, "POST", "/v1/accounts:signInWithPassword", I(e, t));
 }
-async function Cr(e, t) {
+async function Dr(e, t) {
 	return R(e, "POST", "/v1/accounts:signInWithEmailLink", I(e, t));
 }
-async function wr(e, t) {
+async function Or(e, t) {
 	return R(e, "POST", "/v1/accounts:signInWithEmailLink", I(e, t));
 }
-async function K(e, t) {
+async function H(e, t) {
 	return R(e, "POST", "/v1/accounts:signInWithIdp", I(e, t));
 }
-async function Tr(e, t) {
+async function kr(e, t) {
 	return L(e, "POST", "/v1/accounts:sendVerificationCode", I(e, t));
 }
-async function Er(e, t) {
+async function Ar(e, t) {
 	return R(e, "POST", "/v1/accounts:signInWithPhoneNumber", I(e, t));
 }
-async function Dr(e, t) {
+async function jr(e, t) {
 	let n = await R(e, "POST", "/v1/accounts:signInWithPhoneNumber", I(e, t));
 	if (n.temporaryProof) throw jn(e, "account-exists-with-different-credential", n);
 	return n;
 }
-async function Or(e, t) {
+async function Mr(e, t) {
 	return R(e, "POST", "/v1/accounts:signInWithPhoneNumber", I(e, {
 		...t,
 		operation: "REAUTH"
-	}), Sa);
+	}), Ta);
 }
-function kr(e) {
+function Nr(e) {
 	switch (e) {
 		case "recoverEmail": return "RECOVER_EMAIL";
 		case "resetPassword": return "PASSWORD_RESET";
@@ -1479,83 +1479,83 @@ function kr(e) {
 		default: return null;
 	}
 }
-function Ar(e) {
-	let t = re(h(e)).link, n = t ? re(h(t)).deep_link_id : null, r = re(h(e)).deep_link_id;
-	return (r ? re(h(r)).link : null) || r || n || t || e;
+function Pr(e) {
+	let t = g(ne(e)).link, n = t ? g(ne(t)).deep_link_id : null, r = g(ne(e)).deep_link_id;
+	return (r ? g(ne(r)).link : null) || r || n || t || e;
 }
-function jr(e) {
+function Fr(e) {
 	return e.providerId ? e.providerId : "phoneNumber" in e ? "phone" : null;
 }
-function Mr(e, t, n, r) {
+function Ir(e, t, n, r) {
 	return (t === "reauthenticate" ? n._getReauthenticationResolver(e) : n._getIdTokenResponse(e)).catch((n) => {
-		throw n.code === "auth/multi-factor-auth-required" ? Ma._fromErrorAndOperation(e, n, t, r) : n;
+		throw n.code === "auth/multi-factor-auth-required" ? Fa._fromErrorAndOperation(e, n, t, r) : n;
 	});
 }
-async function Nr(e, t, n = !1) {
-	let r = await B(e, t._linkToIdToken(e.auth, await e.getIdToken()), n);
-	return ja._forOperation(e, "link", r);
+async function Lr(e, t, n = !1) {
+	let r = await Vn(e, t._linkToIdToken(e.auth, await e.getIdToken()), n);
+	return Pa._forOperation(e, "link", r);
 }
-async function Pr(e, t, n = !1) {
+async function Rr(e, t, n = !1) {
 	let { auth: r } = e;
-	if (C(r.app)) return Promise.reject(M(r));
+	if (w(r.app)) return Promise.reject(M(r));
 	let i = "reauthenticate";
 	try {
-		let a = await B(e, Mr(r, i, t, e), n);
+		let a = await Vn(e, Ir(r, i, t, e), n);
 		N(a.idToken, r, "internal-error");
-		let o = Rn(a.idToken);
+		let o = zn(a.idToken);
 		N(o, r, "internal-error");
 		let { sub: s } = o;
-		return N(e.uid === s, r, "user-mismatch"), ja._forOperation(e, i, a);
+		return N(e.uid === s, r, "user-mismatch"), Pa._forOperation(e, i, a);
 	} catch (e) {
 		throw e?.code === "auth/user-not-found" && A(r, "user-mismatch"), e;
 	}
 }
-async function Fr(e, t, n = !1) {
-	if (C(e.app)) return Promise.reject(M(e));
-	let r = "signIn", i = await Mr(e, r, t), a = await ja._fromIdTokenResponse(e, r, i);
+async function zr(e, t, n = !1) {
+	if (w(e.app)) return Promise.reject(M(e));
+	let r = "signIn", i = await Ir(e, r, t), a = await Pa._fromIdTokenResponse(e, r, i);
 	return n || await e._updateCurrentUser(a.user), a;
 }
-async function Ir(e, t) {
-	return Fr(U(e), t);
+async function Br(e, t) {
+	return zr(V(e), t);
 }
-async function Lr(e) {
-	let t = U(e);
+async function Vr(e) {
+	let t = V(e);
 	t._getPasswordPolicyInternal() && await t._updatePasswordPolicy();
 }
-function Rr(e, t, n) {
-	return C(e.app) ? Promise.reject(M(e)) : Ir(g(e), Ta.credential(t, n)).catch(async (t) => {
-		throw t.code === "auth/password-does-not-meet-requirements" && Lr(e), t;
+function Hr(e, t, n) {
+	return w(e.app) ? Promise.reject(M(e)) : Br(_(e), Oa.credential(t, n)).catch(async (t) => {
+		throw t.code === "auth/password-does-not-meet-requirements" && Vr(e), t;
 	});
 }
-function zr(e, t, n, r) {
-	return g(e).onIdTokenChanged(t, n, r);
+function Ur(e, t, n, r) {
+	return _(e).onIdTokenChanged(t, n, r);
 }
-function Br(e, t, n) {
-	return g(e).beforeAuthStateChanged(t, n);
+function Wr(e, t, n) {
+	return _(e).beforeAuthStateChanged(t, n);
 }
-function Vr(e, t, n, r) {
-	return g(e).onAuthStateChanged(t, n, r);
+function Gr(e, t, n, r) {
+	return _(e).onAuthStateChanged(t, n, r);
 }
-function Hr(e, t) {
+function Kr(e, t) {
 	return L(e, "POST", "/v2/accounts/mfaEnrollment:start", I(e, t));
 }
-function Ur(e, t) {
+function qr(e, t) {
 	return L(e, "POST", "/v2/accounts/mfaEnrollment:finalize", I(e, t));
 }
-function Wr(e, t) {
+function Jr(e, t) {
 	return L(e, "POST", "/v2/accounts/mfaEnrollment:start", I(e, t));
 }
-function Gr(e, t) {
+function Yr(e, t) {
 	return L(e, "POST", "/v2/accounts/mfaEnrollment:finalize", I(e, t));
 }
-function Kr(e) {
+function Xr(e) {
 	let t = e.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&"), n = RegExp(`${t}=([^;]+)`);
 	return document.cookie.match(n)?.[1] ?? null;
 }
-function qr(e) {
+function Zr(e) {
 	return `${window.location.protocol === "http:" ? "__dev_" : "__HOST-"}FIREBASE_${e.split(":")[3]}`;
 }
-function Jr(e) {
+function Qr(e) {
 	return Promise.all(e.map(async (e) => {
 		try {
 			return {
@@ -1570,21 +1570,21 @@ function Jr(e) {
 		}
 	}));
 }
-function Yr(e = "", t = 10) {
+function $r(e = "", t = 10) {
 	let n = "";
 	for (let e = 0; e < t; e++) n += Math.floor(Math.random() * 10);
 	return e + n;
 }
-function q() {
+function U() {
 	return window;
 }
-function Xr(e) {
-	q().location.href = e;
+function ei(e) {
+	U().location.href = e;
 }
-function Zr() {
-	return q().WorkerGlobalScope !== void 0 && typeof q().importScripts == "function";
+function ti() {
+	return U().WorkerGlobalScope !== void 0 && typeof U().importScripts == "function";
 }
-async function Qr() {
+async function ni() {
 	if (!navigator?.serviceWorker) return null;
 	try {
 		return (await navigator.serviceWorker.ready).active;
@@ -1592,61 +1592,61 @@ async function Qr() {
 		return null;
 	}
 }
-function $r() {
+function ri() {
 	return navigator?.serviceWorker?.controller || null;
 }
-function ei() {
-	return Zr() ? self : null;
+function ii() {
+	return ti() ? self : null;
 }
-function ti(e, t) {
-	return e.transaction([qa], t ? "readwrite" : "readonly").objectStore(qa);
+function ai(e, t) {
+	return e.transaction([Y], t ? "readwrite" : "readonly").objectStore(Y);
 }
-function ni() {
-	return new Q(indexedDB.deleteDatabase(Ga)).toPromise();
+function oi() {
+	return new X(indexedDB.deleteDatabase(Ja)).toPromise();
 }
-function ri() {
-	let e = indexedDB.open(Ga, Ka);
+function si() {
+	let e = indexedDB.open(Ja, Ya);
 	return new Promise((t, n) => {
 		e.addEventListener("error", () => {
 			n(e.error);
 		}), e.addEventListener("upgradeneeded", () => {
 			let t = e.result;
 			try {
-				t.createObjectStore(qa, { keyPath: Ja });
+				t.createObjectStore(Y, { keyPath: Xa });
 			} catch (e) {
 				n(e);
 			}
 		}), e.addEventListener("success", async () => {
 			let n = e.result;
-			n.objectStoreNames.contains(qa) ? t(n) : (n.close(), await ni(), t(await ri()));
+			n.objectStoreNames.contains(Y) ? t(n) : (n.close(), await oi(), t(await si()));
 		});
 	});
 }
-async function ii(e, t, n) {
-	return new Q(ti(e, !0).put({
-		[Ja]: t,
+async function ci(e, t, n) {
+	return new X(ai(e, !0).put({
+		[Xa]: t,
 		value: n
 	})).toPromise();
 }
-async function ai(e, t) {
-	let n = await new Q(ti(e, !1).get(t)).toPromise();
+async function li(e, t) {
+	let n = await new X(ai(e, !1).get(t)).toPromise();
 	return n === void 0 ? null : n.value;
 }
-function oi(e, t) {
-	return new Q(ti(e, !0).delete(t)).toPromise();
+function di(e, t) {
+	return new X(ai(e, !0).delete(t)).toPromise();
 }
-function si(e, t) {
+function fi(e, t) {
 	return L(e, "POST", "/v2/accounts/mfaSignIn:start", I(e, t));
 }
-function ci(e, t) {
+function pi(e, t) {
 	return L(e, "POST", "/v2/accounts/mfaSignIn:finalize", I(e, t));
 }
-function li(e, t) {
+function mi(e, t) {
 	return L(e, "POST", "/v2/accounts/mfaSignIn:finalize", I(e, t));
 }
-async function di(e, t, n) {
+async function hi(e, t, n) {
 	if (!e._getRecaptchaConfig()) try {
-		await pr(e);
+		await _r(e);
 	} catch {
 		console.log("Failed to initialize reCAPTCHA Enterprise config. Triggering the reCAPTCHA v2 verification.");
 	}
@@ -1654,32 +1654,32 @@ async function di(e, t, n) {
 		let r;
 		if (r = typeof t == "string" ? { phoneNumber: t } : t, "session" in r) {
 			let t = r.session;
-			if ("phoneNumber" in r) return N(t.type === "enroll", e, "internal-error"), (await G(e, {
+			if ("phoneNumber" in r) return N(t.type === "enroll", e, "internal-error"), (await gr(e, {
 				idToken: t.credential,
 				phoneEnrollmentInfo: {
 					phoneNumber: r.phoneNumber,
 					clientType: "CLIENT_TYPE_WEB"
 				}
-			}, "mfaSmsEnrollment", async (e, t) => t.phoneEnrollmentInfo.captchaResponse === X ? (N(n?.type === $a, e, "argument-error"), Hr(e, await fi(e, t, n))) : Hr(e, t), "PHONE_PROVIDER").catch((e) => Promise.reject(e))).phoneSessionInfo.sessionInfo;
+			}, "mfaSmsEnrollment", async (e, t) => t.phoneEnrollmentInfo.captchaResponse === q ? (N(n?.type === to, e, "argument-error"), Kr(e, await gi(e, t, n))) : Kr(e, t), "PHONE_PROVIDER").catch((e) => Promise.reject(e))).phoneSessionInfo.sessionInfo;
 			{
 				N(t.type === "signin", e, "internal-error");
 				let i = r.multiFactorHint?.uid || r.multiFactorUid;
-				return N(i, e, "missing-multi-factor-info"), (await G(e, {
+				return N(i, e, "missing-multi-factor-info"), (await gr(e, {
 					mfaPendingCredential: t.credential,
 					mfaEnrollmentId: i,
 					phoneSignInInfo: { clientType: "CLIENT_TYPE_WEB" }
-				}, "mfaSmsSignIn", async (e, t) => t.phoneSignInInfo.captchaResponse === X ? (N(n?.type === $a, e, "argument-error"), si(e, await fi(e, t, n))) : si(e, t), "PHONE_PROVIDER").catch((e) => Promise.reject(e))).phoneResponseInfo.sessionInfo;
+				}, "mfaSmsSignIn", async (e, t) => t.phoneSignInInfo.captchaResponse === q ? (N(n?.type === to, e, "argument-error"), fi(e, await gi(e, t, n))) : fi(e, t), "PHONE_PROVIDER").catch((e) => Promise.reject(e))).phoneResponseInfo.sessionInfo;
 			}
-		} else return (await G(e, {
+		} else return (await gr(e, {
 			phoneNumber: r.phoneNumber,
 			clientType: "CLIENT_TYPE_WEB"
-		}, "sendVerificationCode", async (e, t) => t.captchaResponse === X ? (N(n?.type === $a, e, "argument-error"), Tr(e, await fi(e, t, n))) : Tr(e, t), "PHONE_PROVIDER").catch((e) => Promise.reject(e))).sessionInfo;
+		}, "sendVerificationCode", async (e, t) => t.captchaResponse === q ? (N(n?.type === to, e, "argument-error"), kr(e, await gi(e, t, n))) : kr(e, t), "PHONE_PROVIDER").catch((e) => Promise.reject(e))).sessionInfo;
 	} finally {
 		n?._reset();
 	}
 }
-async function fi(e, t, n) {
-	N(n.type === $a, e, "argument-error");
+async function gi(e, t, n) {
+	N(n.type === to, e, "argument-error");
 	let r = await n.verify();
 	N(typeof r == "string", e, "argument-error");
 	let i = { ...t };
@@ -1702,59 +1702,59 @@ async function fi(e, t, n) {
 		} }), i;
 	} else return Object.assign(i, { recaptchaToken: r }), i;
 }
-function pi(e, t) {
-	return t ? H(t) : (N(e._popupRedirectResolver, e, "argument-error"), e._popupRedirectResolver);
+function _i(e, t) {
+	return t ? B(t) : (N(e._popupRedirectResolver, e, "argument-error"), e._popupRedirectResolver);
 }
-function mi(e) {
-	return Fr(e.auth, new to(e), e.bypassAuthState);
+function vi(e) {
+	return zr(e.auth, new ro(e), e.bypassAuthState);
 }
-function hi(e) {
+function yi(e) {
 	let { auth: t, user: n } = e;
-	return N(n, t, "internal-error"), Pr(n, new to(e), e.bypassAuthState);
+	return N(n, t, "internal-error"), Rr(n, new ro(e), e.bypassAuthState);
 }
-async function gi(e) {
+async function bi(e) {
 	let { auth: t, user: n } = e;
-	return N(n, t, "internal-error"), Nr(n, new to(e), e.bypassAuthState);
+	return N(n, t, "internal-error"), Lr(n, new ro(e), e.bypassAuthState);
 }
-async function _i(e, t, n) {
-	if (C(e.app)) return Promise.reject(j(e, "operation-not-supported-in-this-environment"));
-	let r = U(e);
-	return bn(e, t, Ea), new io(r, "signInViaPopup", t, pi(r, n)).executeNotNull();
+async function xi(e, t, n) {
+	if (w(e.app)) return Promise.reject(j(e, "operation-not-supported-in-this-environment"));
+	let r = V(e);
+	return bn(e, t, ka), new oo(r, "signInViaPopup", t, _i(r, n)).executeNotNull();
 }
-async function vi(e, t) {
-	let n = Si(t), r = xi(e);
+async function Si(e, t) {
+	let n = Ei(t), r = Ti(e);
 	if (!await r._isAvailable()) return !1;
 	let i = await r._get(n) === "true";
 	return await r._remove(n), i;
 }
-async function yi(e, t) {
-	return xi(e)._set(Si(t), "true");
+async function Ci(e, t) {
+	return Ti(e)._set(Ei(t), "true");
 }
-function bi(e, t) {
-	oo.set(e._key(), t);
+function wi(e, t) {
+	co.set(e._key(), t);
 }
-function xi(e) {
-	return H(e._redirectPersistence);
-}
-function Si(e) {
-	return qn(ao, e.config.apiKey, e.name);
-}
-function Ci(e, t, n) {
-	return wi(e, t, n);
-}
-async function wi(e, t, n) {
-	if (C(e.app)) return Promise.reject(M(e));
-	let r = U(e);
-	bn(e, t, Ea), await r._initializationPromise;
-	let i = pi(r, n);
-	return await yi(i, r), i._openRedirect(r, t, "signInViaRedirect");
-}
-async function Ti(e, t, n = !1) {
-	if (C(e.app)) return Promise.reject(M(e));
-	let r = U(e), i = await new so(r, pi(r, t), n).execute();
-	return i && !n && (delete i.user._redirectEventId, await r._persistUserIfCurrent(i.user), await r._setRedirectUser(null, t)), i;
+function Ti(e) {
+	return B(e._redirectPersistence);
 }
 function Ei(e) {
+	return Yn(so, e.config.apiKey, e.name);
+}
+function Di(e, t, n) {
+	return Oi(e, t, n);
+}
+async function Oi(e, t, n) {
+	if (w(e.app)) return Promise.reject(M(e));
+	let r = V(e);
+	bn(e, t, ka), await r._initializationPromise;
+	let i = _i(r, n);
+	return await Ci(i, r), i._openRedirect(r, t, "signInViaRedirect");
+}
+async function ki(e, t, n = !1) {
+	if (w(e.app)) return Promise.reject(M(e));
+	let r = V(e), i = await new lo(r, _i(r, t), n).execute();
+	return i && !n && (delete i.user._redirectEventId, await r._persistUserIfCurrent(i.user), await r._setRedirectUser(null, t)), i;
+}
+function Ai(e) {
 	return [
 		e.type,
 		e.eventId,
@@ -1762,132 +1762,132 @@ function Ei(e) {
 		e.tenantId
 	].filter((e) => e).join("-");
 }
-function Di({ type: e, error: t }) {
+function ji({ type: e, error: t }) {
 	return e === "unknown" && t?.code === "auth/no-auth-event";
 }
-function Oi(e) {
+function Mi(e) {
 	switch (e.type) {
 		case "signInViaRedirect":
 		case "linkViaRedirect":
 		case "reauthViaRedirect": return !0;
-		case "unknown": return Di(e);
+		case "unknown": return ji(e);
 		default: return !1;
 	}
 }
-async function ki(e, t = {}) {
+async function Ni(e, t = {}) {
 	return L(e, "GET", "/v1/projects", t);
 }
-async function Ai(e) {
+async function Pi(e) {
 	if (e.config.emulator) return;
-	let { authorizedDomains: t } = await ki(e);
+	let { authorizedDomains: t } = await Ni(e);
 	for (let e of t) try {
-		if (ji(e)) return;
+		if (Fi(e)) return;
 	} catch {}
 	A(e, "unauthorized-domain");
 }
-function ji(e) {
+function Fi(e) {
 	let t = Sn(), { protocol: n, hostname: r } = new URL(t);
 	if (e.startsWith("chrome-extension://")) {
 		let i = new URL(e);
 		return i.hostname === "" && r === "" ? n === "chrome-extension:" && e.replace("chrome-extension://", "") === t.replace("chrome-extension://", "") : n === "chrome-extension:" && i.hostname === r;
 	}
-	if (!fo.test(n)) return !1;
-	if (uo.test(e)) return r === e;
+	if (!mo.test(n)) return !1;
+	if (po.test(e)) return r === e;
 	let i = e.replace(/\./g, "\\.");
 	return RegExp("^(.+\\." + i + "|" + i + ")$", "i").test(r);
 }
-function Mi() {
-	let e = q().___jsl;
+function Ii() {
+	let e = U().___jsl;
 	if (e?.H) {
 		for (let t of Object.keys(e.H)) if (e.H[t].r = e.H[t].r || [], e.H[t].L = e.H[t].L || [], e.H[t].r = [...e.H[t].L], e.CP) for (let t = 0; t < e.CP.length; t++) e.CP[t] = null;
 	}
 }
-function Ni(e) {
+function Li(e) {
 	return new Promise((t, n) => {
 		function r() {
-			Mi(), gapi.load("gapi.iframes", {
+			Ii(), gapi.load("gapi.iframes", {
 				callback: () => {
 					t(gapi.iframes.getContext());
 				},
 				ontimeout: () => {
-					Mi(), n(j(e, "network-request-failed"));
+					Ii(), n(j(e, "network-request-failed"));
 				},
-				timeout: po.get()
+				timeout: ho.get()
 			});
 		}
-		if (q().gapi?.iframes?.Iframe) t(gapi.iframes.getContext());
-		else if (q().gapi?.load) r();
+		if (U().gapi?.iframes?.Iframe) t(gapi.iframes.getContext());
+		else if (U().gapi?.load) r();
 		else {
-			let t = fr("iframefcb");
-			return q()[t] = () => {
+			let t = mr("iframefcb");
+			return U()[t] = () => {
 				gapi.load ? r() : n(j(e, "network-request-failed"));
-			}, lr(`${dr()}?onload=${t}`).catch((e) => n(e));
+			}, dr(`${pr()}?onload=${t}`).catch((e) => n(e));
 		}
 	}).catch((e) => {
-		throw mo = null, e;
+		throw go = null, e;
 	});
 }
-function Pi(e) {
-	return mo ||= Ni(e), mo;
+function Ri(e) {
+	return go ||= Li(e), go;
 }
-function Fi(e) {
+function zi(e) {
 	let t = e.config;
 	N(t.authDomain, e, "auth-domain-config-required");
-	let n = t.emulator ? Dn(t, _o) : `https://${e.config.authDomain}/${go}`, r = {
+	let n = t.emulator ? Dn(t, yo) : `https://${e.config.authDomain}/${vo}`, r = {
 		apiKey: t.apiKey,
 		appName: e.name,
 		v: O
-	}, i = yo.get(e.config.apiHost);
+	}, i = xo.get(e.config.apiHost);
 	i && (r.eid = i);
 	let a = e._getFrameworks();
-	return a.length && (r.fw = a.join(",")), `${n}?${m(r).slice(1)}`;
+	return a.length && (r.fw = a.join(",")), `${n}?${h(r).slice(1)}`;
 }
-async function Ii(e) {
-	let t = await Pi(e), n = q().gapi;
+async function Bi(e) {
+	let t = await Ri(e), n = U().gapi;
 	return N(n, e, "internal-error"), t.open({
 		where: document.body,
-		url: Fi(e),
+		url: zi(e),
 		messageHandlersFilter: n.iframes.CROSS_ORIGIN_IFRAMES_FILTER,
-		attributes: vo,
+		attributes: bo,
 		dontclear: !0
 	}, (t) => new Promise(async (n, r) => {
 		await t.restyle({ setHideOnLeave: !1 });
-		let i = j(e, "network-request-failed"), a = q().setTimeout(() => {
+		let i = j(e, "network-request-failed"), a = U().setTimeout(() => {
 			r(i);
-		}, ho.get());
+		}, _o.get());
 		function o() {
-			q().clearTimeout(a), n(t);
+			U().clearTimeout(a), n(t);
 		}
 		t.ping(o).then(o, () => {
 			r(i);
 		});
 	}));
 }
-function Li(e, t, n, r = xo, i = So) {
+function Vi(e, t, n, r = Co, i = wo) {
 	let o = Math.max((window.screen.availHeight - i) / 2, 0).toString(), s = Math.max((window.screen.availWidth - r) / 2, 0).toString(), c = "", l = {
-		...bo,
+		...So,
 		width: r.toString(),
 		height: i.toString(),
 		top: o,
 		left: s
 	}, u = a().toLowerCase();
-	n && (c = Zn(u) ? Co : n), Yn(u) && (t ||= wo, l.scrollbars = "yes");
+	n && (c = $n(u) ? To : n), Zn(u) && (t ||= Eo, l.scrollbars = "yes");
 	let d = Object.entries(l).reduce((e, [t, n]) => `${e}${t}=${n},`, "");
-	if (rr(u) && c !== "_self") return Ri(t || "", c), new To(null);
+	if (ar(u) && c !== "_self") return Hi(t || "", c), new Do(null);
 	let f = window.open(t || "", c, d);
 	N(f, e, "popup-blocked");
 	try {
 		f.focus();
 	} catch {}
-	return new To(f);
+	return new Do(f);
 }
-function Ri(e, t) {
+function Hi(e, t) {
 	let n = document.createElement("a");
 	n.href = e, n.target = t;
 	let r = document.createEvent("MouseEvent");
 	r.initMouseEvent("click", !0, !0, window, 1, 0, 0, 0, 0, !1, !1, !1, !1, 1, null), n.dispatchEvent(r);
 }
-async function zi(e, t, n, r, i, a) {
+async function Ui(e, t, n, r, i, a) {
 	N(e.config.authDomain, e, "auth-domain-config-required"), N(e.config.apiKey, e, "invalid-api-key");
 	let o = {
 		apiKey: e.config.apiKey,
@@ -1897,27 +1897,27 @@ async function zi(e, t, n, r, i, a) {
 		v: O,
 		eventId: i
 	};
-	if (t instanceof Ea) {
-		t.setDefaultLanguage(e.languageCode), o.providerId = t.providerId || "", te(t.getCustomParameters()) || (o.customParameters = JSON.stringify(t.getCustomParameters()));
+	if (t instanceof ka) {
+		t.setDefaultLanguage(e.languageCode), o.providerId = t.providerId || "", p(t.getCustomParameters()) || (o.customParameters = JSON.stringify(t.getCustomParameters()));
 		for (let [e, t] of Object.entries(a || {})) o[e] = t;
 	}
-	if (t instanceof Z) {
+	if (t instanceof J) {
 		let e = t.getScopes().filter((e) => e !== "");
 		e.length > 0 && (o.scopes = e.join(","));
 	}
 	e.tenantId && (o.tid = e.tenantId);
 	let s = o;
 	for (let e of Object.keys(s)) s[e] === void 0 && delete s[e];
-	let c = await e._getAppCheckToken(), l = c ? `#${Oo}=${encodeURIComponent(c)}` : "";
-	return `${Bi(e)}?${m(s).slice(1)}${l}`;
+	let c = await e._getAppCheckToken(), l = c ? `#${Ao}=${encodeURIComponent(c)}` : "";
+	return `${Wi(e)}?${h(s).slice(1)}${l}`;
 }
-function Bi({ config: e }) {
-	return e.emulator ? Dn(e, Do) : `https://${e.authDomain}/${Eo}`;
+function Wi({ config: e }) {
+	return e.emulator ? Dn(e, ko) : `https://${e.authDomain}/${Oo}`;
 }
-function Vi(e) {
+function Gi(e) {
 	return e === void 0 || e?.length === 0;
 }
-function Hi(e) {
+function Ki(e) {
 	switch (e) {
 		case "Node": return "node";
 		case "ReactNative": return "rn";
@@ -1927,57 +1927,57 @@ function Hi(e) {
 		default: return;
 	}
 }
-function Ui(e) {
-	ft(new y("auth", (t, { options: n }) => {
+function qi(e) {
+	dt(new b("auth", (t, { options: n }) => {
 		let r = t.getProvider("app").getImmediate(), i = t.getProvider("heartbeat"), a = t.getProvider("app-check-internal"), { apiKey: o, authDomain: s } = r.options;
 		N(o && !o.includes(":"), "invalid-api-key", { appName: r.name });
-		let c = new da(r, i, a, {
+		let c = new ma(r, i, a, {
 			apiKey: o,
 			authDomain: s,
 			clientPlatform: e,
 			apiHost: "identitytoolkit.googleapis.com",
 			tokenApiHost: "securetoken.googleapis.com",
 			apiScheme: "https",
-			sdkClientVersion: or(e)
+			sdkClientVersion: cr(e)
 		});
-		return hr(c, n), c;
+		return yr(c, n), c;
 	}, "PUBLIC").setInstantiationMode("EXPLICIT").setInstanceCreatedCallback((e, t, n) => {
 		e.getProvider("auth-internal").initialize();
-	})), ft(new y("auth-internal", (e) => ((e) => new Bo(e))(U(e.getProvider("auth").getImmediate())), "PRIVATE").setInstantiationMode("EXPLICIT")), w(Ro, zo, Hi(e)), w(Ro, zo, "esm2020");
+	})), dt(new b("auth-internal", (e) => ((e) => new Ho(e))(V(e.getProvider("auth").getImmediate())), "PRIVATE").setInstantiationMode("EXPLICIT")), T(Bo, Vo, Ki(e)), T(Bo, Vo, "esm2020");
 }
-function Wi(e = ht()) {
-	let t = pt(e, "auth");
+function Ji(e = mt()) {
+	let t = ft(e, "auth");
 	if (t.isInitialized()) return t.getImmediate();
-	let n = mr(e, {
-		popupRedirectResolver: jo,
+	let n = vr(e, {
+		popupRedirectResolver: No,
 		persistence: [
-			Qa,
-			Ra,
-			Ha
+			eo,
+			Va,
+			Ga
 		]
-	}), r = Se("authTokenSyncURL");
+	}), r = xe("authTokenSyncURL");
 	if (r && typeof isSecureContext == "boolean" && isSecureContext) {
 		let e = new URL(r, location.origin);
 		if (location.origin === e.origin) {
-			let t = Uo(e.toString());
-			Br(n, t, () => t(n.currentUser)), zr(n, (e) => t(e));
+			let t = Go(e.toString());
+			Wr(n, t, () => t(n.currentUser)), Ur(n, (e) => t(e));
 		}
 	}
-	let i = be("auth");
-	return i && gr(n, `http://${i}`), n;
+	let i = ye("auth");
+	return i && br(n, `http://${i}`), n;
 }
-function Gi() {
+function Yi() {
 	return document.getElementsByTagName("head")?.[0] ?? document;
 }
-var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la, ua, da, fa, pa, ma, ha, ga, X, _a, va, ya, ba, xa, Sa, Ca, wa, Ta, Ea, Z, Da, Oa, ka, Aa, ja, Ma, Na, Pa, Fa, Ia, La, Ra, za, Ba, Va, Ha, Ua, Wa, Ga, Ka, qa, Ja, Q, Ya, Xa, Za, Qa, $a, eo, to, no, ro, io, ao, oo, so, co, lo, uo, fo, po, mo, ho, go, _o, vo, yo, bo, xo, So, Co, wo, To, Eo, Do, Oo, ko, Ao, jo, Mo, No, Po, Fo, Io, Lo, Ro, zo, Bo, Vo, Ho, Uo, Wo = e((() => {
-	mn(), De(), ze(), Me(), Ki = gn, qi = new v("auth", "Firebase", gn()), Ji = new Re("@firebase/auth"), J = class {
+var Xi, Zi, W, G, Qi, $i, ea, ta, na, ra, ia, aa, oa, K, sa, ca, la, ua, da, fa, pa, ma, ha, ga, _a, va, ya, q, ba, xa, Sa, Ca, wa, Ta, Ea, Da, Oa, ka, J, Aa, ja, Ma, Na, Pa, Fa, Ia, La, Ra, za, Ba, Va, Ha, Ua, Wa, Ga, Ka, qa, Ja, Ya, Y, Xa, X, Za, Qa, $a, eo, to, no, ro, io, ao, oo, so, co, lo, uo, fo, po, mo, ho, go, _o, vo, yo, bo, xo, So, Co, wo, To, Eo, Do, Oo, ko, Ao, jo, Mo, No, Po, Fo, Io, Lo, Ro, zo, Bo, Vo, Ho, Uo, Wo, Go, Ko = e((() => {
+	mn(), Ee(), Re(), je(), Xi = gn, Zi = new y("auth", "Firebase", gn()), W = new Le("@firebase/auth"), G = class {
 		constructor(e, t) {
 			this.shortDelay = e, this.longDelay = t, F(t > e, "Short delay should be less than long delay!"), this.isMobile = o() || l();
 		}
 		get() {
 			return Tn() ? this.isMobile ? this.longDelay : this.shortDelay : Math.min(5e3, this.shortDelay);
 		}
-	}, Yi = class {
+	}, Qi = class {
 		static initialize(e, t, n) {
 			this.fetchImpl = e, t && (this.headersImpl = t), n && (this.responseImpl = n);
 		}
@@ -2002,7 +2002,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			if (typeof Response < "u") return Response;
 			P("Could not find Response implementation, make sure you call FetchProvider.initialize() with an appropriate polyfill");
 		}
-	}, Xi = {
+	}, $i = {
 		CREDENTIAL_MISMATCH: "custom-token-mismatch",
 		MISSING_CUSTOM_TOKEN: "internal-error",
 		INVALID_IDENTIFIER: "invalid-email",
@@ -2051,23 +2051,23 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		MISSING_RECAPTCHA_VERSION: "missing-recaptcha-version",
 		INVALID_RECAPTCHA_VERSION: "invalid-recaptcha-version",
 		INVALID_REQ_TYPE: "invalid-req-type"
-	}, Zi = [
+	}, ea = [
 		"/v1/accounts:signInWithCustomToken",
 		"/v1/accounts:signInWithEmailLink",
 		"/v1/accounts:signInWithIdp",
 		"/v1/accounts:signInWithPassword",
 		"/v1/accounts:signInWithPhoneNumber",
 		"/v1/token"
-	], Qi = new J(3e4, 6e4), $i = class {
+	], ta = new G(3e4, 6e4), na = class {
 		clearNetworkTimeout() {
 			clearTimeout(this.timer);
 		}
 		constructor(e) {
 			this.auth = e, this.timer = null, this.promise = new Promise((e, t) => {
-				this.timer = setTimeout(() => t(j(this.auth, "network-request-failed")), Qi.get());
+				this.timer = setTimeout(() => t(j(this.auth, "network-request-failed")), ta.get());
 			});
 		}
-	}, ea = class {
+	}, ra = class {
 		constructor(e) {
 			if (this.siteKey = "", this.recaptchaEnforcementState = [], e.recaptchaKey === void 0) throw Error("recaptchaKey undefined");
 			this.siteKey = e.recaptchaKey.split("/")[3], this.recaptchaEnforcementState = e.recaptchaEnforcementState;
@@ -2083,7 +2083,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		isAnyProviderEnabled() {
 			return this.isProviderEnabled("EMAIL_PASSWORD_PROVIDER") || this.isProviderEnabled("PHONE_PROVIDER");
 		}
-	}, ta = class {
+	}, ia = class {
 		constructor(e) {
 			this.user = e, this.isRunning = !1, this.timerId = null, this.errorBackoff = 3e4;
 		}
@@ -2119,12 +2119,12 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			}
 			this.schedule();
 		}
-	}, na = class {
+	}, aa = class {
 		constructor(e, t) {
 			this.createdAt = e, this.lastLoginAt = t, this._initializeTime();
 		}
 		_initializeTime() {
-			this.lastSignInTime = z(this.lastLoginAt), this.creationTime = z(this.createdAt);
+			this.lastSignInTime = In(this.lastLoginAt), this.creationTime = In(this.createdAt);
 		}
 		_copy(e) {
 			this.createdAt = e.createdAt, this.lastLoginAt = e.lastLoginAt, this._initializeTime();
@@ -2135,7 +2135,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				lastLoginAt: this.lastLoginAt
 			};
 		}
-	}, ra = class e {
+	}, oa = class e {
 		constructor() {
 			this.refreshToken = null, this.accessToken = null, this.expirationTime = null;
 		}
@@ -2144,12 +2144,12 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		}
 		updateFromServerResponse(e) {
 			N(e.idToken, "internal-error"), N(e.idToken !== void 0, "internal-error"), N(e.refreshToken !== void 0, "internal-error");
-			let t = "expiresIn" in e && e.expiresIn !== void 0 ? Number(e.expiresIn) : zn(e.idToken);
+			let t = "expiresIn" in e && e.expiresIn !== void 0 ? Number(e.expiresIn) : Bn(e.idToken);
 			this.updateTokensAndExpiration(e.idToken, e.refreshToken, t);
 		}
 		updateFromIdToken(e) {
 			N(e.length !== 0, "internal-error");
-			let t = zn(e);
+			let t = Bn(e);
 			this.updateTokensAndExpiration(e, null, t);
 		}
 		async getToken(e, t = !1) {
@@ -2159,7 +2159,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			this.refreshToken = null;
 		}
 		async refresh(e, t) {
-			let { accessToken: n, refreshToken: r, expiresIn: i } = await Gn(e, t);
+			let { accessToken: n, refreshToken: r, expiresIn: i } = await qn(e, t);
 			this.updateTokensAndExpiration(n, r, Number(i));
 		}
 		updateTokensAndExpiration(e, t, n) {
@@ -2185,19 +2185,19 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		_performRefresh() {
 			return P("not implemented");
 		}
-	}, Y = class e {
+	}, K = class e {
 		constructor({ uid: e, auth: t, stsTokenManager: n, ...r }) {
-			this.providerId = "firebase", this.proactiveRefresh = new ta(this), this.reloadUserInfo = null, this.reloadListener = null, this.uid = e, this.auth = t, this.stsTokenManager = n, this.accessToken = n.accessToken, this.displayName = r.displayName || null, this.email = r.email || null, this.emailVerified = r.emailVerified || !1, this.phoneNumber = r.phoneNumber || null, this.photoURL = r.photoURL || null, this.isAnonymous = r.isAnonymous || !1, this.tenantId = r.tenantId || null, this.providerData = r.providerData ? [...r.providerData] : [], this.metadata = new na(r.createdAt || void 0, r.lastLoginAt || void 0);
+			this.providerId = "firebase", this.proactiveRefresh = new ia(this), this.reloadUserInfo = null, this.reloadListener = null, this.uid = e, this.auth = t, this.stsTokenManager = n, this.accessToken = n.accessToken, this.displayName = r.displayName || null, this.email = r.email || null, this.emailVerified = r.emailVerified || !1, this.phoneNumber = r.phoneNumber || null, this.photoURL = r.photoURL || null, this.isAnonymous = r.isAnonymous || !1, this.tenantId = r.tenantId || null, this.providerData = r.providerData ? [...r.providerData] : [], this.metadata = new aa(r.createdAt || void 0, r.lastLoginAt || void 0);
 		}
 		async getIdToken(e) {
-			let t = await B(this, this.stsTokenManager.getToken(this.auth, e));
+			let t = await Vn(this, this.stsTokenManager.getToken(this.auth, e));
 			return N(t, this.auth, "internal-error"), this.accessToken !== t && (this.accessToken = t, await this.auth._persistUserIfCurrent(this), this.auth._notifyListenersIfCurrent(this)), t;
 		}
 		getIdTokenResult(e) {
-			return In(this, e);
+			return Ln(this, e);
 		}
 		reload() {
-			return Hn(this);
+			return Wn(this);
 		}
 		_assign(e) {
 			this !== e && (N(this.uid === e.uid, this.auth, "internal-error"), this.displayName = e.displayName, this.photoURL = e.photoURL, this.email = e.email, this.emailVerified = e.emailVerified, this.phoneNumber = e.phoneNumber, this.isAnonymous = e.isAnonymous, this.tenantId = e.tenantId, this.providerData = e.providerData.map((e) => ({ ...e })), this.metadata._copy(e.metadata), this.stsTokenManager._assign(e.stsTokenManager));
@@ -2224,12 +2224,12 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		}
 		async _updateTokensIfNecessary(e, t = !1) {
 			let n = !1;
-			e.idToken && e.idToken !== this.stsTokenManager.accessToken && (this.stsTokenManager.updateFromServerResponse(e), n = !0), t && await Vn(this), await this.auth._persistUserIfCurrent(this), n && this.auth._notifyListenersIfCurrent(this);
+			e.idToken && e.idToken !== this.stsTokenManager.accessToken && (this.stsTokenManager.updateFromServerResponse(e), n = !0), t && await Un(this), await this.auth._persistUserIfCurrent(this), n && this.auth._notifyListenersIfCurrent(this);
 		}
 		async delete() {
-			if (C(this.auth.app)) return Promise.reject(M(this.auth));
+			if (w(this.auth.app)) return Promise.reject(M(this.auth));
 			let e = await this.getIdToken();
-			return await B(this, Pn(this.auth, { idToken: e })), this.stsTokenManager.clearRefreshToken(), this.auth.signOut();
+			return await Vn(this, Pn(this.auth, { idToken: e })), this.stsTokenManager.clearRefreshToken(), this.auth.signOut();
 		}
 		toJSON() {
 			return {
@@ -2253,11 +2253,11 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			return this.stsTokenManager.refreshToken || "";
 		}
 		static _fromJSON(t, n) {
-			let r = n.displayName ?? void 0, i = n.email ?? void 0, a = n.phoneNumber ?? void 0, o = n.photoURL ?? void 0, s = n.tenantId ?? void 0, c = n._redirectEventId ?? void 0, l = n.createdAt ?? void 0, u = n.lastLoginAt ?? void 0, { uid: d, emailVerified: f, isAnonymous: ee, providerData: te, stsTokenManager: p } = n;
-			N(d && p, t, "internal-error");
-			let ne = ra.fromJSON(this.name, p);
-			N(typeof d == "string", t, "internal-error"), V(r, t.name), V(i, t.name), N(typeof f == "boolean", t, "internal-error"), N(typeof ee == "boolean", t, "internal-error"), V(a, t.name), V(o, t.name), V(s, t.name), V(c, t.name), V(l, t.name), V(u, t.name);
-			let m = new e({
+			let r = n.displayName ?? void 0, i = n.email ?? void 0, a = n.phoneNumber ?? void 0, o = n.photoURL ?? void 0, s = n.tenantId ?? void 0, c = n._redirectEventId ?? void 0, l = n.createdAt ?? void 0, u = n.lastLoginAt ?? void 0, { uid: d, emailVerified: f, isAnonymous: ee, providerData: p, stsTokenManager: m } = n;
+			N(d && m, t, "internal-error");
+			let te = oa.fromJSON(this.name, m);
+			N(typeof d == "string", t, "internal-error"), z(r, t.name), z(i, t.name), N(typeof f == "boolean", t, "internal-error"), N(typeof ee == "boolean", t, "internal-error"), z(a, t.name), z(o, t.name), z(s, t.name), z(c, t.name), z(l, t.name), z(u, t.name);
+			let h = new e({
 				uid: d,
 				auth: t,
 				email: i,
@@ -2267,14 +2267,14 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				photoURL: o,
 				phoneNumber: a,
 				tenantId: s,
-				stsTokenManager: ne,
+				stsTokenManager: te,
 				createdAt: l,
 				lastLoginAt: u
 			});
-			return te && Array.isArray(te) && (m.providerData = te.map((e) => ({ ...e }))), c && (m._redirectEventId = c), m;
+			return p && Array.isArray(p) && (h.providerData = p.map((e) => ({ ...e }))), c && (h._redirectEventId = c), h;
 		}
 		static async _fromIdTokenResponse(t, n, r = !1) {
-			let i = new ra();
+			let i = new oa();
 			i.updateFromServerResponse(n);
 			let a = new e({
 				uid: n.localId,
@@ -2282,12 +2282,12 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				stsTokenManager: i,
 				isAnonymous: r
 			});
-			return await Vn(a), a;
+			return await Un(a), a;
 		}
 		static async _fromGetAccountInfoResponse(t, n, r) {
 			let i = n.users[0];
 			N(i.localId !== void 0, "internal-error");
-			let a = i.providerUserInfo === void 0 ? [] : Wn(i.providerUserInfo), o = !(i.email && i.passwordHash) && !a?.length, s = new ra();
+			let a = i.providerUserInfo === void 0 ? [] : Kn(i.providerUserInfo), o = !(i.email && i.passwordHash) && !a?.length, s = new oa();
 			s.updateFromIdToken(r);
 			let c = new e({
 				uid: i.localId,
@@ -2303,12 +2303,12 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				phoneNumber: i.phoneNumber || null,
 				tenantId: i.tenantId || null,
 				providerData: a,
-				metadata: new na(i.createdAt, i.lastLoginAt),
+				metadata: new aa(i.createdAt, i.lastLoginAt),
 				isAnonymous: !(i.email && i.passwordHash) && !a?.length
 			};
 			return Object.assign(c, l), c;
 		}
-	}, ia = /* @__PURE__ */ new Map(), aa = class {
+	}, sa = /* @__PURE__ */ new Map(), ca = class {
 		constructor() {
 			this.type = "NONE", this.storage = {};
 		}
@@ -2327,11 +2327,11 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		}
 		_addListener(e, t) {}
 		_removeListener(e, t) {}
-	}, aa.type = "NONE", oa = aa, sa = class e {
+	}, ca.type = "NONE", la = ca, ua = class e {
 		constructor(e, t, n) {
 			this.persistence = e, this.auth = t, this.userKey = n;
 			let { config: r, name: i } = this.auth;
-			this.fullUserKey = qn(this.userKey, r.apiKey, i), this.fullPersistenceKey = qn("persistence", r.apiKey, i), this.boundEventHandler = t._onStorageEvent.bind(t), this.persistence._addListener(this.fullUserKey, this.boundEventHandler);
+			this.fullUserKey = Yn(this.userKey, r.apiKey, i), this.fullPersistenceKey = Yn("persistence", r.apiKey, i), this.boundEventHandler = t._onStorageEvent.bind(t), this.persistence._addListener(this.fullUserKey, this.boundEventHandler);
 		}
 		setCurrentUser(e) {
 			return this.persistence._set(this.fullUserKey, e.toJSON());
@@ -2341,9 +2341,9 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			if (!e) return null;
 			if (typeof e == "string") {
 				let t = await Fn(this.auth, { idToken: e }).catch(() => void 0);
-				return t ? Y._fromGetAccountInfoResponse(this.auth, t, e) : null;
+				return t ? K._fromGetAccountInfoResponse(this.auth, t, e) : null;
 			}
-			return Y._fromJSON(this.auth, e);
+			return K._fromJSON(this.auth, e);
 		}
 		removeCurrentUser() {
 			return this.persistence._remove(this.fullUserKey);
@@ -2360,10 +2360,10 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			this.persistence._removeListener(this.fullUserKey, this.boundEventHandler);
 		}
 		static async create(t, n, r = "authUser") {
-			if (!n.length) return new e(H(oa), t, r);
+			if (!n.length) return new e(B(la), t, r);
 			let i = (await Promise.all(n.map(async (e) => {
 				if (await e._isAvailable()) return e;
-			}))).filter((e) => e), a = i[0] || H(oa), o = qn(r, t.config.apiKey, t.name), s = null;
+			}))).filter((e) => e), a = i[0] || B(la), o = Yn(r, t.config.apiKey, t.name), s = null;
 			for (let e of n) try {
 				let n = await e._get(o);
 				if (n) {
@@ -2371,8 +2371,8 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 					if (typeof n == "string") {
 						let e = await Fn(t, { idToken: n }).catch(() => void 0);
 						if (!e) break;
-						r = await Y._fromGetAccountInfoResponse(t, e, n);
-					} else r = Y._fromJSON(t, n);
+						r = await K._fromGetAccountInfoResponse(t, e, n);
+					} else r = K._fromJSON(t, n);
 					e !== a && (s = r), a = e;
 					break;
 				}
@@ -2384,7 +2384,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				} catch {}
 			})), new e(a, t, r));
 		}
-	}, ca = class {
+	}, da = class {
 		constructor(e) {
 			this.auth = e, this.queue = [];
 		}
@@ -2415,10 +2415,10 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				throw this.auth._errorFactory.create("login-blocked", { originalMessage: e?.message });
 			}
 		}
-	}, la = 6, ua = class {
+	}, fa = 6, pa = class {
 		constructor(e) {
 			let t = e.customStrengthOptions;
-			this.customStrengthOptions = {}, this.customStrengthOptions.minPasswordLength = t.minPasswordLength ?? la, t.maxPasswordLength && (this.customStrengthOptions.maxPasswordLength = t.maxPasswordLength), t.containsLowercaseCharacter !== void 0 && (this.customStrengthOptions.containsLowercaseLetter = t.containsLowercaseCharacter), t.containsUppercaseCharacter !== void 0 && (this.customStrengthOptions.containsUppercaseLetter = t.containsUppercaseCharacter), t.containsNumericCharacter !== void 0 && (this.customStrengthOptions.containsNumericCharacter = t.containsNumericCharacter), t.containsNonAlphanumericCharacter !== void 0 && (this.customStrengthOptions.containsNonAlphanumericCharacter = t.containsNonAlphanumericCharacter), this.enforcementState = e.enforcementState, this.enforcementState === "ENFORCEMENT_STATE_UNSPECIFIED" && (this.enforcementState = "OFF"), this.allowedNonAlphanumericCharacters = e.allowedNonAlphanumericCharacters?.join("") ?? "", this.forceUpgradeOnSignin = e.forceUpgradeOnSignin ?? !1, this.schemaVersion = e.schemaVersion;
+			this.customStrengthOptions = {}, this.customStrengthOptions.minPasswordLength = t.minPasswordLength ?? fa, t.maxPasswordLength && (this.customStrengthOptions.maxPasswordLength = t.maxPasswordLength), t.containsLowercaseCharacter !== void 0 && (this.customStrengthOptions.containsLowercaseLetter = t.containsLowercaseCharacter), t.containsUppercaseCharacter !== void 0 && (this.customStrengthOptions.containsUppercaseLetter = t.containsUppercaseCharacter), t.containsNumericCharacter !== void 0 && (this.customStrengthOptions.containsNumericCharacter = t.containsNumericCharacter), t.containsNonAlphanumericCharacter !== void 0 && (this.customStrengthOptions.containsNonAlphanumericCharacter = t.containsNonAlphanumericCharacter), this.enforcementState = e.enforcementState, this.enforcementState === "ENFORCEMENT_STATE_UNSPECIFIED" && (this.enforcementState = "OFF"), this.allowedNonAlphanumericCharacters = e.allowedNonAlphanumericCharacters?.join("") ?? "", this.forceUpgradeOnSignin = e.forceUpgradeOnSignin ?? !1, this.schemaVersion = e.schemaVersion;
 		}
 		validatePassword(e) {
 			let t = {
@@ -2439,13 +2439,13 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		updatePasswordCharacterOptionsStatuses(e, t, n, r, i) {
 			this.customStrengthOptions.containsLowercaseLetter && (e.containsLowercaseLetter ||= t), this.customStrengthOptions.containsUppercaseLetter && (e.containsUppercaseLetter ||= n), this.customStrengthOptions.containsNumericCharacter && (e.containsNumericCharacter ||= r), this.customStrengthOptions.containsNonAlphanumericCharacter && (e.containsNonAlphanumericCharacter ||= i);
 		}
-	}, da = class {
+	}, ma = class {
 		constructor(e, t, n, r) {
-			this.app = e, this.heartbeatServiceProvider = t, this.appCheckServiceProvider = n, this.config = r, this.currentUser = null, this.emulatorConfig = null, this.operations = Promise.resolve(), this.authStateSubscription = new fa(this), this.idTokenSubscription = new fa(this), this.beforeStateQueue = new ca(this), this.redirectUser = null, this.isProactiveRefreshEnabled = !1, this.EXPECTED_PASSWORD_POLICY_SCHEMA_VERSION = 1, this._canInitEmulator = !0, this._isInitialized = !1, this._deleted = !1, this._initializationPromise = null, this._popupRedirectResolver = null, this._errorFactory = qi, this._agentRecaptchaConfig = null, this._tenantRecaptchaConfigs = {}, this._projectPasswordPolicy = null, this._tenantPasswordPolicies = {}, this._resolvePersistenceManagerAvailable = void 0, this.lastNotifiedUid = void 0, this.languageCode = null, this.tenantId = null, this.settings = { appVerificationDisabledForTesting: !1 }, this.frameworks = [], this.name = e.name, this.clientVersion = r.sdkClientVersion, this._persistenceManagerAvailable = new Promise((e) => this._resolvePersistenceManagerAvailable = e);
+			this.app = e, this.heartbeatServiceProvider = t, this.appCheckServiceProvider = n, this.config = r, this.currentUser = null, this.emulatorConfig = null, this.operations = Promise.resolve(), this.authStateSubscription = new ha(this), this.idTokenSubscription = new ha(this), this.beforeStateQueue = new da(this), this.redirectUser = null, this.isProactiveRefreshEnabled = !1, this.EXPECTED_PASSWORD_POLICY_SCHEMA_VERSION = 1, this._canInitEmulator = !0, this._isInitialized = !1, this._deleted = !1, this._initializationPromise = null, this._popupRedirectResolver = null, this._errorFactory = Zi, this._agentRecaptchaConfig = null, this._tenantRecaptchaConfigs = {}, this._projectPasswordPolicy = null, this._tenantPasswordPolicies = {}, this._resolvePersistenceManagerAvailable = void 0, this.lastNotifiedUid = void 0, this.languageCode = null, this.tenantId = null, this.settings = { appVerificationDisabledForTesting: !1 }, this.frameworks = [], this.name = e.name, this.clientVersion = r.sdkClientVersion, this._persistenceManagerAvailable = new Promise((e) => this._resolvePersistenceManagerAvailable = e);
 		}
 		_initializeWithPersistence(e, t) {
-			return t && (this._popupRedirectResolver = H(t)), this._initializationPromise = this.queue(async () => {
-				if (!this._deleted && (this.persistenceManager = await sa.create(this, e), this._resolvePersistenceManagerAvailable?.(), !this._deleted)) {
+			return t && (this._popupRedirectResolver = B(t)), this._initializationPromise = this.queue(async () => {
+				if (!this._deleted && (this.persistenceManager = await ua.create(this, e), this._resolvePersistenceManagerAvailable?.(), !this._deleted)) {
 					if (this._popupRedirectResolver?._shouldInitProactively) try {
 						await this._popupRedirectResolver._initialize(this);
 					} catch {}
@@ -2466,14 +2466,14 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		}
 		async initializeCurrentUserFromIdToken(e) {
 			try {
-				let t = await Fn(this, { idToken: e }), n = await Y._fromGetAccountInfoResponse(this, t, e);
+				let t = await Fn(this, { idToken: e }), n = await K._fromGetAccountInfoResponse(this, t, e);
 				await this.directlySetCurrentUser(n);
 			} catch (e) {
 				console.warn("FirebaseServerApp could not login user with provided authIdToken: ", e), await this.directlySetCurrentUser(null);
 			}
 		}
 		async initializeCurrentUser(e) {
-			if (C(this.app)) {
+			if (w(this.app)) {
 				let e = this.app.settings.authIdToken;
 				return e ? new Promise((t) => {
 					setTimeout(() => this.initializeCurrentUserFromIdToken(e).then(t, t));
@@ -2507,7 +2507,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		}
 		async reloadAndSetCurrentUserOrClear(e) {
 			try {
-				await Vn(e);
+				await Un(e);
 			} catch (e) {
 				if (e?.code !== "auth/network-request-failed") return this.directlySetCurrentUser(null);
 			}
@@ -2520,8 +2520,8 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			this._deleted = !0;
 		}
 		async updateCurrentUser(e) {
-			if (C(this.app)) return Promise.reject(M(this));
-			let t = e ? g(e) : null;
+			if (w(this.app)) return Promise.reject(M(this));
+			let t = e ? _(e) : null;
 			return t && N(t.auth.config.apiKey === this.config.apiKey, this, "invalid-user-token"), this._updateCurrentUser(t && t._clone(this));
 		}
 		async _updateCurrentUser(e, t = !1) {
@@ -2530,11 +2530,11 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			});
 		}
 		async signOut() {
-			return C(this.app) ? Promise.reject(M(this)) : (await this.beforeStateQueue.runMiddleware(null), (this.redirectPersistenceManager || this._popupRedirectResolver) && await this._setRedirectUser(null), this._updateCurrentUser(null, !0));
+			return w(this.app) ? Promise.reject(M(this)) : (await this.beforeStateQueue.runMiddleware(null), (this.redirectPersistenceManager || this._popupRedirectResolver) && await this._setRedirectUser(null), this._updateCurrentUser(null, !0));
 		}
 		setPersistence(e) {
-			return C(this.app) ? Promise.reject(M(this)) : this.queue(async () => {
-				await this.assertedPersistence.setPersistence(H(e));
+			return w(this.app) ? Promise.reject(M(this)) : this.queue(async () => {
+				await this.assertedPersistence.setPersistence(B(e));
 			});
 		}
 		_getRecaptchaConfig() {
@@ -2549,7 +2549,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			return this.tenantId === null ? this._projectPasswordPolicy : this._tenantPasswordPolicies[this.tenantId];
 		}
 		async _updatePasswordPolicy() {
-			let e = new ua(await sr(this));
+			let e = new pa(await lr(this));
 			this.tenantId === null ? this._projectPasswordPolicy = e : this._tenantPasswordPolicies[this.tenantId] = e;
 		}
 		_getPersistenceType() {
@@ -2559,7 +2559,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			return this.assertedPersistence.persistence;
 		}
 		_updateErrorMap(e) {
-			this._errorFactory = new v("auth", "Firebase", e());
+			this._errorFactory = new y("auth", "Firebase", e());
 		}
 		onAuthStateChanged(e, t, n) {
 			return this.registerStateListener(this.authStateSubscription, e, t, n);
@@ -2588,7 +2588,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 					token: e,
 					idToken: await this.currentUser.getIdToken()
 				};
-				this.tenantId != null && (t.tenantId = this.tenantId), await Kn(this, t);
+				this.tenantId != null && (t.tenantId = this.tenantId), await Jn(this, t);
 			}
 		}
 		toJSON() {
@@ -2605,8 +2605,8 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		}
 		async getOrInitRedirectPersistenceManager(e) {
 			if (!this.redirectPersistenceManager) {
-				let t = e && H(e) || this._popupRedirectResolver;
-				N(t, this, "argument-error"), this.redirectPersistenceManager = await sa.create(this, [H(t._redirectPersistence)], "redirectUser"), this.redirectUser = await this.redirectPersistenceManager.getCurrentUser();
+				let t = e && B(e) || this._popupRedirectResolver;
+				N(t, this, "argument-error"), this.redirectPersistenceManager = await ua.create(this, [B(t._redirectPersistence)], "redirectUser"), this.redirectUser = await this.redirectPersistenceManager.getCurrentUser();
 			}
 			return this.redirectPersistenceManager;
 		}
@@ -2664,7 +2664,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			return N(this.persistenceManager, this, "internal-error"), this.persistenceManager;
 		}
 		_logFramework(e) {
-			!e || this.frameworks.includes(e) || (this.frameworks.push(e), this.frameworks.sort(), this.clientVersion = or(this.config.clientPlatform, this._getFrameworks()));
+			!e || this.frameworks.includes(e) || (this.frameworks.push(e), this.frameworks.sort(), this.clientVersion = cr(this.config.clientPlatform, this._getFrameworks()));
 		}
 		_getFrameworks() {
 			return this.frameworks;
@@ -2678,27 +2678,27 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			return n && (e["X-Firebase-AppCheck"] = n), e;
 		}
 		async _getAppCheckToken() {
-			if (C(this.app) && this.app.settings.appCheckToken) return this.app.settings.appCheckToken;
+			if (w(this.app) && this.app.settings.appCheckToken) return this.app.settings.appCheckToken;
 			let e = await this.appCheckServiceProvider.getImmediate({ optional: !0 })?.getToken();
 			return e?.error && _n(`Error while retrieving App Check token: ${e.error}`), e?.token;
 		}
-	}, fa = class {
+	}, ha = class {
 		constructor(e) {
-			this.auth = e, this.observer = null, this.addObserver = ie((e) => this.observer = e);
+			this.auth = e, this.observer = null, this.addObserver = re((e) => this.observer = e);
 		}
 		get next() {
 			return N(this.observer, this.auth, "internal-error"), this.observer.next.bind(this.observer);
 		}
-	}, pa = {
+	}, ga = {
 		async loadJS() {
 			throw Error("Unable to load external scripts");
 		},
 		recaptchaV2Script: "",
 		recaptchaEnterpriseScript: "",
 		gapiScript: ""
-	}, ma = class {
+	}, _a = class {
 		constructor() {
-			this.enterprise = new ha();
+			this.enterprise = new va();
 		}
 		ready(e) {
 			e();
@@ -2709,7 +2709,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		render(e, t) {
 			return "";
 		}
-	}, ha = class {
+	}, va = class {
 		ready(e) {
 			e();
 		}
@@ -2719,9 +2719,9 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		render(e, t) {
 			return "";
 		}
-	}, ga = "recaptcha-enterprise", X = "NO_RECAPTCHA", _a = class {
+	}, ya = "recaptcha-enterprise", q = "NO_RECAPTCHA", ba = class {
 		constructor(e) {
-			this.type = ga, this.auth = U(e);
+			this.type = ya, this.auth = V(e);
 		}
 		async verify(e = "verify", t = !1) {
 			async function n(e) {
@@ -2736,7 +2736,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 					}).then((r) => {
 						if (r.recaptchaKey === void 0) n(/* @__PURE__ */ Error("recaptcha Enterprise site key undefined"));
 						else {
-							let n = new ea(r);
+							let n = new ra(r);
 							return e.tenantId == null ? e._agentRecaptchaConfig = n : e._tenantRecaptchaConfigs[e.tenantId] = n, t(n.siteKey);
 						}
 					}).catch((e) => {
@@ -2750,11 +2750,11 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 					i.enterprise.execute(t, { action: e }).then((e) => {
 						n(e);
 					}).catch(() => {
-						n(X);
+						n(q);
 					});
 				}) : r(Error("No reCAPTCHA enterprise script loaded."));
 			}
-			return this.auth.settings.appVerificationDisabledForTesting ? new ma().execute("siteKey", { action: "verify" }) : new Promise((e, i) => {
+			return this.auth.settings.appVerificationDisabledForTesting ? new _a().execute("siteKey", { action: "verify" }) : new Promise((e, i) => {
 				n(this.auth).then((n) => {
 					if (!t && Mn(window.grecaptcha)) r(n, e, i);
 					else {
@@ -2762,8 +2762,8 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 							i(/* @__PURE__ */ Error("RecaptchaVerifier is only supported in browser"));
 							return;
 						}
-						let t = ur();
-						t.length !== 0 && (t += n), lr(t).then(() => {
+						let t = fr();
+						t.length !== 0 && (t += n), dr(t).then(() => {
 							r(n, e, i);
 						}).catch((e) => {
 							i(e);
@@ -2774,7 +2774,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				});
 			});
 		}
-	}, va = class {
+	}, xa = class {
 		constructor(e, t) {
 			this.providerId = e, this.signInMethod = t;
 		}
@@ -2790,7 +2790,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		_getReauthenticationResolver(e) {
 			return P("not implemented");
 		}
-	}, ya = class e extends va {
+	}, Sa = class e extends xa {
 		constructor(e, t, n, r = null) {
 			super("password", n), this._email = e, this._password = t, this._tenantId = r;
 		}
@@ -2818,13 +2818,13 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		}
 		async _getIdTokenResponse(e) {
 			switch (this.signInMethod) {
-				case "password": return G(e, {
+				case "password": return gr(e, {
 					returnSecureToken: !0,
 					email: this._email,
 					password: this._password,
 					clientType: "CLIENT_TYPE_WEB"
-				}, "signInWithPassword", Sr, "EMAIL_PASSWORD_PROVIDER");
-				case "emailLink": return Cr(e, {
+				}, "signInWithPassword", Er, "EMAIL_PASSWORD_PROVIDER");
+				case "emailLink": return Dr(e, {
 					email: this._email,
 					oobCode: this._password
 				});
@@ -2833,14 +2833,14 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		}
 		async _linkToIdToken(e, t) {
 			switch (this.signInMethod) {
-				case "password": return G(e, {
+				case "password": return gr(e, {
 					idToken: t,
 					returnSecureToken: !0,
 					email: this._email,
 					password: this._password,
 					clientType: "CLIENT_TYPE_WEB"
-				}, "signUpPassword", xr, "EMAIL_PASSWORD_PROVIDER");
-				case "emailLink": return wr(e, {
+				}, "signUpPassword", Tr, "EMAIL_PASSWORD_PROVIDER");
+				case "emailLink": return Or(e, {
 					idToken: t,
 					email: this._email,
 					oobCode: this._password
@@ -2851,7 +2851,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		_getReauthenticationResolver(e) {
 			return this._getIdTokenResponse(e);
 		}
-	}, ba = "http://localhost", xa = class e extends va {
+	}, Ca = "http://localhost", wa = class e extends xa {
 		constructor() {
 			super(...arguments), this.pendingToken = null;
 		}
@@ -2877,29 +2877,29 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			return a.idToken = i.idToken || void 0, a.accessToken = i.accessToken || void 0, a.secret = i.secret, a.nonce = i.nonce, a.pendingToken = i.pendingToken || null, a;
 		}
 		_getIdTokenResponse(e) {
-			return K(e, this.buildRequest());
+			return H(e, this.buildRequest());
 		}
 		_linkToIdToken(e, t) {
 			let n = this.buildRequest();
-			return n.idToken = t, K(e, n);
+			return n.idToken = t, H(e, n);
 		}
 		_getReauthenticationResolver(e) {
 			let t = this.buildRequest();
-			return t.autoCreate = !1, K(e, t);
+			return t.autoCreate = !1, H(e, t);
 		}
 		buildRequest() {
 			let e = {
-				requestUri: ba,
+				requestUri: Ca,
 				returnSecureToken: !0
 			};
 			if (this.pendingToken) e.pendingToken = this.pendingToken;
 			else {
 				let t = {};
-				this.idToken && (t.id_token = this.idToken), this.accessToken && (t.access_token = this.accessToken), this.secret && (t.oauth_token_secret = this.secret), t.providerId = this.providerId, this.nonce && !this.pendingToken && (t.nonce = this.nonce), e.postBody = m(t);
+				this.idToken && (t.id_token = this.idToken), this.accessToken && (t.access_token = this.accessToken), this.secret && (t.oauth_token_secret = this.secret), t.providerId = this.providerId, this.nonce && !this.pendingToken && (t.nonce = this.nonce), e.postBody = h(t);
 			}
 			return e;
 		}
-	}, Sa = { USER_NOT_FOUND: "user-not-found" }, Ca = class e extends va {
+	}, Ta = { USER_NOT_FOUND: "user-not-found" }, Ea = class e extends xa {
 		constructor(e) {
 			super("phone", "phone"), this.params = e;
 		}
@@ -2916,16 +2916,16 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			});
 		}
 		_getIdTokenResponse(e) {
-			return Er(e, this._makeVerificationRequest());
+			return Ar(e, this._makeVerificationRequest());
 		}
 		_linkToIdToken(e, t) {
-			return Dr(e, {
+			return jr(e, {
 				idToken: t,
 				...this._makeVerificationRequest()
 			});
 		}
 		_getReauthenticationResolver(e) {
-			return Or(e, this._makeVerificationRequest());
+			return Mr(e, this._makeVerificationRequest());
 		}
 		_makeVerificationRequest() {
 			let { temporaryProof: e, phoneNumber: t, verificationId: n, verificationCode: r } = this.params;
@@ -2951,31 +2951,31 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				temporaryProof: a
 			});
 		}
-	}, wa = class e {
+	}, Da = class e {
 		constructor(e) {
-			let t = re(h(e)), n = t.apiKey ?? null, r = t.oobCode ?? null, i = kr(t.mode ?? null);
+			let t = g(ne(e)), n = t.apiKey ?? null, r = t.oobCode ?? null, i = Nr(t.mode ?? null);
 			N(n && r && i, "argument-error"), this.apiKey = n, this.operation = i, this.code = r, this.continueUrl = t.continueUrl ?? null, this.languageCode = t.lang ?? null, this.tenantId = t.tenantId ?? null;
 		}
 		static parseLink(t) {
-			let n = Ar(t);
+			let n = Pr(t);
 			try {
 				return new e(n);
 			} catch {
 				return null;
 			}
 		}
-	}, Ta = class e {
+	}, Oa = class e {
 		constructor() {
 			this.providerId = e.PROVIDER_ID;
 		}
 		static credential(e, t) {
-			return ya._fromEmailAndPassword(e, t);
+			return Sa._fromEmailAndPassword(e, t);
 		}
 		static credentialWithLink(e, t) {
-			let n = wa.parseLink(t);
-			return N(n, "argument-error"), ya._fromEmailAndCode(e, n.code, n.tenantId);
+			let n = Da.parseLink(t);
+			return N(n, "argument-error"), Sa._fromEmailAndCode(e, n.code, n.tenantId);
 		}
-	}, Ta.PROVIDER_ID = "password", Ta.EMAIL_PASSWORD_SIGN_IN_METHOD = "password", Ta.EMAIL_LINK_SIGN_IN_METHOD = "emailLink", Ea = class {
+	}, Oa.PROVIDER_ID = "password", Oa.EMAIL_PASSWORD_SIGN_IN_METHOD = "password", Oa.EMAIL_LINK_SIGN_IN_METHOD = "emailLink", ka = class {
 		constructor(e) {
 			this.providerId = e, this.defaultLanguageCode = null, this.customParameters = {};
 		}
@@ -2988,7 +2988,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		getCustomParameters() {
 			return this.customParameters;
 		}
-	}, Z = class extends Ea {
+	}, J = class extends ka {
 		constructor() {
 			super(...arguments), this.scopes = [];
 		}
@@ -2998,12 +2998,12 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		getScopes() {
 			return [...this.scopes];
 		}
-	}, Da = class e extends Z {
+	}, Aa = class e extends J {
 		constructor() {
 			super("facebook.com");
 		}
 		static credential(t) {
-			return xa._fromParams({
+			return wa._fromParams({
 				providerId: e.PROVIDER_ID,
 				signInMethod: e.FACEBOOK_SIGN_IN_METHOD,
 				accessToken: t
@@ -3023,12 +3023,12 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				return null;
 			}
 		}
-	}, Da.FACEBOOK_SIGN_IN_METHOD = "facebook.com", Da.PROVIDER_ID = "facebook.com", Oa = class e extends Z {
+	}, Aa.FACEBOOK_SIGN_IN_METHOD = "facebook.com", Aa.PROVIDER_ID = "facebook.com", ja = class e extends J {
 		constructor() {
 			super("google.com"), this.addScope("profile");
 		}
 		static credential(t, n) {
-			return xa._fromParams({
+			return wa._fromParams({
 				providerId: e.PROVIDER_ID,
 				signInMethod: e.GOOGLE_SIGN_IN_METHOD,
 				idToken: t,
@@ -3051,12 +3051,12 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				return null;
 			}
 		}
-	}, Oa.GOOGLE_SIGN_IN_METHOD = "google.com", Oa.PROVIDER_ID = "google.com", ka = class e extends Z {
+	}, ja.GOOGLE_SIGN_IN_METHOD = "google.com", ja.PROVIDER_ID = "google.com", Ma = class e extends J {
 		constructor() {
 			super("github.com");
 		}
 		static credential(t) {
-			return xa._fromParams({
+			return wa._fromParams({
 				providerId: e.PROVIDER_ID,
 				signInMethod: e.GITHUB_SIGN_IN_METHOD,
 				accessToken: t
@@ -3076,12 +3076,12 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				return null;
 			}
 		}
-	}, ka.GITHUB_SIGN_IN_METHOD = "github.com", ka.PROVIDER_ID = "github.com", Aa = class e extends Z {
+	}, Ma.GITHUB_SIGN_IN_METHOD = "github.com", Ma.PROVIDER_ID = "github.com", Na = class e extends J {
 		constructor() {
 			super("twitter.com");
 		}
 		static credential(t, n) {
-			return xa._fromParams({
+			return wa._fromParams({
 				providerId: e.PROVIDER_ID,
 				signInMethod: e.TWITTER_SIGN_IN_METHOD,
 				oauthToken: t,
@@ -3104,14 +3104,14 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				return null;
 			}
 		}
-	}, Aa.TWITTER_SIGN_IN_METHOD = "twitter.com", Aa.PROVIDER_ID = "twitter.com", ja = class e {
+	}, Na.TWITTER_SIGN_IN_METHOD = "twitter.com", Na.PROVIDER_ID = "twitter.com", Pa = class e {
 		constructor(e) {
 			this.user = e.user, this.providerId = e.providerId, this._tokenResponse = e._tokenResponse, this.operationType = e.operationType;
 		}
 		static async _fromIdTokenResponse(t, n, r, i = !1) {
 			return new e({
-				user: await Y._fromIdTokenResponse(t, r, i),
-				providerId: jr(r),
+				user: await K._fromIdTokenResponse(t, r, i),
+				providerId: Fr(r),
 				_tokenResponse: r,
 				operationType: n
 			});
@@ -3119,12 +3119,12 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		static async _forOperation(t, n, r) {
 			return await t._updateTokensIfNecessary(r, !0), new e({
 				user: t,
-				providerId: jr(r),
+				providerId: Fr(r),
 				_tokenResponse: r,
 				operationType: n
 			});
 		}
-	}, Ma = class e extends _ {
+	}, Fa = class e extends v {
 		constructor(t, n, r, i) {
 			super(n.code, n.message), this.operationType = r, this.user = i, Object.setPrototypeOf(this, e.prototype), this.customData = {
 				appName: t.name,
@@ -3136,13 +3136,13 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		static _fromErrorAndOperation(t, n, r, i) {
 			return new e(t, n, r, i);
 		}
-	}, Na = "__sak", Pa = class {
+	}, Ia = "__sak", La = class {
 		constructor(e, t) {
 			this.storageRetriever = e, this.type = t;
 		}
 		_isAvailable() {
 			try {
-				return this.storage ? (this.storage.setItem(Na, "1"), this.storage.removeItem(Na), Promise.resolve(!0)) : Promise.resolve(!1);
+				return this.storage ? (this.storage.setItem(Ia, "1"), this.storage.removeItem(Ia), Promise.resolve(!0)) : Promise.resolve(!1);
 			} catch {
 				return Promise.resolve(!1);
 			}
@@ -3160,9 +3160,9 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		get storage() {
 			return this.storageRetriever();
 		}
-	}, Fa = 1e3, Ia = 10, La = class extends Pa {
+	}, Ra = 1e3, za = 10, Ba = class extends La {
 		constructor() {
-			super(() => window.localStorage, "LOCAL"), this.boundEventHandler = (e, t) => this.onStorageEvent(e, t), this.listeners = {}, this.localCache = {}, this.pollTimer = null, this.fallbackToPolling = ar(), this._shouldAllowMigration = !0;
+			super(() => window.localStorage, "LOCAL"), this.boundEventHandler = (e, t) => this.onStorageEvent(e, t), this.listeners = {}, this.localCache = {}, this.pollTimer = null, this.fallbackToPolling = sr(), this._shouldAllowMigration = !0;
 		}
 		forAllChangedKeys(e) {
 			for (let t of Object.keys(this.listeners)) {
@@ -3183,7 +3183,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				let e = this.storage.getItem(n);
 				!t && this.localCache[n] === e || this.notifyListeners(n, e);
 			}, i = this.storage.getItem(n);
-			ir() && i !== e.newValue && e.newValue !== e.oldValue ? setTimeout(r, Ia) : r();
+			or() && i !== e.newValue && e.newValue !== e.oldValue ? setTimeout(r, za) : r();
 		}
 		notifyListeners(e, t) {
 			this.localCache[e] = t;
@@ -3199,7 +3199,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 						newValue: n
 					}), !0);
 				});
-			}, Fa);
+			}, Ra);
 		}
 		stopPolling() {
 			this.pollTimer &&= (clearInterval(this.pollTimer), null);
@@ -3226,7 +3226,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		async _remove(e) {
 			await super._remove(e), delete this.localCache[e];
 		}
-	}, La.type = "LOCAL", Ra = La, za = 1e3, Ba = class {
+	}, Ba.type = "LOCAL", Va = Ba, Ha = 1e3, Ua = class {
 		constructor() {
 			this.type = "COOKIE", this.listenerUnsubscribes = /* @__PURE__ */ new Map();
 		}
@@ -3240,17 +3240,17 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		async _set(e, t) {}
 		async _get(e) {
 			if (!this._isAvailable()) return null;
-			let t = qr(e);
-			return window.cookieStore ? (await window.cookieStore.get(t))?.value : Kr(t);
+			let t = Zr(e);
+			return window.cookieStore ? (await window.cookieStore.get(t))?.value : Xr(t);
 		}
 		async _remove(e) {
 			if (!this._isAvailable() || !await this._get(e)) return;
-			let t = qr(e);
+			let t = Zr(e);
 			document.cookie = `${t}=;Max-Age=34560000;Partitioned;Secure;SameSite=Strict;Path=/;Priority=High`, await fetch("/__cookies__", { method: "DELETE" }).catch(() => void 0);
 		}
 		_addListener(e, t) {
 			if (!this._isAvailable()) return;
-			let n = qr(e);
+			let n = Zr(e);
 			if (window.cookieStore) {
 				let e = ((e) => {
 					let r = e.changed.find((e) => e.name === n);
@@ -3258,23 +3258,23 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				});
 				return this.listenerUnsubscribes.set(t, () => window.cookieStore.removeEventListener("change", e)), window.cookieStore.addEventListener("change", e);
 			}
-			let r = Kr(n), i = setInterval(() => {
-				let e = Kr(n);
+			let r = Xr(n), i = setInterval(() => {
+				let e = Xr(n);
 				e !== r && (t(e), r = e);
-			}, za);
+			}, Ha);
 			this.listenerUnsubscribes.set(t, () => clearInterval(i));
 		}
 		_removeListener(e, t) {
 			let n = this.listenerUnsubscribes.get(t);
 			n && (n(), this.listenerUnsubscribes.delete(t));
 		}
-	}, Ba.type = "COOKIE", Va = class extends Pa {
+	}, Ua.type = "COOKIE", Wa = class extends La {
 		constructor() {
 			super(() => window.sessionStorage, "SESSION");
 		}
 		_addListener(e, t) {}
 		_removeListener(e, t) {}
-	}, Va.type = "SESSION", Ha = Va, Ua = class e {
+	}, Wa.type = "SESSION", Ga = Wa, Ka = class e {
 		constructor(e) {
 			this.eventTarget = e, this.handlersMap = {}, this.boundEventHandler = this.handleEvent.bind(this);
 		}
@@ -3295,7 +3295,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				eventId: n,
 				eventType: r
 			});
-			let o = await Jr(Array.from(a).map(async (e) => e(t.origin, i)));
+			let o = await Qr(Array.from(a).map(async (e) => e(t.origin, i)));
 			t.ports[0].postMessage({
 				status: "done",
 				eventId: n,
@@ -3309,7 +3309,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		_unsubscribe(e, t) {
 			this.handlersMap[e] && t && this.handlersMap[e].delete(t), (!t || this.handlersMap[e].size === 0) && delete this.handlersMap[e], Object.keys(this.handlersMap).length === 0 && this.eventTarget.removeEventListener("message", this.boundEventHandler);
 		}
-	}, Ua.receivers = [], Wa = class {
+	}, Ka.receivers = [], qa = class {
 		constructor(e) {
 			this.target = e, this.handlers = /* @__PURE__ */ new Set();
 		}
@@ -3321,7 +3321,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			if (!r) throw Error("connection_unavailable");
 			let i, a;
 			return new Promise((o, s) => {
-				let c = Yr("", 20);
+				let c = $r("", 20);
 				r.port1.start();
 				let l = setTimeout(() => {
 					s(/* @__PURE__ */ Error("unsupported_event"));
@@ -3353,7 +3353,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				a && this.removeMessageHandler(a);
 			});
 		}
-	}, Ga = "firebaseLocalStorageDb", Ka = 1, qa = "firebaseLocalStorage", Ja = "fbase_key", Q = class {
+	}, Ja = "firebaseLocalStorageDb", Ya = 1, Y = "firebaseLocalStorage", Xa = "fbase_key", X = class {
 		constructor(e) {
 			this.request = e;
 		}
@@ -3366,44 +3366,44 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				});
 			});
 		}
-	}, Ya = 800, Xa = 3, Za = class {
+	}, Za = 800, Qa = 3, $a = class {
 		constructor() {
 			this.type = "LOCAL", this._shouldAllowMigration = !0, this.listeners = {}, this.localCache = {}, this.pollTimer = null, this.pendingWrites = 0, this.receiver = null, this.sender = null, this.serviceWorkerReceiverAvailable = !1, this.activeServiceWorker = null, this._workerInitializationPromise = this.initializeServiceWorkerMessaging().then(() => {}, () => {});
 		}
 		async _openDb() {
-			return this.db ||= await ri(), this.db;
+			return this.db ||= await si(), this.db;
 		}
 		async _withRetries(e) {
 			let t = 0;
 			for (;;) try {
 				return await e(await this._openDb());
 			} catch (e) {
-				if (t++ > Xa) throw e;
+				if (t++ > Qa) throw e;
 				this.db &&= (this.db.close(), void 0);
 			}
 		}
 		async initializeServiceWorkerMessaging() {
-			return Zr() ? this.initializeReceiver() : this.initializeSender();
+			return ti() ? this.initializeReceiver() : this.initializeSender();
 		}
 		async initializeReceiver() {
-			this.receiver = Ua._getInstance(ei()), this.receiver._subscribe("keyChanged", async (e, t) => ({ keyProcessed: (await this._poll()).includes(t.key) })), this.receiver._subscribe("ping", async (e, t) => ["keyChanged"]);
+			this.receiver = Ka._getInstance(ii()), this.receiver._subscribe("keyChanged", async (e, t) => ({ keyProcessed: (await this._poll()).includes(t.key) })), this.receiver._subscribe("ping", async (e, t) => ["keyChanged"]);
 		}
 		async initializeSender() {
-			if (this.activeServiceWorker = await Qr(), !this.activeServiceWorker) return;
-			this.sender = new Wa(this.activeServiceWorker);
+			if (this.activeServiceWorker = await ni(), !this.activeServiceWorker) return;
+			this.sender = new qa(this.activeServiceWorker);
 			let e = await this.sender._send("ping", {}, 800);
 			e && e[0]?.fulfilled && e[0]?.value.includes("keyChanged") && (this.serviceWorkerReceiverAvailable = !0);
 		}
 		async notifyServiceWorker(e) {
-			if (!(!this.sender || !this.activeServiceWorker || $r() !== this.activeServiceWorker)) try {
+			if (!(!this.sender || !this.activeServiceWorker || ri() !== this.activeServiceWorker)) try {
 				await this.sender._send("keyChanged", { key: e }, this.serviceWorkerReceiverAvailable ? 800 : 50);
 			} catch {}
 		}
 		async _isAvailable() {
 			try {
 				if (!indexedDB) return !1;
-				let e = await ri();
-				return await ii(e, Na, "1"), await oi(e, Na), !0;
+				let e = await si();
+				return await ci(e, Ia, "1"), await di(e, Ia), !0;
 			} catch {}
 			return !1;
 		}
@@ -3416,17 +3416,17 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			}
 		}
 		async _set(e, t) {
-			return this._withPendingWrite(async () => (await this._withRetries((n) => ii(n, e, t)), this.localCache[e] = t, this.notifyServiceWorker(e)));
+			return this._withPendingWrite(async () => (await this._withRetries((n) => ci(n, e, t)), this.localCache[e] = t, this.notifyServiceWorker(e)));
 		}
 		async _get(e) {
-			let t = await this._withRetries((t) => ai(t, e));
+			let t = await this._withRetries((t) => li(t, e));
 			return this.localCache[e] = t, t;
 		}
 		async _remove(e) {
-			return this._withPendingWrite(async () => (await this._withRetries((t) => oi(t, e)), delete this.localCache[e], this.notifyServiceWorker(e)));
+			return this._withPendingWrite(async () => (await this._withRetries((t) => di(t, e)), delete this.localCache[e], this.notifyServiceWorker(e)));
 		}
 		async _poll() {
-			let e = await this._withRetries((e) => new Q(ti(e, !1).getAll()).toPromise());
+			let e = await this._withRetries((e) => new X(ai(e, !1).getAll()).toPromise());
 			if (!e || this.pendingWrites !== 0) return [];
 			let t = [], n = /* @__PURE__ */ new Set();
 			if (e.length !== 0) for (let { fbase_key: r, value: i } of e) n.add(r), JSON.stringify(this.localCache[r]) !== JSON.stringify(i) && (this.notifyListeners(r, i), t.push(r));
@@ -3439,7 +3439,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			if (n) for (let e of Array.from(n)) e(t);
 		}
 		startPolling() {
-			this.stopPolling(), this.pollTimer = setInterval(async () => this._poll(), Ya);
+			this.stopPolling(), this.pollTimer = setInterval(async () => this._poll(), Za);
 		}
 		stopPolling() {
 			this.pollTimer &&= (clearInterval(this.pollTimer), null);
@@ -3450,15 +3450,15 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		_removeListener(e, t) {
 			this.listeners[e] && (this.listeners[e].delete(t), this.listeners[e].size === 0 && delete this.listeners[e]), Object.keys(this.listeners).length === 0 && this.stopPolling();
 		}
-	}, Za.type = "LOCAL", Qa = Za, fr("rcb"), new J(3e4, 6e4), $a = "recaptcha", eo = class e {
+	}, $a.type = "LOCAL", eo = $a, mr("rcb"), new G(3e4, 6e4), to = "recaptcha", no = class e {
 		constructor(t) {
-			this.providerId = e.PROVIDER_ID, this.auth = U(t);
+			this.providerId = e.PROVIDER_ID, this.auth = V(t);
 		}
 		verifyPhoneNumber(e, t) {
-			return di(this.auth, e, g(t));
+			return hi(this.auth, e, _(t));
 		}
 		static credential(e, t) {
-			return Ca._fromVerification(e, t);
+			return Ea._fromVerification(e, t);
 		}
 		static credentialFromResult(t) {
 			let n = t;
@@ -3470,20 +3470,20 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		static credentialFromTaggedObject({ _tokenResponse: e }) {
 			if (!e) return null;
 			let { phoneNumber: t, temporaryProof: n } = e;
-			return t && n ? Ca._fromTokenResponse(t, n) : null;
+			return t && n ? Ea._fromTokenResponse(t, n) : null;
 		}
-	}, eo.PROVIDER_ID = "phone", eo.PHONE_SIGN_IN_METHOD = "phone", to = class extends va {
+	}, no.PROVIDER_ID = "phone", no.PHONE_SIGN_IN_METHOD = "phone", ro = class extends xa {
 		constructor(e) {
 			super("custom", "custom"), this.params = e;
 		}
 		_getIdTokenResponse(e) {
-			return K(e, this._buildIdpRequest());
+			return H(e, this._buildIdpRequest());
 		}
 		_linkToIdToken(e, t) {
-			return K(e, this._buildIdpRequest(t));
+			return H(e, this._buildIdpRequest(t));
 		}
 		_getReauthenticationResolver(e) {
-			return K(e, this._buildIdpRequest());
+			return H(e, this._buildIdpRequest());
 		}
 		_buildIdpRequest(e) {
 			let t = {
@@ -3497,7 +3497,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			};
 			return e && (t.idToken = e), t;
 		}
-	}, no = class {
+	}, io = class {
 		constructor(e, t, n, r, i = !1) {
 			this.auth = e, this.resolver = n, this.user = r, this.bypassAuthState = i, this.pendingPromise = null, this.eventManager = null, this.filter = Array.isArray(t) ? t : [t];
 		}
@@ -3541,11 +3541,11 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		getIdpTask(e) {
 			switch (e) {
 				case "signInViaPopup":
-				case "signInViaRedirect": return mi;
+				case "signInViaRedirect": return vi;
 				case "linkViaPopup":
-				case "linkViaRedirect": return gi;
+				case "linkViaRedirect": return bi;
 				case "reauthViaPopup":
-				case "reauthViaRedirect": return hi;
+				case "reauthViaRedirect": return yi;
 				default: A(this.auth, "internal-error");
 			}
 		}
@@ -3558,7 +3558,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		unregisterAndCleanUp() {
 			this.eventManager && this.eventManager.unregisterConsumer(this), this.pendingPromise = null, this.cleanUp();
 		}
-	}, ro = new J(2e3, 1e4), io = class e extends no {
+	}, ao = new G(2e3, 1e4), oo = class e extends io {
 		constructor(t, n, r, i, a) {
 			super(t, n, i, a), this.provider = r, this.authWindow = null, this.pollId = null, e.currentPopupAction && e.currentPopupAction.cancel(), e.currentPopupAction = this;
 		}
@@ -3568,7 +3568,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		}
 		async onExecution() {
 			F(this.filter.length === 1, "Popup operations only handle one event");
-			let e = Yr();
+			let e = $r();
 			this.authWindow = await this.resolver._openPopup(this.auth, this.provider, this.filter[0], e), this.authWindow.associatedEvent = e, this.resolver._originValidation(this.auth).catch((e) => {
 				this.reject(e);
 			}), this.resolver._isIframeWebStorageSupported(this.auth, (e) => {
@@ -3592,11 +3592,11 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 					}, 8e3);
 					return;
 				}
-				this.pollId = window.setTimeout(e, ro.get());
+				this.pollId = window.setTimeout(e, ao.get());
 			};
 			e();
 		}
-	}, io.currentPopupAction = null, ao = "pendingRedirect", oo = /* @__PURE__ */ new Map(), so = class extends no {
+	}, oo.currentPopupAction = null, so = "pendingRedirect", co = /* @__PURE__ */ new Map(), lo = class extends io {
 		constructor(e, t, n = !1) {
 			super(e, [
 				"signInViaRedirect",
@@ -3606,17 +3606,17 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			], t, void 0, n), this.eventId = null;
 		}
 		async execute() {
-			let e = oo.get(this.auth._key());
+			let e = co.get(this.auth._key());
 			if (!e) {
 				try {
-					let t = await vi(this.resolver, this.auth) ? await super.execute() : null;
+					let t = await Si(this.resolver, this.auth) ? await super.execute() : null;
 					e = () => Promise.resolve(t);
 				} catch (t) {
 					e = () => Promise.reject(t);
 				}
-				oo.set(this.auth._key(), e);
+				co.set(this.auth._key(), e);
 			}
-			return this.bypassAuthState || oo.set(this.auth._key(), () => Promise.resolve(null)), e();
+			return this.bypassAuthState || co.set(this.auth._key(), () => Promise.resolve(null)), e();
 		}
 		async onAuthEvent(e) {
 			if (e.type === "signInViaRedirect") return super.onAuthEvent(e);
@@ -3632,7 +3632,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		}
 		async onExecution() {}
 		cleanUp() {}
-	}, co = 600 * 1e3, lo = class {
+	}, uo = 600 * 1e3, fo = class {
 		constructor(e) {
 			this.auth = e, this.cachedEventUids = /* @__PURE__ */ new Set(), this.consumers = /* @__PURE__ */ new Set(), this.queuedRedirectEvent = null, this.hasHandledPotentialRedirect = !1, this.lastProcessedEventTime = Date.now();
 		}
@@ -3647,10 +3647,10 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			let t = !1;
 			return this.consumers.forEach((n) => {
 				this.isEventForConsumer(e, n) && (t = !0, this.sendToConsumer(e, n), this.saveEventToCache(e));
-			}), this.hasHandledPotentialRedirect || !Oi(e) ? t : (this.hasHandledPotentialRedirect = !0, t ||= (this.queuedRedirectEvent = e, !0), t);
+			}), this.hasHandledPotentialRedirect || !Mi(e) ? t : (this.hasHandledPotentialRedirect = !0, t ||= (this.queuedRedirectEvent = e, !0), t);
 		}
 		sendToConsumer(e, t) {
-			if (e.error && !Di(e)) {
+			if (e.error && !ji(e)) {
 				let n = e.error.code?.split("auth/")[1] || "internal-error";
 				t.onError(j(this.auth, n));
 			} else t.onAuthEvent(e);
@@ -3660,12 +3660,12 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			return t.filter.includes(e.type) && n;
 		}
 		hasEventBeenHandled(e) {
-			return Date.now() - this.lastProcessedEventTime >= co && this.cachedEventUids.clear(), this.cachedEventUids.has(Ei(e));
+			return Date.now() - this.lastProcessedEventTime >= uo && this.cachedEventUids.clear(), this.cachedEventUids.has(Ai(e));
 		}
 		saveEventToCache(e) {
-			this.cachedEventUids.add(Ei(e)), this.lastProcessedEventTime = Date.now();
+			this.cachedEventUids.add(Ai(e)), this.lastProcessedEventTime = Date.now();
 		}
-	}, uo = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/, fo = /^https?/, po = new J(3e4, 6e4), mo = null, ho = new J(5e3, 15e3), go = "__/auth/iframe", _o = "emulator/auth/iframe", vo = {
+	}, po = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/, mo = /^https?/, ho = new G(3e4, 6e4), go = null, _o = new G(5e3, 15e3), vo = "__/auth/iframe", yo = "emulator/auth/iframe", bo = {
 		style: {
 			position: "absolute",
 			top: "-100px",
@@ -3674,16 +3674,16 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		},
 		"aria-hidden": "true",
 		tabindex: "-1"
-	}, yo = new Map([
+	}, xo = new Map([
 		["identitytoolkit.googleapis.com", "p"],
 		["staging-identitytoolkit.sandbox.googleapis.com", "s"],
 		["test-identitytoolkit.sandbox.googleapis.com", "t"]
-	]), bo = {
+	]), So = {
 		location: "yes",
 		resizable: "yes",
 		statusbar: "yes",
 		toolbar: "no"
-	}, xo = 500, So = 600, Co = "_blank", wo = "http://localhost", To = class {
+	}, Co = 500, wo = 600, To = "_blank", Eo = "http://localhost", Do = class {
 		constructor(e) {
 			this.window = e, this.associatedEvent = null;
 		}
@@ -3692,15 +3692,15 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				this.window.close();
 			} catch {}
 		}
-	}, Eo = "__/auth/handler", Do = "emulator/auth/handler", Oo = "fac", ko = "webStorageSupport", Ao = class {
+	}, Oo = "__/auth/handler", ko = "emulator/auth/handler", Ao = "fac", jo = "webStorageSupport", Mo = class {
 		constructor() {
-			this.eventManagers = {}, this.iframes = {}, this.originValidationPromises = {}, this._redirectPersistence = Ha, this._completeRedirectFn = Ti, this._overrideRedirectResult = bi;
+			this.eventManagers = {}, this.iframes = {}, this.originValidationPromises = {}, this._redirectPersistence = Ga, this._completeRedirectFn = ki, this._overrideRedirectResult = wi;
 		}
 		async _openPopup(e, t, n, r) {
-			return F(this.eventManagers[e._key()]?.manager, "_initialize() not called before _openPopup()"), Li(e, await zi(e, t, n, Sn(), r), Yr());
+			return F(this.eventManagers[e._key()]?.manager, "_initialize() not called before _openPopup()"), Vi(e, await Ui(e, t, n, Sn(), r), $r());
 		}
 		async _openRedirect(e, t, n, r) {
-			return await this._originValidation(e), Xr(await zi(e, t, n, Sn(), r)), new Promise(() => {});
+			return await this._originValidation(e), ei(await Ui(e, t, n, Sn(), r)), new Promise(() => {});
 		}
 		_initialize(e) {
 			let t = e._key();
@@ -3714,23 +3714,23 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			}), n;
 		}
 		async initAndGetManager(e) {
-			let t = await Ii(e), n = new lo(e);
+			let t = await Bi(e), n = new fo(e);
 			return t.register("authEvent", (t) => (N(t?.authEvent, e, "invalid-auth-event"), { status: n.onEvent(t.authEvent) ? "ACK" : "ERROR" }), gapi.iframes.CROSS_ORIGIN_IFRAMES_FILTER), this.eventManagers[e._key()] = { manager: n }, this.iframes[e._key()] = t, n;
 		}
 		_isIframeWebStorageSupported(e, t) {
-			this.iframes[e._key()].send(ko, { type: ko }, (n) => {
-				let r = n?.[0]?.[ko];
+			this.iframes[e._key()].send(jo, { type: jo }, (n) => {
+				let r = n?.[0]?.[jo];
 				r !== void 0 && t(!!r), A(e, "internal-error");
 			}, gapi.iframes.CROSS_ORIGIN_IFRAMES_FILTER);
 		}
 		_originValidation(e) {
 			let t = e._key();
-			return this.originValidationPromises[t] || (this.originValidationPromises[t] = Ai(e)), this.originValidationPromises[t];
+			return this.originValidationPromises[t] || (this.originValidationPromises[t] = Pi(e)), this.originValidationPromises[t];
 		}
 		get _shouldInitProactively() {
-			return ar() || Xn() || nr();
+			return sr() || Qn() || ir();
 		}
-	}, jo = Ao, Mo = class {
+	}, No = Mo, Po = class {
 		constructor(e) {
 			this.factorId = e;
 		}
@@ -3741,7 +3741,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 				default: return P("unexpected MultiFactorSessionType");
 			}
 		}
-	}, No = class e extends Mo {
+	}, Fo = class e extends Po {
 		constructor(e) {
 			super("phone"), this.credential = e;
 		}
@@ -3749,40 +3749,40 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			return new e(t);
 		}
 		_finalizeEnroll(e, t, n) {
-			return Ur(e, {
+			return qr(e, {
 				idToken: t,
 				displayName: n,
 				phoneVerificationInfo: this.credential._makeVerificationRequest()
 			});
 		}
 		_finalizeSignIn(e, t) {
-			return ci(e, {
+			return pi(e, {
 				mfaPendingCredential: t,
 				phoneVerificationInfo: this.credential._makeVerificationRequest()
 			});
 		}
-	}, Po = class {
+	}, Io = class {
 		constructor() {}
 		static assertion(e) {
-			return No._fromCredential(e);
+			return Fo._fromCredential(e);
 		}
-	}, Po.FACTOR_ID = "phone", Fo = class {
+	}, Io.FACTOR_ID = "phone", Lo = class {
 		static assertionForEnrollment(e, t) {
-			return Io._fromSecret(e, t);
+			return Ro._fromSecret(e, t);
 		}
 		static assertionForSignIn(e, t) {
-			return Io._fromEnrollmentId(e, t);
+			return Ro._fromEnrollmentId(e, t);
 		}
 		static async generateSecret(e) {
 			let t = e;
 			N(t.user?.auth !== void 0, "internal-error");
-			let n = await Wr(t.user.auth, {
+			let n = await Jr(t.user.auth, {
 				idToken: t.credential,
 				totpEnrollmentInfo: {}
 			});
-			return Lo._fromStartTotpMfaEnrollmentResponse(n, t.user.auth);
+			return zo._fromStartTotpMfaEnrollmentResponse(n, t.user.auth);
 		}
-	}, Fo.FACTOR_ID = "totp", Io = class e extends Mo {
+	}, Lo.FACTOR_ID = "totp", Ro = class e extends Po {
 		constructor(e, t, n) {
 			super("totp"), this.otp = e, this.enrollmentId = t, this.secret = n;
 		}
@@ -3793,7 +3793,7 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			return new e(n, t);
 		}
 		async _finalizeEnroll(e, t, n) {
-			return N(this.secret !== void 0, e, "argument-error"), Gr(e, {
+			return N(this.secret !== void 0, e, "argument-error"), Yr(e, {
 				idToken: t,
 				displayName: n,
 				totpVerificationInfo: this.secret._makeTotpVerificationInfo(this.otp)
@@ -3802,13 +3802,13 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		async _finalizeSignIn(e, t) {
 			N(this.enrollmentId !== void 0 && this.otp !== void 0, e, "argument-error");
 			let n = { verificationCode: this.otp };
-			return li(e, {
+			return mi(e, {
 				mfaPendingCredential: t,
 				mfaEnrollmentId: this.enrollmentId,
 				totpVerificationInfo: n
 			});
 		}
-	}, Lo = class e {
+	}, zo = class e {
 		constructor(e, t, n, r, i, a, o) {
 			this.sessionInfo = a, this.auth = o, this.secretKey = e, this.hashingAlgorithm = t, this.codeLength = n, this.codeIntervalSeconds = r, this.enrollmentCompletionDeadline = i;
 		}
@@ -3823,9 +3823,9 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		}
 		generateQrCodeUrl(e, t) {
 			let n = !1;
-			return (Vi(e) || Vi(t)) && (n = !0), n && (Vi(e) && (e = this.auth.currentUser?.email || "unknownuser"), Vi(t) && (t = this.auth.name)), `otpauth://totp/${t}:${e}?secret=${this.secretKey}&issuer=${t}&algorithm=${this.hashingAlgorithm}&digits=${this.codeLength}`;
+			return (Gi(e) || Gi(t)) && (n = !0), n && (Gi(e) && (e = this.auth.currentUser?.email || "unknownuser"), Gi(t) && (t = this.auth.name)), `otpauth://totp/${t}:${e}?secret=${this.secretKey}&issuer=${t}&algorithm=${this.hashingAlgorithm}&digits=${this.codeLength}`;
 		}
-	}, Ro = "@firebase/auth", zo = "1.12.2", Bo = class {
+	}, Bo = "@firebase/auth", Vo = "1.12.2", Ho = class {
 		constructor(e) {
 			this.auth = e, this.internalListeners = /* @__PURE__ */ new Map();
 		}
@@ -3853,42 +3853,42 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 		updateProactiveRefresh() {
 			this.internalListeners.size > 0 ? this.auth._startProactiveRefresh() : this.auth._stopProactiveRefresh();
 		}
-	}, Vo = Se("authIdTokenMaxAge") || 300, Ho = null, Uo = (e) => async (t) => {
+	}, Uo = xe("authIdTokenMaxAge") || 300, Wo = null, Go = (e) => async (t) => {
 		let n = t && await t.getIdTokenResult(), r = n && ((/* @__PURE__ */ new Date()).getTime() - Date.parse(n.issuedAtTime)) / 1e3;
-		if (r && r > Vo) return;
+		if (r && r > Uo) return;
 		let i = n?.token;
-		Ho !== i && (Ho = i, await fetch(e, {
+		Wo !== i && (Wo = i, await fetch(e, {
 			method: i ? "POST" : "DELETE",
 			headers: i ? { Authorization: `Bearer ${i}` } : {}
 		}));
-	}, cr({
+	}, ur({
 		loadJS(e) {
 			return new Promise((t, n) => {
 				let r = document.createElement("script");
 				r.setAttribute("src", e), r.onload = t, r.onerror = (e) => {
 					let t = j("internal-error");
 					t.customData = e, n(t);
-				}, r.type = "text/javascript", r.charset = "UTF-8", Gi().appendChild(r);
+				}, r.type = "text/javascript", r.charset = "UTF-8", Yi().appendChild(r);
 			});
 		},
 		gapiScript: "https://apis.google.com/js/api.js",
 		recaptchaV2Script: "https://www.google.com/recaptcha/api.js",
 		recaptchaEnterpriseScript: "https://www.google.com/recaptcha/enterprise.js?render="
-	}), Ui("Browser");
-})), Go = e((() => {
-	Wo(), mn(), ze();
-})), Ko = e((() => {
-	Go();
-})), qo, Jo = e((() => {
-	hn(), Ko(), qo = class {
+	}), qi("Browser");
+})), qo = e((() => {
+	Ko(), mn(), Re();
+})), Jo = e((() => {
+	qo();
+})), Yo, Xo = e((() => {
+	hn(), Jo(), Yo = class {
 		constructor(e) {
-			this.app = mt(e), this.auth = Wi(this.app), this.googleProvider = new Oa(), this.googleProvider.setCustomParameters({ prompt: "select_account" });
+			this.app = pt(e), this.auth = Ji(this.app), this.googleProvider = new ja(), this.googleProvider.setCustomParameters({ prompt: "select_account" });
 		}
 		async waitForAuthReady({ requireUser: e = !1, timeoutMs: t = 1e4 } = {}) {
 			if (typeof this.auth.authStateReady == "function" ? await this.auth.authStateReady() : await new Promise((e, n) => {
 				let r = setTimeout(() => {
 					i(), n(/* @__PURE__ */ Error("Tempo esgotado aguardando a autenticação do Firebase."));
-				}, t), i = Vr(this.auth, () => {
+				}, t), i = Gr(this.auth, () => {
 					clearTimeout(r), i(), e();
 				}, (e) => {
 					clearTimeout(r), i(), n(e);
@@ -3897,15 +3897,15 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			return this.auth.currentUser;
 		}
 		async login(e, t) {
-			let n = await Rr(this.auth, e, t);
+			let n = await Hr(this.auth, e, t);
 			return await this.waitForAuthReady({ requireUser: !0 }), n;
 		}
 		async loginWithGoogle() {
-			let e = await _i(this.auth, this.googleProvider);
+			let e = await xi(this.auth, this.googleProvider);
 			return await this.waitForAuthReady({ requireUser: !0 }), e;
 		}
 		async loginWithGoogleRedirect() {
-			return Ci(this.auth, this.googleProvider);
+			return Di(this.auth, this.googleProvider);
 		}
 		async loginWithGooglePopupOrRedirect() {
 			try {
@@ -3916,8 +3916,8 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			}
 		}
 	};
-})), Yo, Xo, Zo = e((() => {
-	Yo = 2700 * 1e3, Xo = class {
+})), Zo, Qo, $o = e((() => {
+	Zo = 2700 * 1e3, Qo = class {
 		constructor(e, t) {
 			this.firebaseClient = e, this.baseUrl = t.replace(/\/+$/, ""), this.clientId = foundry.utils.randomID();
 		}
@@ -3978,13 +3978,13 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 			};
 			return await o(), i = setInterval(() => {
 				r?.close(), o();
-			}, Yo), { close() {
+			}, Zo), { close() {
 				a = !0, clearInterval(i), r?.close();
 			} };
 		}
 	};
-})), Qo, $o = e((() => {
-	Qo = class {
+})), es, ts = e((() => {
+	es = class {
 		constructor(e) {
 			this.firebaseClient = e;
 		}
@@ -4024,16 +4024,16 @@ var Ki, qi, Ji, J, Yi, Xi, Zi, Qi, $i, ea, ta, na, ra, Y, ia, aa, oa, sa, ca, la
 }));
 //#endregion
 //#region src/draft-selector.js
-function es(e) {
+function ns(e) {
 	return String(e ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&#39;");
 }
-function ts(e) {
-	return `<p>Erro ao carregar fichas: ${es(e?.message || "Erro desconhecido.")}</p>
+function rs(e) {
+	return `<p>Erro ao carregar fichas: ${ns(e?.message || "Erro desconhecido.")}</p>
     <p>Verifique se a URL do backend está configurada corretamente nas configurações do módulo e
     se o servidor (runarcana-api) está no ar.</p>`;
 }
-var ns, rs = e((() => {
-	ns = class {
+var is, as = e((() => {
+	is = class {
 		constructor(e, t, n) {
 			this.apiClient = e, this.actor = t, this.syncManager = n;
 		}
@@ -4042,7 +4042,7 @@ var ns, rs = e((() => {
 			try {
 				let e = await this.apiClient.listDrafts(), n = "<form><div class=\"form-group\"><label>Ficha:</label><select name=\"draftId\">";
 				return e.length === 0 ? n += "<option value=\"\">Nenhuma ficha encontrada</option>" : e.forEach((e) => {
-					n += `<option value="${e.id}">${es(e.concept?.name || e.title || "Sem Nome")} (${es(e.classBuild?.classId || "Sem Classe")})</option>`;
+					n += `<option value="${e.id}">${ns(e.concept?.name || e.title || "Sem Nome")} (${ns(e.classBuild?.classId || "Sem Classe")})</option>`;
 				}), n += "</select></div></form>", t.wait({
 					window: { title: "Vincular Ficha Runarcana" },
 					content: n,
@@ -4059,7 +4059,7 @@ var ns, rs = e((() => {
 			} catch (e) {
 				return t.prompt({
 					window: { title: "Erro" },
-					content: ts(e),
+					content: rs(e),
 					ok: { label: "Fechar" }
 				});
 			}
@@ -4068,13 +4068,13 @@ var ns, rs = e((() => {
 }));
 //#endregion
 //#region src/compendium-sync.js
-function is() {
+function os() {
 	return game.packs.filter((e) => e.documentName === "Item");
 }
-async function as(e) {
+async function ss(e) {
 	let t = new Set((e || []).filter(Boolean)), n = /* @__PURE__ */ new Map();
 	if (t.size === 0) return n;
-	for (let e of is()) {
+	for (let e of os()) {
 		let r;
 		try {
 			r = await e.getIndex({ fields: ["flags.runarcana-sync.catalogKey"] });
@@ -4092,7 +4092,7 @@ async function as(e) {
 	}
 	return n;
 }
-function os(e) {
+function cs(e) {
 	if (!e) return e;
 	try {
 		return new URL(e, window.location.origin).href;
@@ -4100,12 +4100,12 @@ function os(e) {
 		return e;
 	}
 }
-function ss(e, t) {
+function ls(e, t) {
 	let n = [];
 	for (let r = 0; r < e.length; r += t) n.push(e.slice(r, r + t));
 	return n;
 }
-async function cs(e, t, n, r) {
+async function us(e, t, n, r) {
 	let i = [], a = [];
 	for (let e of n) {
 		let t = game.packs.get(e);
@@ -4114,7 +4114,7 @@ async function cs(e, t, n, r) {
 			packId: e,
 			foundryId: t.id,
 			name: t.name,
-			img: os(t.img),
+			img: cs(t.img),
 			itemType: t.type,
 			catalogKey: t.getFlag("runarcana-sync", "catalogKey") ?? null,
 			system: t.toObject().system
@@ -4125,28 +4125,28 @@ async function cs(e, t, n, r) {
 			count: n.length
 		});
 	}
-	let o = ss(i, ls);
+	let o = ls(i, ds);
 	for (let n = 0; n < o.length; n++) await e.putCompendiumItemsBatch(o[n], t), r?.(n + 1, o.length);
 	return {
 		totalSynced: i.length,
 		packSummaries: a
 	};
 }
-var ls, us = e((() => {
-	ls = 50;
+var ds, fs = e((() => {
+	ds = 50;
 }));
 //#endregion
 //#region src/compendium-sync-dialog.js
-function ds(e) {
+function ps(e) {
 	return String(e ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&#39;");
 }
-var fs, ps, ms = e((() => {
-	us(), fs = "compendiumSyncSelection", ps = class {
+var ms, hs, gs = e((() => {
+	fs(), ms = "compendiumSyncSelection", hs = class {
 		constructor(e) {
 			this.apiClient = e;
 		}
 		async render() {
-			let { DialogV2: e } = foundry.applications.api, t = is();
+			let { DialogV2: e } = foundry.applications.api, t = os();
 			if (t.length === 0) return e.prompt({
 				window: { title: "Sincronizar Compêndio de Itens" },
 				content: "<p>Nenhum compêndio do tipo Item foi encontrado neste mundo.</p>",
@@ -4154,7 +4154,7 @@ var fs, ps, ms = e((() => {
 			});
 			let n = [];
 			try {
-				n = game.settings.get("runarcana-sync", fs) ?? [];
+				n = game.settings.get("runarcana-sync", ms) ?? [];
 			} catch {
 				n = [];
 			}
@@ -4163,9 +4163,9 @@ var fs, ps, ms = e((() => {
 				let t = r.has(e.collection) ? "checked" : "";
 				i += `
           <label style="display:block;margin:4px 0;">
-            <input type="checkbox" name="pack" value="${ds(e.collection)}" ${t} />
-            ${ds(e.metadata.label)}
-            <small>(${ds(e.metadata.packageName || e.metadata.system || "")})</small>
+            <input type="checkbox" name="pack" value="${ps(e.collection)}" ${t} />
+            ${ps(e.metadata.label)}
+            <small>(${ps(e.metadata.packageName || e.metadata.system || "")})</small>
           </label>`;
 			}
 			i += "\n        </div>\n      </form>";
@@ -4189,9 +4189,9 @@ var fs, ps, ms = e((() => {
 							ui.notifications.error("Runarcana Sync: configure a Chave de Sincronização de Compêndio nas configurações do módulo primeiro.");
 							return;
 						}
-						await game.settings.set("runarcana-sync", fs, i);
+						await game.settings.set("runarcana-sync", ms, i);
 						try {
-							let e = await cs(a, o, i, (e, t) => {
+							let e = await us(a, o, i, (e, t) => {
 								ui.notifications.info(`Runarcana Sync: sincronizando lote ${e} de ${t}...`);
 							});
 							ui.notifications.info(`Runarcana Sync: ${e.totalSynced} itens sincronizados de ${e.packSummaries.length} compêndio(s).`);
@@ -4206,8 +4206,105 @@ var fs, ps, ms = e((() => {
 			});
 		}
 	};
-})), hs, $, gs, _s = e((() => {
-	hs = {
+}));
+//#endregion
+//#region src/data-mapper.js
+function _s(e) {
+	return e ? Array.isArray(e) ? e.filter(Boolean).map(String) : e instanceof Set ? [...e].filter(Boolean).map(String) : typeof e == "object" ? Object.keys(e).filter((t) => e[t]) : [] : [];
+}
+function Z(e) {
+	if (!e) return [];
+	let t = _s(e.value ?? (Array.isArray(e) || e instanceof Set ? e : null)), n = typeof e.custom == "string" ? e.custom.split(/[;,\n]/).map((e) => e.trim()).filter(Boolean) : [];
+	return [...new Set([...t, ...n])];
+}
+function vs(e) {
+	let t = e.system?.attributes?.senses ?? {}, n = t.ranges ?? {}, r = {};
+	for (let e of Os) {
+		let i = n[e] ?? t[e];
+		typeof i == "number" && i > 0 && (r[e] = i);
+	}
+	return t.units && (r.units = t.units), typeof t.special == "string" && t.special.trim() && (r.special = t.special.trim()), r;
+}
+function ys(e) {
+	let t = e.system?.traits ?? {};
+	return {
+		senses: vs(e),
+		damageResistances: Z(t.dr),
+		damageImmunities: Z(t.di),
+		damageVulnerabilities: Z(t.dv),
+		armorProficiencies: Z(t.armorProf),
+		weaponProficiencies: Z(t.weaponProf),
+		languages: Z(t.languages)
+	};
+}
+function bs(e) {
+	return e ? Array.isArray(e) ? e : typeof e.length == "number" || typeof e[Symbol.iterator] == "function" ? [...e] : typeof e == "object" ? Object.values(e) : [] : [];
+}
+function xs(e, t) {
+	let n = bs(e.itemTypes?.[t]);
+	return n.length > 0 ? n : bs(e.items?.contents ?? e.items).filter((e) => e?.type === t);
+}
+function Ss(e) {
+	return e ? typeof e == "string" ? e : e.name || "" : "";
+}
+function Cs(e) {
+	let t = e?.system?.hd?.denomination ?? e?.system?.hitDice ?? e?.system?.hitDie;
+	if (typeof t == "number" && t > 0) return `d${t}`;
+	if (typeof t == "string" && t.trim()) {
+		let e = t.trim();
+		return e.startsWith("d") ? e : `d${e}`;
+	}
+	return "";
+}
+function ws(e) {
+	let t = e.system?.attributes?.hd;
+	if (!t) return {
+		value: 0,
+		max: 0
+	};
+	let n = Number(t.value), r = Number(t.max);
+	return {
+		value: Number.isFinite(n) ? n : 0,
+		max: Number.isFinite(r) ? r : 0
+	};
+}
+function Ts(e) {
+	let t = xs(e, "class"), n = bs(e.classes), r = /* @__PURE__ */ new Set(), i = [];
+	for (let e of [...t, ...n]) {
+		let t = e?.id || e?.name;
+		!t || r.has(t) || (r.add(t), i.push(e));
+	}
+	let a = xs(e, "race")[0], o = xs(e, "background")[0], s = xs(e, "subclass")[0], c = ws(e), l = e.system?.traits?.size || "";
+	return {
+		classes: i.map((e) => ({
+			name: e.name || "",
+			identifier: e.system?.identifier || e.identifier || "",
+			levels: Number(e.system?.levels) || 0,
+			hitDie: Cs(e)
+		})),
+		subclassName: s?.name || "",
+		raceName: a?.name || Ss(e.system?.details?.race),
+		backgroundName: o?.name || Ss(e.system?.details?.background),
+		size: l,
+		hitDie: i.map(Cs).find(Boolean) || "",
+		hitDiceValue: c.value,
+		hitDiceMax: c.max
+	};
+}
+function Q(e) {
+	return typeof e == "string" ? e.trim() : "";
+}
+function Es(e) {
+	let t = e.system?.details ?? {}, n = {}, r = {}, i = Q(t.appearance), a = Q(t.age), o = Q(t.gender), s = Q(t.height), c = Q(t.weight), l = Q(t.eyes), u = Q(t.hair), d = Q(t.skin);
+	i && (n.appearance = i), a && (n.age = a), o && (n.sex = o), s && (n.height = s), c && (n.weight = c), l && (n.eyes = l), u && (n.hair = u), d && (n.skin = d);
+	let f = Q(t.alignment), ee = Q(t.faith), p = Q(t.ideal), m = Q(t.bond), te = Q(t.flaw), h = Q(t.trait), g = Q(t.biography?.value);
+	return f && (r.alignment = f), ee && (r.faith = ee), p && (r.ideal = p), m && (r.bond = m), te && (r.flaw = te), h && (r.trait = h), g && (r.backstory = g), {
+		identity: n,
+		description: r
+	};
+}
+var Ds, Os, $, ks, As = e((() => {
+	Ds = {
 		"system.abilities.str.value": "attributes.scores.strength",
 		"system.abilities.dex.value": "attributes.scores.dexterity",
 		"system.abilities.con.value": "attributes.scores.constitution",
@@ -4255,7 +4352,12 @@ var fs, ps, ms = e((() => {
 		"system.attributes.death.success": "derivedStats.deathSaveSuccesses",
 		"system.attributes.death.failure": "derivedStats.deathSaveFailures",
 		"system.attributes.exhaustion": "derivedStats.exhaustion"
-	}, $ = [
+	}, Os = [
+		"darkvision",
+		"blindsight",
+		"tremorsense",
+		"truesight"
+	], $ = [
 		{
 			foundry: "str",
 			firebase: "strength"
@@ -4280,7 +4382,7 @@ var fs, ps, ms = e((() => {
 			foundry: "cha",
 			firebase: "charisma"
 		}
-	], gs = [
+	], ks = [
 		{
 			foundry: "acr",
 			id: "acrobatics"
@@ -4357,17 +4459,17 @@ var fs, ps, ms = e((() => {
 }));
 //#endregion
 //#region src/sync-manager.js
-function vs(e, t) {
+function js(e, t) {
 	let n;
 	return function(...r) {
 		clearTimeout(n), n = setTimeout(() => e.apply(this, r), t);
 	};
 }
-function ys(e) {
+function Ms(e) {
 	let t = foundry.utils.deepClone(e);
 	return delete t._stats, delete t.sort, delete t.ownership, delete t.folder, t.flags && (delete t.flags.core, delete t.flags.exportSource), t;
 }
-function bs(e) {
+function Ns(e) {
 	if (!e.system || !e.system.activities) return e;
 	let t = e.system.activities;
 	if (Array.isArray(t)) {
@@ -4379,24 +4481,61 @@ function bs(e) {
 	} else if (typeof t == "object") for (let [e, n] of Object.entries(t)) n._id ||= e;
 	return e;
 }
-function xs(e) {
-	let t = os(e);
+function Ps(e) {
+	let t = cs(e);
 	return !t || String(t).includes("mystery-man") || String(t).includes("icons/svg/item-bag") ? "" : t;
 }
-function Ss(e) {
+function Fs(e) {
+	let t = e.statuses;
+	return t ? typeof t.size == "number" ? [...t].map(String) : Array.isArray(t) ? t.map(String) : typeof t == "object" ? Object.keys(t) : [] : [];
+}
+function Is(e) {
+	if (typeof e.allApplicableEffects == "function") return [...e.allApplicableEffects()];
 	let t = e.effects;
-	return (t?.contents ?? (Array.isArray(t) ? t : [])).filter((e) => !e.disabled && e.name).map((e) => {
-		let t = os(e.img || e.icon);
-		return t ? {
+	return t?.contents ?? (Array.isArray(t) ? t : []);
+}
+function Ls(e) {
+	return e.type === "enchantment" || e.isAppliedEnchantment === !0;
+}
+function Rs(e) {
+	let t = e.duration?.label;
+	if (!t) return "";
+	let n = String(t).trim();
+	return !n || /^(none|nenhum|permanent|permanente|indefinid)/i.test(n) ? "" : n;
+}
+function zs(e, t) {
+	let n = e.parent;
+	return n && n !== t && n.name ? n.name : "";
+}
+function Bs(e, t) {
+	let n = { name: e.name }, r = cs(e.img || e.icon);
+	r && (n.img = r), e.disabled && (n.disabled = !0), e.isSuppressed && (n.isSuppressed = !0), e.isTemporary && (n.isTemporary = !0);
+	let i = Fs(e);
+	i.length && (n.statuses = i);
+	let a = Rs(e);
+	a && (n.durationLabel = a);
+	let o = zs(e, t);
+	return o && (n.source = o), n;
+}
+function Vs(e) {
+	return Is(e).filter((e) => !e.disabled && !e.isSuppressed && e.name && !Ls(e)).map((t) => Bs(t, e)).filter((e) => {
+		let t = e.statuses ?? [];
+		return t.length === 0 ? !1 : !t.every((e) => e === "exhaustion");
+	}).map((e) => {
+		let t = {
 			name: e.name,
-			img: t
-		} : { name: e.name };
+			statuses: e.statuses
+		};
+		return e.img && (t.img = e.img), t;
 	});
 }
-var Cs, ws = e((() => {
-	_s(), us(), Cs = class {
+function Hs(e) {
+	return Is(e).filter((e) => e?.name && !Ls(e)).map((t) => Bs(t, e));
+}
+var Us, Ws = e((() => {
+	As(), fs(), Us = class {
 		constructor(e) {
-			this.apiClient = e, this.streams = /* @__PURE__ */ new Map(), this.activeSyncs = /* @__PURE__ */ new Set(), this.lastKnownDraft = /* @__PURE__ */ new Map(), this.debouncedActorUpdate = vs(this._executeActorUpdate.bind(this), 1e3), this.debouncedItemUpdate = vs(this._executeItemUpdate.bind(this), 1e3);
+			this.apiClient = e, this.streams = /* @__PURE__ */ new Map(), this.activeSyncs = /* @__PURE__ */ new Set(), this.lastKnownDraft = /* @__PURE__ */ new Map(), this.debouncedActorUpdate = js(this._executeActorUpdate.bind(this), 1e3), this.debouncedItemUpdate = js(this._executeItemUpdate.bind(this), 1e3);
 		}
 		notifyApiError(e, t, n) {
 			console.error(`Runarcana Sync | Falha ao ${e} a ficha ${n?.name || n?.id || "desconhecida"}:`, t), ui.notifications.error(`Runarcana Sync: erro ao ${e} a ficha ${n?.name || n?.id || ""}: ${t?.message || "erro desconhecido"}`);
@@ -4408,7 +4547,7 @@ var Cs, ws = e((() => {
 				try {
 					try {
 						let n = await this.apiClient.getDraft(t);
-						n && (this.lastKnownDraft.set(e.id, n), await this._applyRemoteDraft(e, n), await this._executeActorUpdate(e, t));
+						n && (this.lastKnownDraft.set(e.id, n), await this._applyRemoteDraft(e, n), await this._executeActorUpdate(e, t), await this._executeItemUpdate(e, t));
 					} catch (t) {
 						this.notifyApiError("carregar", t, e);
 					}
@@ -4438,7 +4577,7 @@ var Cs, ws = e((() => {
 		}
 		async _applyRemoteDraft(e, t) {
 			let n = {};
-			for (let [r, i] of Object.entries(hs)) {
+			for (let [r, i] of Object.entries(Ds)) {
 				if (r.startsWith("system.abilities")) continue;
 				let a = foundry.utils.getProperty(t, i), o = foundry.utils.getProperty(e, r);
 				a != null && a !== o && (n[r] = a);
@@ -4451,7 +4590,7 @@ var Cs, ws = e((() => {
 				if (a === void 0) return;
 				let o = +!!a;
 				(e.system.abilities?.[r]?.proficient ?? 0) !== o && (n[`system.abilities.${r}.proficient`] = o);
-			}), gs.forEach(({ foundry: r, id: i }) => {
+			}), ks.forEach(({ foundry: r, id: i }) => {
 				let a = foundry.utils.getProperty(t, `proficiencies.skills.${i}`);
 				if (a === void 0) return;
 				let o = a === "expertise" ? 2 : +(a === !0);
@@ -4459,9 +4598,9 @@ var Cs, ws = e((() => {
 			}), Object.keys(n).length > 0 && await e.update(n), t.items && Array.isArray(t.items)) {
 				let n = t.items, r = e.items.contents, i = [], a = [], o = [];
 				for (let e of n) {
-					let t = r.find((t) => t.getFlag("runarcana-sync", "sourceId") === e._id || t.id === e._id), n = bs(foundry.utils.deepClone(e));
+					let t = r.find((t) => t.getFlag("runarcana-sync", "sourceId") === e._id || t.id === e._id), n = Ns(foundry.utils.deepClone(e));
 					if (t) {
-						let r = ys(t.toObject()), i = ys(n);
+						let r = Ms(t.toObject()), i = Ms(n);
 						if (i._id = r._id, r.flags?.["runarcana-sync"] && delete r.flags["runarcana-sync"], i.flags?.["runarcana-sync"] && delete i.flags["runarcana-sync"], JSON.stringify(r) !== JSON.stringify(i)) {
 							let r = n;
 							r._id = t.id, foundry.utils.setProperty(r, "flags.runarcana-sync.sourceId", e._id), a.push(r);
@@ -4472,8 +4611,8 @@ var Cs, ws = e((() => {
 					}
 				}
 				for (let e of r) {
-					let t = e.getFlag("runarcana-sync", "sourceId") || e.id;
-					n.some((e) => e._id === t) || o.push(e.id);
+					let t = e.getFlag("runarcana-sync", "sourceId");
+					t && (n.some((e) => e._id === t) || o.push(e.id));
 				}
 				o.length > 0 && await e.deleteEmbeddedDocuments("Item", o), i.length > 0 && await e.createEmbeddedDocuments("Item", i), a.length > 0 && await e.updateEmbeddedDocuments("Item", a);
 			}
@@ -4488,7 +4627,7 @@ var Cs, ws = e((() => {
 			if (n.length === 0) return;
 			let r;
 			try {
-				r = await as(n);
+				r = await ss(n);
 			} catch (e) {
 				console.warn("Runarcana Sync | Falha ao procurar itens de equipamento no compêndio:", e);
 				return;
@@ -4515,7 +4654,7 @@ var Cs, ws = e((() => {
 				return;
 			}
 			let n = foundry.utils.deepClone(this.lastKnownDraft.get(e.id));
-			for (let [t, r] of Object.entries(hs)) {
+			for (let [t, r] of Object.entries(Ds)) {
 				if (t.startsWith("system.abilities")) continue;
 				let i = foundry.utils.getProperty(e, t);
 				i !== void 0 && foundry.utils.setProperty(n, r, i);
@@ -4528,7 +4667,7 @@ var Cs, ws = e((() => {
 			}), $.forEach(({ foundry: t, firebase: r }) => {
 				let i = e.system.abilities?.[t]?.proficient;
 				i !== void 0 && foundry.utils.setProperty(n, `proficiencies.savingThrows.${r}`, i >= 1);
-			}), gs.forEach(({ foundry: t, id: r }) => {
+			}), ks.forEach(({ foundry: t, id: r }) => {
 				let i = e.system.skills?.[t]?.value;
 				if (i === void 0) return;
 				let a = i >= 2 ? "expertise" : i >= 1;
@@ -4539,7 +4678,15 @@ var Cs, ws = e((() => {
 				let e = $.find(({ foundry: e }) => e === r);
 				e && foundry.utils.setProperty(n, "spellcasting.ability", e.firebase);
 			}
-			foundry.utils.setProperty(n, "concept.portraitUrl", xs(e.img)), n.conditions = Ss(e);
+			foundry.utils.setProperty(n, "concept.portraitUrl", Ps(e.img)), n.conditions = Vs(e), n.effects = Hs(e), n.traits = ys(e), n.foundryIdentity = Ts(e);
+			let i = Es(e);
+			n.identity = {
+				...n.identity ?? {},
+				...i.identity
+			}, n.description = {
+				...n.description ?? {},
+				...i.description
+			};
 			try {
 				let r = await this.apiClient.saveDraft(t, n);
 				this.lastKnownDraft.set(e.id, r);
@@ -4557,11 +4704,28 @@ var Cs, ws = e((() => {
 				console.warn(`Runarcana Sync | Ignorando atualização de itens de ${e.name}: ainda não temos uma cópia da ficha vinda do backend.`);
 				return;
 			}
-			let n = e.items.map((e) => {
-				let t = e.toObject();
-				return t._id = e.getFlag("runarcana-sync", "sourceId") || t._id, t.img = os(t.img), ys(t);
-			}), r = foundry.utils.deepClone(this.lastKnownDraft.get(e.id));
-			r.items = n;
+			let n = [];
+			for (let t of e.items) try {
+				let e = t.toObject();
+				e._id = t.getFlag("runarcana-sync", "sourceId") || e._id, e.img = cs(e.img);
+				let r = Ms(e);
+				[
+					"class",
+					"subclass",
+					"race",
+					"background"
+				].includes(r.type) && r.system && delete r.system.advancement, n.push(r);
+			} catch (e) {
+				console.warn(`Runarcana Sync | Não foi possível serializar ${t.name} (${t.type}):`, e), n.push({
+					_id: t.getFlag("runarcana-sync", "sourceId") || t.id,
+					name: t.name,
+					type: t.type,
+					img: cs(t.img),
+					system: t.type === "class" ? { levels: t.system?.levels } : {}
+				});
+			}
+			let r = foundry.utils.deepClone(this.lastKnownDraft.get(e.id));
+			r.items = n, r.foundryIdentity = Ts(e), r.conditions = Vs(e), r.effects = Hs(e);
 			try {
 				let n = await this.apiClient.saveDraft(t, r);
 				this.lastKnownDraft.set(e.id, n);
@@ -4570,15 +4734,15 @@ var Cs, ws = e((() => {
 			}
 		}
 	};
-})), Ts = /* @__PURE__ */ t((() => {
-	Jo(), Zo(), $o(), rs(), ms(), ws();
+})), Gs = /* @__PURE__ */ t((() => {
+	Xo(), $o(), ts(), as(), gs(), Ws();
 	var e = null, t = null, n = null;
 	function r() {
 		if (!t) {
 			ui.notifications.warn("Configure a URL do backend nas configurações do módulo primeiro.");
 			return;
 		}
-		new ps(t).render();
+		new hs(t).render();
 	}
 	var i = class extends FormApplication {
 		constructor() {
@@ -4740,9 +4904,9 @@ var Cs, ws = e((() => {
 				l = e.config, u = e.missingFields;
 			}
 			if (Object.keys(l).length > 0) {
-				e = new qo(l);
+				e = new Yo(l);
 				let r = a("backendUrl");
-				r ? (t = new Xo(e, r), n = new Cs(t), await e.waitForAuthReady(), game.actors.forEach((e) => n.startListening(e)), console.log("Runarcana Sync | Firebase (login) e backend configurados e rodando."), i.api.firebaseClient = e, i.api.syncManager = n) : console.warn("Runarcana Sync | URL do backend não configurada nas configurações do módulo.");
+				r ? (t = new Qo(e, r), n = new Us(t), await e.waitForAuthReady(), game.actors.forEach((e) => n.startListening(e)), console.log("Runarcana Sync | Firebase (login) e backend configurados e rodando."), i.api.firebaseClient = e, i.api.syncManager = n) : console.warn("Runarcana Sync | URL do backend não configurada nas configurações do módulo.");
 			} else console.warn(`Runarcana Sync | Firebase não configurado. Campos ausentes: ${u.join(", ") || "desconhecidos"}.`);
 		} catch (e) {
 			console.error("Runarcana Sync | Erro ao iniciar o Firebase:", e), ui.notifications.error("Runarcana Sync: Configuração do Firebase inválida.");
@@ -4782,7 +4946,7 @@ var Cs, ws = e((() => {
 			label: o ? "Runarcana (Vinculado)" : "Runarcana Sync",
 			onclick: () => {
 				if (!e || !t) return ui.notifications.warn("Configure o Firebase e a URL do backend nas configurações do módulo primeiro.");
-				e.auth.currentUser ? new ns(t, a, n).render(!0) : new Qo(e).render(!0);
+				e.auth.currentUser ? new is(t, a, n).render(!0) : new es(e).render(!0);
 			}
 		});
 	}), Hooks.on("getHeaderControlsActorSheetV2", (r, i) => {
@@ -4796,10 +4960,10 @@ var Cs, ws = e((() => {
 			class: "runarcana-sync-btn",
 			onClick: () => {
 				if (!e || !t) return ui.notifications.warn("Configure o Firebase e a URL do backend nas configurações do módulo primeiro.");
-				e.auth.currentUser ? new ns(t, a, n).render(!0) : new Qo(e).render(!0);
+				e.auth.currentUser ? new is(t, a, n).render(!0) : new es(e).render(!0);
 			}
 		});
 	});
 }));
 //#endregion
-export default Ts();
+export default Gs();

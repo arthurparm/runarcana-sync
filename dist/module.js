@@ -4219,7 +4219,7 @@ function Z(e) {
 }
 function vs(e) {
 	let t = e.system?.attributes?.senses ?? {}, n = t.ranges ?? {}, r = {};
-	for (let e of Os) {
+	for (let e of As) {
 		let i = n[e] ?? t[e];
 		typeof i == "number" && i > 0 && (r[e] = i);
 	}
@@ -4303,8 +4303,14 @@ function Es(e) {
 		description: r
 	};
 }
-var Ds, Os, $, ks, As = e((() => {
-	Ds = {
+function Ds(e) {
+	return e >= 2 ? "expertise" : e >= 1;
+}
+function Os(e) {
+	return e === "expertise" ? 2 : +!!e;
+}
+var ks, As, $, js, Ms = e((() => {
+	ks = {
 		"system.abilities.str.value": "attributes.scores.strength",
 		"system.abilities.dex.value": "attributes.scores.dexterity",
 		"system.abilities.con.value": "attributes.scores.constitution",
@@ -4352,7 +4358,7 @@ var Ds, Os, $, ks, As = e((() => {
 		"system.attributes.death.success": "derivedStats.deathSaveSuccesses",
 		"system.attributes.death.failure": "derivedStats.deathSaveFailures",
 		"system.attributes.exhaustion": "derivedStats.exhaustion"
-	}, Os = [
+	}, As = [
 		"darkvision",
 		"blindsight",
 		"tremorsense",
@@ -4382,7 +4388,7 @@ var Ds, Os, $, ks, As = e((() => {
 			foundry: "cha",
 			firebase: "charisma"
 		}
-	], ks = [
+	], js = [
 		{
 			foundry: "acr",
 			id: "acrobatics"
@@ -4459,17 +4465,17 @@ var Ds, Os, $, ks, As = e((() => {
 }));
 //#endregion
 //#region src/sync-manager.js
-function js(e, t) {
+function Ns(e, t) {
 	let n;
 	return function(...r) {
 		clearTimeout(n), n = setTimeout(() => e.apply(this, r), t);
 	};
 }
-function Ms(e) {
+function Ps(e) {
 	let t = foundry.utils.deepClone(e);
 	return delete t._stats, delete t.sort, delete t.ownership, delete t.folder, t.flags && (delete t.flags.core, delete t.flags.exportSource), t;
 }
-function Ns(e) {
+function Fs(e) {
 	if (!e.system || !e.system.activities) return e;
 	let t = e.system.activities;
 	if (Array.isArray(t)) {
@@ -4481,44 +4487,44 @@ function Ns(e) {
 	} else if (typeof t == "object") for (let [e, n] of Object.entries(t)) n._id ||= e;
 	return e;
 }
-function Ps(e) {
+function Is(e) {
 	let t = cs(e);
 	return !t || String(t).includes("mystery-man") || String(t).includes("icons/svg/item-bag") ? "" : t;
 }
-function Fs(e) {
+function Ls(e) {
 	let t = e.statuses;
 	return t ? typeof t.size == "number" ? [...t].map(String) : Array.isArray(t) ? t.map(String) : typeof t == "object" ? Object.keys(t) : [] : [];
 }
-function Is(e) {
+function Rs(e) {
 	if (typeof e.allApplicableEffects == "function") return [...e.allApplicableEffects()];
 	let t = e.effects;
 	return t?.contents ?? (Array.isArray(t) ? t : []);
 }
-function Ls(e) {
+function zs(e) {
 	return e.type === "enchantment" || e.isAppliedEnchantment === !0;
 }
-function Rs(e) {
+function Bs(e) {
 	let t = e.duration?.label;
 	if (!t) return "";
 	let n = String(t).trim();
 	return !n || /^(none|nenhum|permanent|permanente|indefinid)/i.test(n) ? "" : n;
 }
-function zs(e, t) {
+function Vs(e, t) {
 	let n = e.parent;
 	return n && n !== t && n.name ? n.name : "";
 }
-function Bs(e, t) {
+function Hs(e, t) {
 	let n = { name: e.name }, r = cs(e.img || e.icon);
 	r && (n.img = r), e.disabled && (n.disabled = !0), e.isSuppressed && (n.isSuppressed = !0), e.isTemporary && (n.isTemporary = !0);
-	let i = Fs(e);
+	let i = Ls(e);
 	i.length && (n.statuses = i);
-	let a = Rs(e);
+	let a = Bs(e);
 	a && (n.durationLabel = a);
-	let o = zs(e, t);
+	let o = Vs(e, t);
 	return o && (n.source = o), n;
 }
-function Vs(e) {
-	return Is(e).filter((e) => !e.disabled && !e.isSuppressed && e.name && !Ls(e)).map((t) => Bs(t, e)).filter((e) => {
+function Us(e) {
+	return Rs(e).filter((e) => !e.disabled && !e.isSuppressed && e.name && !zs(e)).map((t) => Hs(t, e)).filter((e) => {
 		let t = e.statuses ?? [];
 		return t.length === 0 ? !1 : !t.every((e) => e === "exhaustion");
 	}).map((e) => {
@@ -4529,13 +4535,13 @@ function Vs(e) {
 		return e.img && (t.img = e.img), t;
 	});
 }
-function Hs(e) {
-	return Is(e).filter((e) => e?.name && !Ls(e)).map((t) => Bs(t, e));
+function Ws(e) {
+	return Rs(e).filter((e) => e?.name && !zs(e)).map((t) => Hs(t, e));
 }
-var Us, Ws = e((() => {
-	As(), fs(), Us = class {
+var Gs, Ks = e((() => {
+	Ms(), fs(), Gs = class {
 		constructor(e) {
-			this.apiClient = e, this.streams = /* @__PURE__ */ new Map(), this.activeSyncs = /* @__PURE__ */ new Set(), this.lastKnownDraft = /* @__PURE__ */ new Map(), this.debouncedActorUpdate = js(this._executeActorUpdate.bind(this), 1e3), this.debouncedItemUpdate = js(this._executeItemUpdate.bind(this), 1e3);
+			this.apiClient = e, this.streams = /* @__PURE__ */ new Map(), this.activeSyncs = /* @__PURE__ */ new Set(), this.lastKnownDraft = /* @__PURE__ */ new Map(), this.debouncedActorUpdate = Ns(this._executeActorUpdate.bind(this), 1e3), this.debouncedItemUpdate = Ns(this._executeItemUpdate.bind(this), 1e3);
 		}
 		notifyApiError(e, t, n) {
 			console.error(`Runarcana Sync | Falha ao ${e} a ficha ${n?.name || n?.id || "desconhecida"}:`, t), ui.notifications.error(`Runarcana Sync: erro ao ${e} a ficha ${n?.name || n?.id || ""}: ${t?.message || "erro desconhecido"}`);
@@ -4577,7 +4583,7 @@ var Us, Ws = e((() => {
 		}
 		async _applyRemoteDraft(e, t) {
 			let n = {};
-			for (let [r, i] of Object.entries(Ds)) {
+			for (let [r, i] of Object.entries(ks)) {
 				if (r.startsWith("system.abilities")) continue;
 				let a = foundry.utils.getProperty(t, i), o = foundry.utils.getProperty(e, r);
 				a != null && a !== o && (n[r] = a);
@@ -4590,17 +4596,17 @@ var Us, Ws = e((() => {
 				if (a === void 0) return;
 				let o = +!!a;
 				(e.system.abilities?.[r]?.proficient ?? 0) !== o && (n[`system.abilities.${r}.proficient`] = o);
-			}), ks.forEach(({ foundry: r, id: i }) => {
+			}), js.forEach(({ foundry: r, id: i }) => {
 				let a = foundry.utils.getProperty(t, `proficiencies.skills.${i}`);
 				if (a === void 0) return;
-				let o = a === "expertise" ? 2 : +(a === !0);
+				let o = Os(a);
 				(e.system.skills?.[r]?.value ?? 0) !== o && (n[`system.skills.${r}.value`] = o);
 			}), Object.keys(n).length > 0 && await e.update(n), t.items && Array.isArray(t.items)) {
 				let n = t.items, r = e.items.contents, i = [], a = [], o = [];
 				for (let e of n) {
-					let t = r.find((t) => t.getFlag("runarcana-sync", "sourceId") === e._id || t.id === e._id), n = Ns(foundry.utils.deepClone(e));
+					let t = r.find((t) => t.getFlag("runarcana-sync", "sourceId") === e._id || t.id === e._id), n = Fs(foundry.utils.deepClone(e));
 					if (t) {
-						let r = Ms(t.toObject()), i = Ms(n);
+						let r = Ps(t.toObject()), i = Ps(n);
 						if (i._id = r._id, r.flags?.["runarcana-sync"] && delete r.flags["runarcana-sync"], i.flags?.["runarcana-sync"] && delete i.flags["runarcana-sync"], JSON.stringify(r) !== JSON.stringify(i)) {
 							let r = n;
 							r._id = t.id, foundry.utils.setProperty(r, "flags.runarcana-sync.sourceId", e._id), a.push(r);
@@ -4654,7 +4660,7 @@ var Us, Ws = e((() => {
 				return;
 			}
 			let n = foundry.utils.deepClone(this.lastKnownDraft.get(e.id));
-			for (let [t, r] of Object.entries(Ds)) {
+			for (let [t, r] of Object.entries(ks)) {
 				if (t.startsWith("system.abilities")) continue;
 				let i = foundry.utils.getProperty(e, t);
 				i !== void 0 && foundry.utils.setProperty(n, r, i);
@@ -4667,18 +4673,16 @@ var Us, Ws = e((() => {
 			}), $.forEach(({ foundry: t, firebase: r }) => {
 				let i = e.system.abilities?.[t]?.proficient;
 				i !== void 0 && foundry.utils.setProperty(n, `proficiencies.savingThrows.${r}`, i >= 1);
-			}), ks.forEach(({ foundry: t, id: r }) => {
+			}), js.forEach(({ foundry: t, id: r }) => {
 				let i = e.system.skills?.[t]?.value;
-				if (i === void 0) return;
-				let a = i >= 2 ? "expertise" : i >= 1;
-				foundry.utils.setProperty(n, `proficiencies.skills.${r}`, a);
+				i !== void 0 && foundry.utils.setProperty(n, `proficiencies.skills.${r}`, Ds(i));
 			});
 			let r = e.system.attributes?.spellcasting;
 			if (r) {
 				let e = $.find(({ foundry: e }) => e === r);
 				e && foundry.utils.setProperty(n, "spellcasting.ability", e.firebase);
 			}
-			foundry.utils.setProperty(n, "concept.portraitUrl", Ps(e.img)), n.conditions = Vs(e), n.effects = Hs(e), n.traits = ys(e), n.foundryIdentity = Ts(e);
+			foundry.utils.setProperty(n, "concept.portraitUrl", Is(e.img)), n.conditions = Us(e), n.effects = Ws(e), n.traits = ys(e), n.foundryIdentity = Ts(e);
 			let i = Es(e);
 			n.identity = {
 				...n.identity ?? {},
@@ -4708,7 +4712,7 @@ var Us, Ws = e((() => {
 			for (let t of e.items) try {
 				let e = t.toObject();
 				e._id = t.getFlag("runarcana-sync", "sourceId") || e._id, e.img = cs(e.img);
-				let r = Ms(e);
+				let r = Ps(e);
 				[
 					"class",
 					"subclass",
@@ -4725,7 +4729,7 @@ var Us, Ws = e((() => {
 				});
 			}
 			let r = foundry.utils.deepClone(this.lastKnownDraft.get(e.id));
-			r.items = n, r.foundryIdentity = Ts(e), r.conditions = Vs(e), r.effects = Hs(e);
+			r.items = n, r.foundryIdentity = Ts(e), r.conditions = Us(e), r.effects = Ws(e);
 			try {
 				let n = await this.apiClient.saveDraft(t, r);
 				this.lastKnownDraft.set(e.id, n);
@@ -4734,8 +4738,8 @@ var Us, Ws = e((() => {
 			}
 		}
 	};
-})), Gs = /* @__PURE__ */ t((() => {
-	Xo(), $o(), ts(), as(), gs(), Ws();
+})), qs = /* @__PURE__ */ t((() => {
+	Xo(), $o(), ts(), as(), gs(), Ks();
 	var e = null, t = null, n = null;
 	function r() {
 		if (!t) {
@@ -4906,7 +4910,7 @@ var Us, Ws = e((() => {
 			if (Object.keys(l).length > 0) {
 				e = new Yo(l);
 				let r = a("backendUrl");
-				r ? (t = new Qo(e, r), n = new Us(t), await e.waitForAuthReady(), game.actors.forEach((e) => n.startListening(e)), console.log("Runarcana Sync | Firebase (login) e backend configurados e rodando."), i.api.firebaseClient = e, i.api.syncManager = n) : console.warn("Runarcana Sync | URL do backend não configurada nas configurações do módulo.");
+				r ? (t = new Qo(e, r), n = new Gs(t), await e.waitForAuthReady(), game.actors.forEach((e) => n.startListening(e)), console.log("Runarcana Sync | Firebase (login) e backend configurados e rodando."), i.api.firebaseClient = e, i.api.syncManager = n) : console.warn("Runarcana Sync | URL do backend não configurada nas configurações do módulo.");
 			} else console.warn(`Runarcana Sync | Firebase não configurado. Campos ausentes: ${u.join(", ") || "desconhecidos"}.`);
 		} catch (e) {
 			console.error("Runarcana Sync | Erro ao iniciar o Firebase:", e), ui.notifications.error("Runarcana Sync: Configuração do Firebase inválida.");
@@ -4966,4 +4970,4 @@ var Us, Ws = e((() => {
 	});
 }));
 //#endregion
-export default Gs();
+export default qs();

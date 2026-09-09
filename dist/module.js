@@ -213,10 +213,10 @@ function v(e) {
 		};
 	}
 	if (t.packageType === "system") {
-		let e = typeof game < "u" ? game.system?.title : void 0;
+		let e = (typeof game < "u" ? game.system?.title : void 0) || t.packageName || t.system || "Sistema", n = /\(SRD\)/i.test(t.label ?? "");
 		return {
-			id: `system:${t.packageName || t.system}`,
-			label: e || t.packageName || t.system || "Sistema"
+			id: `system:${t.packageName || t.system}${n ? ":srd" : ""}`,
+			label: n ? `${e} (Legacy)` : e
 		};
 	}
 	return {
@@ -224,7 +224,7 @@ function v(e) {
 		label: "Compêndios do mundo"
 	};
 }
-function ee(e) {
+function y(e) {
 	let t = /* @__PURE__ */ new Map();
 	for (let n of e) {
 		let e = v(n);
@@ -238,22 +238,6 @@ function ee(e) {
 		...e,
 		packs: e.packs.slice().sort((e, t) => (e.metadata.label ?? "").localeCompare(t.metadata.label ?? "", "pt-BR"))
 	})).sort((e, t) => e.label.localeCompare(t.label, "pt-BR"));
-}
-function te(e, t) {
-	let n = t.closest("[data-pack-group]");
-	if (!n) return;
-	let r = t.checked;
-	n.querySelectorAll("input[data-action=\"toggleItem\"]").forEach((e) => {
-		e.checked = r;
-	});
-}
-function y(e, t) {
-	let n = t.closest("[data-pack-group]");
-	if (!n) return;
-	let r = n.querySelector("input[data-action=\"toggleGroup\"]");
-	if (!r) return;
-	let i = Array.from(n.querySelectorAll("input[data-action=\"toggleItem\"]")), a = i.filter((e) => e.checked).length;
-	r.checked = a > 0 && a === i.length, r.indeterminate = a > 0 && a < i.length;
 }
 var b, x, S = e((() => {
 	g(), b = "compendiumSyncSelection", x = class {
@@ -273,21 +257,19 @@ var b, x, S = e((() => {
 			} catch {
 				n = [];
 			}
-			let r = new Set(n), i = ee(t), a = "\n      <form>\n        <p>Escolha os compêndios de itens a sincronizar (ex: um compêndio próprio,\n        curado com os itens liberados na sua mesa):</p>\n        <div class=\"form-group\" style=\"max-height: 320px; overflow-y: auto; column-count: 1;\">";
+			let r = new Set(n), i = y(t), a = "\n      <form>\n        <p>Escolha os compêndios de itens a sincronizar (ex: um compêndio próprio,\n        curado com os itens liberados na sua mesa):</p>\n        <div style=\"max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; column-count: 1; column-width: auto;\">";
 			for (let e of i) {
-				let t = e.packs.every((e) => r.has(e.collection));
 				a += `
           <fieldset data-pack-group style="border:0;margin:0 0 12px 0;padding:0;break-inside:avoid;-webkit-column-break-inside:avoid;">
-            <label style="display:flex;align-items:center;gap:6px;font-weight:700;text-transform:uppercase;font-size:0.85em;letter-spacing:0.02em;border-bottom:1px solid var(--color-border-light-tertiary, #7a7971);padding-bottom:4px;margin-bottom:6px;">
-              <input type="checkbox" data-action="toggleGroup" ${t ? "checked" : ""} />
+            <div style="font-weight:700;text-transform:uppercase;font-size:0.85em;letter-spacing:0.02em;border-bottom:1px solid var(--color-border-light-tertiary, #7a7971);padding-bottom:4px;margin-bottom:6px;">
               ${_(e.label)}
-            </label>
+            </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;">`;
 				for (let t of e.packs) {
 					let e = r.has(t.collection) ? "checked" : "";
 					a += `
               <label style="display:block;margin:2px 0;">
-                <input type="checkbox" name="pack" data-action="toggleItem" value="${_(t.collection)}" ${e} />
+                <input type="checkbox" name="pack" value="${_(t.collection)}" ${e} />
                 ${_(t.metadata.label)}
               </label>`;
 				}
@@ -298,10 +280,6 @@ var b, x, S = e((() => {
 			return e.wait({
 				window: { title: "Sincronizar Compêndio de Itens" },
 				content: a,
-				actions: {
-					toggleGroup: te,
-					toggleItem: y
-				},
 				buttons: [{
 					action: "sync",
 					label: "Sincronizar Selecionados",
@@ -343,13 +321,13 @@ function w(e) {
 }
 function T(e) {
 	let t = e.system?.attributes?.senses ?? {}, n = t.ranges ?? {}, r = {};
-	for (let e of L) {
+	for (let e of z) {
 		let i = n[e] ?? t[e];
 		typeof i == "number" && i > 0 && (r[e] = i);
 	}
 	return t.units && (r.units = t.units), typeof t.special == "string" && t.special.trim() && (r.special = t.special.trim()), r;
 }
-function ne(e) {
+function E(e) {
 	let t = e.system?.traits ?? {};
 	return {
 		senses: T(e),
@@ -361,17 +339,17 @@ function ne(e) {
 		languages: w(t.languages)
 	};
 }
-function E(e) {
+function D(e) {
 	return e ? Array.isArray(e) ? e : typeof e.length == "number" || typeof e[Symbol.iterator] == "function" ? [...e] : typeof e == "object" ? Object.values(e) : [] : [];
 }
-function D(e, t) {
-	let n = E(e.itemTypes?.[t]);
-	return n.length > 0 ? n : E(e.items?.contents ?? e.items).filter((e) => e?.type === t);
-}
-function O(e) {
-	return e ? typeof e == "string" ? e : e.name || "" : "";
+function O(e, t) {
+	let n = D(e.itemTypes?.[t]);
+	return n.length > 0 ? n : D(e.items?.contents ?? e.items).filter((e) => e?.type === t);
 }
 function k(e) {
+	return e ? typeof e == "string" ? e : e.name || "" : "";
+}
+function A(e) {
 	let t = e?.system?.hd?.denomination ?? e?.system?.hitDice ?? e?.system?.hitDie;
 	if (typeof t == "number" && t > 0) return `d${t}`;
 	if (typeof t == "string" && t.trim()) {
@@ -380,7 +358,7 @@ function k(e) {
 	}
 	return "";
 }
-function A(e) {
+function j(e) {
 	let t = e.system?.attributes?.hd;
 	if (!t) return {
 		value: 0,
@@ -392,49 +370,49 @@ function A(e) {
 		max: Number.isFinite(r) ? r : 0
 	};
 }
-function j(e) {
-	let t = D(e, "class"), n = E(e.classes), r = /* @__PURE__ */ new Set(), i = [];
+function M(e) {
+	let t = O(e, "class"), n = D(e.classes), r = /* @__PURE__ */ new Set(), i = [];
 	for (let e of [...t, ...n]) {
 		let t = e?.id || e?.name;
 		t && !r.has(t) && (r.add(t), i.push(e));
 	}
-	let a = D(e, "race")[0], o = D(e, "background")[0], s = D(e, "subclass")[0], c = A(e), l = e.system?.traits?.size || "";
+	let a = O(e, "race")[0], o = O(e, "background")[0], s = O(e, "subclass")[0], c = j(e), l = e.system?.traits?.size || "";
 	return {
 		classes: i.map((e) => ({
 			name: e.name || "",
 			identifier: e.system?.identifier || e.identifier || "",
 			levels: Number(e.system?.levels) || 0,
-			hitDie: k(e)
+			hitDie: A(e)
 		})),
 		subclassName: s?.name || "",
-		raceName: a?.name || O(e.system?.details?.race),
-		backgroundName: o?.name || O(e.system?.details?.background),
+		raceName: a?.name || k(e.system?.details?.race),
+		backgroundName: o?.name || k(e.system?.details?.background),
 		size: l,
-		hitDie: i.map(k).find(Boolean) || "",
+		hitDie: i.map(A).find(Boolean) || "",
 		hitDiceValue: c.value,
 		hitDiceMax: c.max
 	};
 }
-function M(e) {
+function N(e) {
 	return typeof e == "string" ? e.trim() : "";
 }
-function N(e) {
-	let t = e.system?.details ?? {}, n = {}, r = {}, i = M(t.appearance), a = M(t.age), o = M(t.gender), s = M(t.height), c = M(t.weight), l = M(t.eyes), u = M(t.hair), d = M(t.skin);
+function P(e) {
+	let t = e.system?.details ?? {}, n = {}, r = {}, i = N(t.appearance), a = N(t.age), o = N(t.gender), s = N(t.height), c = N(t.weight), l = N(t.eyes), u = N(t.hair), d = N(t.skin);
 	i && (n.appearance = i), a && (n.age = a), o && (n.sex = o), s && (n.height = s), c && (n.weight = c), l && (n.eyes = l), u && (n.hair = u), d && (n.skin = d);
-	let f = M(t.alignment), p = M(t.faith), m = M(t.ideal), h = M(t.bond), g = M(t.flaw), _ = M(t.trait), v = M(t.biography?.value);
+	let f = N(t.alignment), p = N(t.faith), m = N(t.ideal), h = N(t.bond), g = N(t.flaw), _ = N(t.trait), v = N(t.biography?.value);
 	return f && (r.alignment = f), p && (r.faith = p), m && (r.ideal = m), h && (r.bond = h), g && (r.flaw = g), _ && (r.trait = _), v && (r.backstory = v), {
 		identity: n,
 		description: r
 	};
 }
-function P(e) {
+function F(e) {
 	return e >= 2 ? "expertise" : e >= 1;
 }
-function re(e) {
+function I(e) {
 	return e === "expertise" ? 2 : +!!e;
 }
-var F, I, L, R, z, B = e((() => {
-	F = {
+var L, R, z, B, V, H = e((() => {
+	L = {
 		"system.abilities.str.value": "attributes.scores.strength",
 		"system.abilities.dex.value": "attributes.scores.dexterity",
 		"system.abilities.con.value": "attributes.scores.constitution",
@@ -482,12 +460,12 @@ var F, I, L, R, z, B = e((() => {
 		"system.attributes.death.success": "derivedStats.deathSaveSuccesses",
 		"system.attributes.death.failure": "derivedStats.deathSaveFailures",
 		"system.attributes.exhaustion": "derivedStats.exhaustion"
-	}, I = /* @__PURE__ */ new Set(["system.attributes.hp.max"]), L = [
+	}, R = /* @__PURE__ */ new Set(["system.attributes.hp.max"]), z = [
 		"darkvision",
 		"blindsight",
 		"tremorsense",
 		"truesight"
-	], R = [
+	], B = [
 		{
 			foundry: "str",
 			firebase: "strength"
@@ -512,7 +490,7 @@ var F, I, L, R, z, B = e((() => {
 			foundry: "cha",
 			firebase: "charisma"
 		}
-	], z = [
+	], V = [
 		{
 			foundry: "acr",
 			id: "acrobatics"
@@ -589,17 +567,17 @@ var F, I, L, R, z, B = e((() => {
 }));
 //#endregion
 //#region src/sync-manager.js
-function V(e, t) {
+function U(e, t) {
 	let n;
 	return function(...r) {
 		clearTimeout(n), n = setTimeout(() => e.apply(this, r), t);
 	};
 }
-function H(e) {
+function W(e) {
 	let t = foundry.utils.deepClone(e);
 	return delete t._stats, delete t.sort, delete t.ownership, delete t.folder, t.flags && (delete t.flags.core, delete t.flags.exportSource), t;
 }
-function U(e) {
+function G(e) {
 	if (!e.system || !e.system.activities) return e;
 	let t = e.system.activities;
 	if (Array.isArray(t)) {
@@ -611,44 +589,44 @@ function U(e) {
 	} else if (typeof t == "object") for (let [e, n] of Object.entries(t)) n._id ||= e;
 	return e;
 }
-function W(e) {
+function K(e) {
 	let t = f(e);
 	return !t || String(t).includes("mystery-man") || String(t).includes("icons/svg/item-bag") ? "" : t;
 }
-function G(e) {
+function q(e) {
 	let t = e.statuses;
 	return t ? typeof t.size == "number" ? [...t].map(String) : Array.isArray(t) ? t.map(String) : typeof t == "object" ? Object.keys(t) : [] : [];
 }
-function K(e) {
+function J(e) {
 	if (typeof e.allApplicableEffects == "function") return [...e.allApplicableEffects()];
 	let t = e.effects;
 	return t?.contents ?? (Array.isArray(t) ? t : []);
 }
-function q(e) {
+function Y(e) {
 	return e.type === "enchantment" || e.isAppliedEnchantment === !0;
 }
-function J(e) {
+function ee(e) {
 	let t = e.duration?.label;
 	if (!t) return "";
 	let n = String(t).trim();
 	return !n || /^(none|nenhum|permanent|permanente|indefinid)/i.test(n) ? "" : n;
 }
-function Y(e, t) {
+function te(e, t) {
 	let n = e.parent;
 	return n && n !== t && n.name ? n.name : "";
 }
 function X(e, t) {
 	let n = { name: e.name }, r = f(e.img || e.icon);
 	r && (n.img = r), e.disabled && (n.disabled = !0), e.isSuppressed && (n.isSuppressed = !0), e.isTemporary && (n.isTemporary = !0);
-	let i = G(e);
+	let i = q(e);
 	i.length && (n.statuses = i);
-	let a = J(e);
+	let a = ee(e);
 	a && (n.durationLabel = a);
-	let o = Y(e, t);
+	let o = te(e, t);
 	return o && (n.source = o), n;
 }
 function Z(e) {
-	return K(e).filter((e) => !e.disabled && !e.isSuppressed && e.name && !q(e)).map((t) => X(t, e)).filter((e) => {
+	return J(e).filter((e) => !e.disabled && !e.isSuppressed && e.name && !Y(e)).map((t) => X(t, e)).filter((e) => {
 		let t = e.statuses ?? [];
 		return t.length !== 0 && !t.every((e) => e === "exhaustion");
 	}).map((e) => {
@@ -660,12 +638,12 @@ function Z(e) {
 	});
 }
 function Q(e) {
-	return K(e).filter((e) => e?.name && !q(e)).map((t) => X(t, e));
+	return J(e).filter((e) => e?.name && !Y(e)).map((t) => X(t, e));
 }
-var $, ie = e((() => {
-	B(), g(), $ = class {
+var $, ne = e((() => {
+	H(), g(), $ = class {
 		constructor(e) {
-			this.apiClient = e, this.streams = /* @__PURE__ */ new Map(), this.activeSyncs = /* @__PURE__ */ new Set(), this.lastKnownDraft = /* @__PURE__ */ new Map(), this.debouncedActorUpdate = V(this._executeActorUpdate.bind(this), 1e3), this.debouncedItemUpdate = V(this._executeItemUpdate.bind(this), 1e3);
+			this.apiClient = e, this.streams = /* @__PURE__ */ new Map(), this.activeSyncs = /* @__PURE__ */ new Set(), this.lastKnownDraft = /* @__PURE__ */ new Map(), this.debouncedActorUpdate = U(this._executeActorUpdate.bind(this), 1e3), this.debouncedItemUpdate = U(this._executeItemUpdate.bind(this), 1e3);
 		}
 		notifyApiError(e, t, n) {
 			console.error(`Runarcana Sync | Falha ao ${e} a ficha ${n?.name || n?.id || "desconhecida"}:`, t), ui.notifications.error(`Runarcana Sync: erro ao ${e} a ficha ${n?.name || n?.id || ""}: ${t?.message || "erro desconhecido"}`);
@@ -707,30 +685,30 @@ var $, ie = e((() => {
 		}
 		async _applyRemoteDraft(e, t) {
 			let n = {};
-			for (let [r, i] of Object.entries(F)) {
-				if (r.startsWith("system.abilities") || I.has(r)) continue;
+			for (let [r, i] of Object.entries(L)) {
+				if (r.startsWith("system.abilities") || R.has(r)) continue;
 				let a = foundry.utils.getProperty(t, i), o = foundry.utils.getProperty(e, r);
 				a != null && a !== o && (n[r] = a);
 			}
-			if (R.forEach(({ foundry: r, firebase: i }) => {
+			if (B.forEach(({ foundry: r, firebase: i }) => {
 				let a = e.system.abilities?.[r]?.value || 0, o = (foundry.utils.getProperty(t, `attributes.scores.${i}`) || 10) + (foundry.utils.getProperty(t, `attributes.originBonuses.${i}`) || 0);
 				a !== o && (n[`system.abilities.${r}.value`] = o);
-			}), R.forEach(({ foundry: r, firebase: i }) => {
+			}), B.forEach(({ foundry: r, firebase: i }) => {
 				let a = foundry.utils.getProperty(t, `proficiencies.savingThrows.${i}`);
 				if (a === void 0) return;
 				let o = +!!a;
 				(e.system.abilities?.[r]?.proficient ?? 0) !== o && (n[`system.abilities.${r}.proficient`] = o);
-			}), z.forEach(({ foundry: r, id: i }) => {
+			}), V.forEach(({ foundry: r, id: i }) => {
 				let a = foundry.utils.getProperty(t, `proficiencies.skills.${i}`);
 				if (a === void 0) return;
-				let o = re(a);
+				let o = I(a);
 				(e.system.skills?.[r]?.value ?? 0) !== o && (n[`system.skills.${r}.value`] = o);
 			}), Object.keys(n).length > 0 && await e.update(n), t.items && Array.isArray(t.items)) {
 				let n = t.items, r = e.items.contents, i = [], a = [], o = [];
 				for (let e of n) {
-					let t = r.find((t) => t.getFlag("runarcana-sync", "sourceId") === e._id || t.id === e._id), n = U(foundry.utils.deepClone(e));
+					let t = r.find((t) => t.getFlag("runarcana-sync", "sourceId") === e._id || t.id === e._id), n = G(foundry.utils.deepClone(e));
 					if (t) {
-						let r = H(t.toObject()), i = H(n);
+						let r = W(t.toObject()), i = W(n);
 						if (i._id = r._id, r.flags?.["runarcana-sync"] && delete r.flags["runarcana-sync"], i.flags?.["runarcana-sync"] && delete i.flags["runarcana-sync"], JSON.stringify(r) !== JSON.stringify(i)) {
 							let r = n;
 							r._id = t.id, foundry.utils.setProperty(r, "flags.runarcana-sync.sourceId", e._id), a.push(r);
@@ -784,30 +762,30 @@ var $, ie = e((() => {
 				return;
 			}
 			let n = foundry.utils.deepClone(this.lastKnownDraft.get(e.id));
-			for (let [t, r] of Object.entries(F)) {
+			for (let [t, r] of Object.entries(L)) {
 				if (t.startsWith("system.abilities")) continue;
 				let i = foundry.utils.getProperty(e, t);
 				i !== void 0 && foundry.utils.setProperty(n, r, i);
 			}
-			R.forEach(({ foundry: t, firebase: r }) => {
+			B.forEach(({ foundry: t, firebase: r }) => {
 				let i = e.system.abilities?.[t]?.value;
 				if (i === void 0) return;
 				let a = foundry.utils.getProperty(n, `attributes.originBonuses.${r}`) || 0;
 				foundry.utils.setProperty(n, `attributes.scores.${r}`, i - a);
-			}), R.forEach(({ foundry: t, firebase: r }) => {
+			}), B.forEach(({ foundry: t, firebase: r }) => {
 				let i = e.system.abilities?.[t]?.proficient;
 				i !== void 0 && foundry.utils.setProperty(n, `proficiencies.savingThrows.${r}`, i >= 1);
-			}), z.forEach(({ foundry: t, id: r }) => {
+			}), V.forEach(({ foundry: t, id: r }) => {
 				let i = e.system.skills?.[t]?.value;
-				i !== void 0 && foundry.utils.setProperty(n, `proficiencies.skills.${r}`, P(i));
+				i !== void 0 && foundry.utils.setProperty(n, `proficiencies.skills.${r}`, F(i));
 			});
 			let r = e.system.attributes?.spellcasting;
 			if (r) {
-				let e = R.find(({ foundry: e }) => e === r);
+				let e = B.find(({ foundry: e }) => e === r);
 				e && foundry.utils.setProperty(n, "spellcasting.ability", e.firebase);
 			}
-			foundry.utils.setProperty(n, "concept.portraitUrl", W(e.img)), n.conditions = Z(e), n.effects = Q(e), n.traits = ne(e), n.foundryIdentity = j(e);
-			let i = N(e);
+			foundry.utils.setProperty(n, "concept.portraitUrl", K(e.img)), n.conditions = Z(e), n.effects = Q(e), n.traits = E(e), n.foundryIdentity = M(e);
+			let i = P(e);
 			n.identity = {
 				...n.identity ?? {},
 				...i.identity
@@ -836,7 +814,7 @@ var $, ie = e((() => {
 			for (let t of e.items) try {
 				let e = t.toObject();
 				e._id = t.getFlag("runarcana-sync", "sourceId") || e._id, e.img = f(e.img);
-				let r = H(e);
+				let r = W(e);
 				[
 					"class",
 					"subclass",
@@ -853,7 +831,7 @@ var $, ie = e((() => {
 				});
 			}
 			let r = foundry.utils.deepClone(this.lastKnownDraft.get(e.id));
-			r.items = n, r.foundryIdentity = j(e), r.conditions = Z(e), r.effects = Q(e);
+			r.items = n, r.foundryIdentity = M(e), r.conditions = Z(e), r.effects = Q(e);
 			try {
 				let n = await this.apiClient.saveDraft(t, r);
 				this.lastKnownDraft.set(e.id, n);
@@ -862,8 +840,8 @@ var $, ie = e((() => {
 			}
 		}
 	};
-})), ae = /* @__PURE__ */ t((() => {
-	r(), l(), S(), ie();
+})), re = /* @__PURE__ */ t((() => {
+	r(), l(), S(), ne();
 	var e = null, t = null;
 	function i(e) {
 		let t = game.settings.get("runarcana-sync", e);
@@ -1019,4 +997,4 @@ var $, ie = e((() => {
 	});
 }));
 //#endregion
-export default ae();
+export default re();

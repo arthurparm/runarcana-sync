@@ -1,5 +1,12 @@
 //#region \0rolldown/runtime.js
-var e = (e, t) => () => (e && (t = e(e = 0)), t), t = (e, t) => () => (t || e((t = { exports: {} }).exports, t), t.exports), n, r = e((() => {
+var e = (e, t, n) => () => {
+	if (n) throw n[0];
+	try {
+		return e && (t = e(e = 0)), t;
+	} catch (e) {
+		throw n = [e], e;
+	}
+}, t = (e, t) => () => (t || (e((t = { exports: {} }).exports, t), e = null), t.exports), n, r = e((() => {
 	n = class {
 		constructor({ mesaKey: e, baseUrl: t, syncKey: n } = {}) {
 			this.mesaKey = typeof e == "string" ? e.trim() : "", this.baseUrl = String(t || "").replace(/\/+$/, ""), this.syncKey = typeof n == "string" ? n.trim() : "", this.clientId = foundry.utils.randomID();
@@ -108,7 +115,7 @@ var c, l = e((() => {
 						icon: "fas fa-link",
 						callback: async (e, t, n) => {
 							let r = n.element.querySelector("[name=\"draftId\"]"), i = r.value, a = r.selectedOptions?.[0];
-							!i || a?.disabled || (await this.actor.setFlag("runarcana-sync", "draftId", i), ui.notifications.info(`Actor vinculado à ficha ${i}`), this.syncManager && this.syncManager.startListening(this.actor));
+							i && !a?.disabled && (await this.actor.setFlag("runarcana-sync", "draftId", i), ui.notifications.info(`Actor vinculado à ficha ${i}`), this.syncManager && this.syncManager.startListening(this.actor));
 						}
 					}]
 				});
@@ -266,7 +273,7 @@ function x(e) {
 function S(e) {
 	if (!e) return [];
 	let t = x(e.value ?? (Array.isArray(e) || e instanceof Set ? e : null)), n = typeof e.custom == "string" ? e.custom.split(/[;,\n]/).map((e) => e.trim()).filter(Boolean) : [];
-	return [...new Set([...t, ...n])];
+	return [.../* @__PURE__ */ new Set([...t, ...n])];
 }
 function C(e) {
 	let t = e.system?.attributes?.senses ?? {}, n = t.ranges ?? {}, r = {};
@@ -323,7 +330,7 @@ function A(e) {
 	let t = E(e, "class"), n = T(e.classes), r = /* @__PURE__ */ new Set(), i = [];
 	for (let e of [...t, ...n]) {
 		let t = e?.id || e?.name;
-		!t || r.has(t) || (r.add(t), i.push(e));
+		t && !r.has(t) && (r.add(t), i.push(e));
 	}
 	let a = E(e, "race")[0], o = E(e, "background")[0], s = E(e, "subclass")[0], c = k(e), l = e.system?.traits?.size || "";
 	return {
@@ -409,7 +416,7 @@ var F, I, L, R, z, B = e((() => {
 		"system.attributes.death.success": "derivedStats.deathSaveSuccesses",
 		"system.attributes.death.failure": "derivedStats.deathSaveFailures",
 		"system.attributes.exhaustion": "derivedStats.exhaustion"
-	}, I = new Set(["system.attributes.hp.max"]), L = [
+	}, I = /* @__PURE__ */ new Set(["system.attributes.hp.max"]), L = [
 		"darkvision",
 		"blindsight",
 		"tremorsense",
@@ -577,7 +584,7 @@ function X(e, t) {
 function Z(e) {
 	return K(e).filter((e) => !e.disabled && !e.isSuppressed && e.name && !q(e)).map((t) => X(t, e)).filter((e) => {
 		let t = e.statuses ?? [];
-		return t.length === 0 ? !1 : !t.every((e) => e === "exhaustion");
+		return t.length !== 0 && !t.every((e) => e === "exhaustion");
 	}).map((e) => {
 		let t = {
 			name: e.name,
@@ -599,7 +606,7 @@ var $, ee = e((() => {
 		}
 		async startListening(e) {
 			let t = e.getFlag("runarcana-sync", "draftId");
-			if (!(!t || this.streams.has(e.id))) {
+			if (t && !this.streams.has(e.id)) {
 				this.streams.set(e.id, { close() {} });
 				try {
 					try {
@@ -807,11 +814,12 @@ var $, ee = e((() => {
 			ui.notifications.warn("Configure a URL do backend nas configurações do módulo primeiro.");
 			return;
 		}
-		new y(new n({
+		let r = new n({
 			mesaKey: i("mesaKey"),
 			baseUrl: t,
 			syncKey: e
-		})).render();
+		});
+		new y(r).render();
 	}
 	async function o(e) {
 		t?.stopListening(e), await e.unsetFlag("runarcana-sync", "draftId"), ui.notifications.info(`${e.name}: desvinculado da ficha.`);
@@ -897,13 +905,13 @@ var $, ee = e((() => {
 			syncKey: i("compendiumSyncKey")
 		}), t = new $(e), game.actors.forEach((e) => t.startListening(e)), console.log("Runarcana Sync | Backend configurado e ouvindo atores vinculados."), r && (r.api.apiClient = e, r.api.syncManager = t);
 	}), Hooks.on("updateActor", (e, n, r, i) => {
-		i !== game.user.id || !t || t.handleActorUpdate(e, n);
+		i === game.user.id && t && t.handleActorUpdate(e, n);
 	}), Hooks.on("createItem", (e, n, r) => {
-		r !== game.user.id || !t || !e.parent || t.handleItemUpdate(e.parent);
+		r === game.user.id && t && e.parent && t.handleItemUpdate(e.parent);
 	}), Hooks.on("updateItem", (e, n, r, i) => {
-		i !== game.user.id || !t || !e.parent || t.handleItemUpdate(e.parent);
+		i === game.user.id && t && e.parent && t.handleItemUpdate(e.parent);
 	}), Hooks.on("deleteItem", (e, n, r) => {
-		r !== game.user.id || !t || !e.parent || t.handleItemUpdate(e.parent);
+		r === game.user.id && t && e.parent && t.handleItemUpdate(e.parent);
 	});
 	function d(e) {
 		let t = e?.parent;

@@ -239,8 +239,26 @@ function y(e) {
 		packs: e.packs.slice().sort((e, t) => (e.metadata.label ?? "").localeCompare(t.metadata.label ?? "", "pt-BR"))
 	})).sort((e, t) => e.label.localeCompare(t.label, "pt-BR"));
 }
-var b, x, S = e((() => {
-	g(), b = "compendiumSyncSelection", x = class {
+function b(e) {
+	let t = e.querySelector("input[data-action=\"toggleGroup\"]");
+	if (!t) return;
+	let n = Array.from(e.querySelectorAll("input[data-action=\"toggleItem\"]")), r = n.filter((e) => e.checked).length;
+	t.checked = r > 0 && r === n.length, t.indeterminate = r > 0 && r < n.length;
+}
+function ee(e, t) {
+	let n = t.closest("[data-pack-group]");
+	if (!n) return;
+	let r = t.checked;
+	n.querySelectorAll("input[data-action=\"toggleItem\"]").forEach((e) => {
+		e.disabled = !r, e.checked = r;
+	}), t.indeterminate = !1;
+}
+function te(e, t) {
+	let n = t.closest("[data-pack-group]");
+	n && b(n);
+}
+var x, S, C, w = e((() => {
+	g(), x = "compendiumSyncSelection", S = "\n  .rs-compendium-sync .rs-group-toggle {\n    position: relative;\n    width: 16px;\n    height: 16px;\n    flex: 0 0 auto;\n    border: 1px solid var(--color-border-light-tertiary, #7a7971);\n    border-radius: 3px;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .rs-compendium-sync .rs-group-toggle input[type=\"checkbox\"] {\n    position: absolute;\n    inset: 0;\n    margin: 0;\n    opacity: 0;\n    cursor: pointer;\n  }\n  .rs-compendium-sync .rs-group-toggle::after {\n    content: \"\";\n    font-weight: 900;\n    font-size: 12px;\n    line-height: 1;\n    color: #1b1a17;\n    pointer-events: none;\n  }\n  .rs-compendium-sync .rs-group-toggle:has(input:checked),\n  .rs-compendium-sync .rs-group-toggle:has(input:indeterminate) {\n    background: #c9a227;\n  }\n  .rs-compendium-sync .rs-group-toggle:has(input:checked)::after {\n    content: \"\\2713\";\n  }\n  .rs-compendium-sync .rs-group-toggle:has(input:indeterminate)::after {\n    content: \"\\2212\";\n  }\n", C = class {
 		constructor(e) {
 			this.apiClient = e;
 		}
@@ -253,23 +271,32 @@ var b, x, S = e((() => {
 			});
 			let n = [];
 			try {
-				n = game.settings.get("runarcana-sync", b) ?? [];
+				n = game.settings.get("runarcana-sync", x) ?? [];
 			} catch {
 				n = [];
 			}
-			let r = new Set(n), i = y(t), a = "\n      <form>\n        <p>Escolha os compêndios de itens a sincronizar (ex: um compêndio próprio,\n        curado com os itens liberados na sua mesa):</p>\n        <div style=\"max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; column-count: 1; column-width: auto;\">";
+			let r = new Set(n), i = y(t), a = `
+      <style>${S}</style>
+      <form class="rs-compendium-sync">
+        <p>Escolha os compêndios de itens a sincronizar (ex: um compêndio próprio,
+        curado com os itens liberados na sua mesa):</p>
+        <div style="max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; column-count: 1; column-width: auto;">`;
 			for (let e of i) {
+				let t = e.packs.filter((e) => r.has(e.collection)).length, n = t > 0 && t === e.packs.length;
 				a += `
           <fieldset data-pack-group style="border:0;margin:0 0 12px 0;padding:0;break-inside:avoid;-webkit-column-break-inside:avoid;">
-            <div style="font-weight:700;text-transform:uppercase;font-size:0.85em;letter-spacing:0.02em;border-bottom:1px solid var(--color-border-light-tertiary, #7a7971);padding-bottom:4px;margin-bottom:6px;">
+            <label style="display:flex;align-items:center;gap:6px;font-weight:700;text-transform:uppercase;font-size:0.85em;letter-spacing:0.02em;border-bottom:1px solid var(--color-border-light-tertiary, #7a7971);padding-bottom:4px;margin-bottom:6px;cursor:pointer;">
+              <span class="rs-group-toggle">
+                <input type="checkbox" data-action="toggleGroup" ${n ? "checked" : ""} />
+              </span>
               ${_(e.label)}
-            </div>
+            </label>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;">`;
 				for (let t of e.packs) {
 					let e = r.has(t.collection) ? "checked" : "";
 					a += `
               <label style="display:block;margin:2px 0;">
-                <input type="checkbox" name="pack" value="${_(t.collection)}" ${e} />
+                <input type="checkbox" name="pack" data-action="toggleItem" value="${_(t.collection)}" ${e} />
                 ${_(t.metadata.label)}
               </label>`;
 				}
@@ -280,6 +307,10 @@ var b, x, S = e((() => {
 			return e.wait({
 				window: { title: "Sincronizar Compêndio de Itens" },
 				content: a,
+				actions: {
+					toggleGroup: ee,
+					toggleItem: te
+				},
 				buttons: [{
 					action: "sync",
 					label: "Sincronizar Selecionados",
@@ -291,7 +322,7 @@ var b, x, S = e((() => {
 							ui.notifications.warn("Runarcana Sync: selecione ao menos um compêndio.");
 							return;
 						}
-						await game.settings.set("runarcana-sync", b, i);
+						await game.settings.set("runarcana-sync", x, i);
 						try {
 							let e = await m(o, i, (e, t) => {
 								ui.notifications.info(`Runarcana Sync: sincronizando lote ${e} de ${t}...`);
@@ -311,15 +342,15 @@ var b, x, S = e((() => {
 }));
 //#endregion
 //#region src/data-mapper.js
-function C(e) {
+function T(e) {
 	return e ? Array.isArray(e) ? e.filter(Boolean).map(String) : e instanceof Set ? [...e].filter(Boolean).map(String) : typeof e == "object" ? Object.keys(e).filter((t) => e[t]) : [] : [];
 }
-function w(e) {
+function E(e) {
 	if (!e) return [];
-	let t = C(e.value ?? (Array.isArray(e) || e instanceof Set ? e : null)), n = typeof e.custom == "string" ? e.custom.split(/[;,\n]/).map((e) => e.trim()).filter(Boolean) : [];
+	let t = T(e.value ?? (Array.isArray(e) || e instanceof Set ? e : null)), n = typeof e.custom == "string" ? e.custom.split(/[;,\n]/).map((e) => e.trim()).filter(Boolean) : [];
 	return [.../* @__PURE__ */ new Set([...t, ...n])];
 }
-function T(e) {
+function D(e) {
 	let t = e.system?.attributes?.senses ?? {}, n = t.ranges ?? {}, r = {};
 	for (let e of z) {
 		let i = n[e] ?? t[e];
@@ -327,29 +358,29 @@ function T(e) {
 	}
 	return t.units && (r.units = t.units), typeof t.special == "string" && t.special.trim() && (r.special = t.special.trim()), r;
 }
-function E(e) {
+function O(e) {
 	let t = e.system?.traits ?? {};
 	return {
-		senses: T(e),
-		damageResistances: w(t.dr),
-		damageImmunities: w(t.di),
-		damageVulnerabilities: w(t.dv),
-		armorProficiencies: w(t.armorProf),
-		weaponProficiencies: w(t.weaponProf),
-		languages: w(t.languages)
+		senses: D(e),
+		damageResistances: E(t.dr),
+		damageImmunities: E(t.di),
+		damageVulnerabilities: E(t.dv),
+		armorProficiencies: E(t.armorProf),
+		weaponProficiencies: E(t.weaponProf),
+		languages: E(t.languages)
 	};
 }
-function D(e) {
+function k(e) {
 	return e ? Array.isArray(e) ? e : typeof e.length == "number" || typeof e[Symbol.iterator] == "function" ? [...e] : typeof e == "object" ? Object.values(e) : [] : [];
 }
-function O(e, t) {
-	let n = D(e.itemTypes?.[t]);
-	return n.length > 0 ? n : D(e.items?.contents ?? e.items).filter((e) => e?.type === t);
+function A(e, t) {
+	let n = k(e.itemTypes?.[t]);
+	return n.length > 0 ? n : k(e.items?.contents ?? e.items).filter((e) => e?.type === t);
 }
-function k(e) {
+function j(e) {
 	return e ? typeof e == "string" ? e : e.name || "" : "";
 }
-function A(e) {
+function M(e) {
 	let t = e?.system?.hd?.denomination ?? e?.system?.hitDice ?? e?.system?.hitDie;
 	if (typeof t == "number" && t > 0) return `d${t}`;
 	if (typeof t == "string" && t.trim()) {
@@ -358,7 +389,7 @@ function A(e) {
 	}
 	return "";
 }
-function j(e) {
+function ne(e) {
 	let t = e.system?.attributes?.hd;
 	if (!t) return {
 		value: 0,
@@ -370,45 +401,45 @@ function j(e) {
 		max: Number.isFinite(r) ? r : 0
 	};
 }
-function M(e) {
-	let t = O(e, "class"), n = D(e.classes), r = /* @__PURE__ */ new Set(), i = [];
+function N(e) {
+	let t = A(e, "class"), n = k(e.classes), r = /* @__PURE__ */ new Set(), i = [];
 	for (let e of [...t, ...n]) {
 		let t = e?.id || e?.name;
 		t && !r.has(t) && (r.add(t), i.push(e));
 	}
-	let a = O(e, "race")[0], o = O(e, "background")[0], s = O(e, "subclass")[0], c = j(e), l = e.system?.traits?.size || "";
+	let a = A(e, "race")[0], o = A(e, "background")[0], s = A(e, "subclass")[0], c = ne(e), l = e.system?.traits?.size || "";
 	return {
 		classes: i.map((e) => ({
 			name: e.name || "",
 			identifier: e.system?.identifier || e.identifier || "",
 			levels: Number(e.system?.levels) || 0,
-			hitDie: A(e)
+			hitDie: M(e)
 		})),
 		subclassName: s?.name || "",
-		raceName: a?.name || k(e.system?.details?.race),
-		backgroundName: o?.name || k(e.system?.details?.background),
+		raceName: a?.name || j(e.system?.details?.race),
+		backgroundName: o?.name || j(e.system?.details?.background),
 		size: l,
-		hitDie: i.map(A).find(Boolean) || "",
+		hitDie: i.map(M).find(Boolean) || "",
 		hitDiceValue: c.value,
 		hitDiceMax: c.max
 	};
 }
-function N(e) {
+function P(e) {
 	return typeof e == "string" ? e.trim() : "";
 }
-function P(e) {
-	let t = e.system?.details ?? {}, n = {}, r = {}, i = N(t.appearance), a = N(t.age), o = N(t.gender), s = N(t.height), c = N(t.weight), l = N(t.eyes), u = N(t.hair), d = N(t.skin);
+function F(e) {
+	let t = e.system?.details ?? {}, n = {}, r = {}, i = P(t.appearance), a = P(t.age), o = P(t.gender), s = P(t.height), c = P(t.weight), l = P(t.eyes), u = P(t.hair), d = P(t.skin);
 	i && (n.appearance = i), a && (n.age = a), o && (n.sex = o), s && (n.height = s), c && (n.weight = c), l && (n.eyes = l), u && (n.hair = u), d && (n.skin = d);
-	let f = N(t.alignment), p = N(t.faith), m = N(t.ideal), h = N(t.bond), g = N(t.flaw), _ = N(t.trait), v = N(t.biography?.value);
+	let f = P(t.alignment), p = P(t.faith), m = P(t.ideal), h = P(t.bond), g = P(t.flaw), _ = P(t.trait), v = P(t.biography?.value);
 	return f && (r.alignment = f), p && (r.faith = p), m && (r.ideal = m), h && (r.bond = h), g && (r.flaw = g), _ && (r.trait = _), v && (r.backstory = v), {
 		identity: n,
 		description: r
 	};
 }
-function F(e) {
+function I(e) {
 	return e >= 2 ? "expertise" : e >= 1;
 }
-function I(e) {
+function re(e) {
 	return e === "expertise" ? 2 : +!!e;
 }
 var L, R, z, B, V, H = e((() => {
@@ -605,13 +636,13 @@ function J(e) {
 function Y(e) {
 	return e.type === "enchantment" || e.isAppliedEnchantment === !0;
 }
-function ee(e) {
+function ie(e) {
 	let t = e.duration?.label;
 	if (!t) return "";
 	let n = String(t).trim();
 	return !n || /^(none|nenhum|permanent|permanente|indefinid)/i.test(n) ? "" : n;
 }
-function te(e, t) {
+function ae(e, t) {
 	let n = e.parent;
 	return n && n !== t && n.name ? n.name : "";
 }
@@ -620,9 +651,9 @@ function X(e, t) {
 	r && (n.img = r), e.disabled && (n.disabled = !0), e.isSuppressed && (n.isSuppressed = !0), e.isTemporary && (n.isTemporary = !0);
 	let i = q(e);
 	i.length && (n.statuses = i);
-	let a = ee(e);
+	let a = ie(e);
 	a && (n.durationLabel = a);
-	let o = te(e, t);
+	let o = ae(e, t);
 	return o && (n.source = o), n;
 }
 function Z(e) {
@@ -640,7 +671,7 @@ function Z(e) {
 function Q(e) {
 	return J(e).filter((e) => e?.name && !Y(e)).map((t) => X(t, e));
 }
-var $, ne = e((() => {
+var $, oe = e((() => {
 	H(), g(), $ = class {
 		constructor(e) {
 			this.apiClient = e, this.streams = /* @__PURE__ */ new Map(), this.activeSyncs = /* @__PURE__ */ new Set(), this.lastKnownDraft = /* @__PURE__ */ new Map(), this.debouncedActorUpdate = U(this._executeActorUpdate.bind(this), 1e3), this.debouncedItemUpdate = U(this._executeItemUpdate.bind(this), 1e3);
@@ -701,7 +732,7 @@ var $, ne = e((() => {
 			}), V.forEach(({ foundry: r, id: i }) => {
 				let a = foundry.utils.getProperty(t, `proficiencies.skills.${i}`);
 				if (a === void 0) return;
-				let o = I(a);
+				let o = re(a);
 				(e.system.skills?.[r]?.value ?? 0) !== o && (n[`system.skills.${r}.value`] = o);
 			}), Object.keys(n).length > 0 && await e.update(n), t.items && Array.isArray(t.items)) {
 				let n = t.items, r = e.items.contents, i = [], a = [], o = [];
@@ -777,15 +808,15 @@ var $, ne = e((() => {
 				i !== void 0 && foundry.utils.setProperty(n, `proficiencies.savingThrows.${r}`, i >= 1);
 			}), V.forEach(({ foundry: t, id: r }) => {
 				let i = e.system.skills?.[t]?.value;
-				i !== void 0 && foundry.utils.setProperty(n, `proficiencies.skills.${r}`, F(i));
+				i !== void 0 && foundry.utils.setProperty(n, `proficiencies.skills.${r}`, I(i));
 			});
 			let r = e.system.attributes?.spellcasting;
 			if (r) {
 				let e = B.find(({ foundry: e }) => e === r);
 				e && foundry.utils.setProperty(n, "spellcasting.ability", e.firebase);
 			}
-			foundry.utils.setProperty(n, "concept.portraitUrl", K(e.img)), n.conditions = Z(e), n.effects = Q(e), n.traits = E(e), n.foundryIdentity = M(e);
-			let i = P(e);
+			foundry.utils.setProperty(n, "concept.portraitUrl", K(e.img)), n.conditions = Z(e), n.effects = Q(e), n.traits = O(e), n.foundryIdentity = N(e);
+			let i = F(e);
 			n.identity = {
 				...n.identity ?? {},
 				...i.identity
@@ -831,7 +862,7 @@ var $, ne = e((() => {
 				});
 			}
 			let r = foundry.utils.deepClone(this.lastKnownDraft.get(e.id));
-			r.items = n, r.foundryIdentity = M(e), r.conditions = Z(e), r.effects = Q(e);
+			r.items = n, r.foundryIdentity = N(e), r.conditions = Z(e), r.effects = Q(e);
 			try {
 				let n = await this.apiClient.saveDraft(t, r);
 				this.lastKnownDraft.set(e.id, n);
@@ -840,8 +871,8 @@ var $, ne = e((() => {
 			}
 		}
 	};
-})), re = /* @__PURE__ */ t((() => {
-	r(), l(), S(), ne();
+})), se = /* @__PURE__ */ t((() => {
+	r(), l(), w(), oe();
 	var e = null, t = null;
 	function i(e) {
 		let t = game.settings.get("runarcana-sync", e);
@@ -863,12 +894,25 @@ var $, ne = e((() => {
 			baseUrl: t,
 			syncKey: e
 		});
-		new x(r).render();
+		new C(r).render();
 	}
-	async function o(e) {
-		t?.stopListening(e), await e.unsetFlag("runarcana-sync", "draftId"), ui.notifications.info(`${e.name}: desvinculado da ficha.`);
+	async function s(e, n) {
+		t?.stopListening(e), await e.unsetFlag("runarcana-sync", "draftId"), ui.notifications.info(n ?? `${e.name}: desvinculado da ficha.`);
 	}
-	async function s(n) {
+	async function u() {
+		if (!game.user.isGM) return;
+		let e = /* @__PURE__ */ new Map();
+		for (let t of game.actors) {
+			let n = t.getFlag("runarcana-sync", "draftId");
+			n && (e.has(n) || e.set(n, []), e.get(n).push(t));
+		}
+		for (let t of e.values()) {
+			if (t.length <= 1) continue;
+			let [e, ...n] = [...t].sort((e, t) => (e._stats?.createdTime ?? 0) - (t._stats?.createdTime ?? 0));
+			for (let t of n) await s(t, `Runarcana Sync: ${t.name} estava vinculado à mesma ficha que ${e.name} — desvinculado automaticamente (limpeza de duplicata).`);
+		}
+	}
+	async function d(n) {
 		if (!i("mesaKey")) return ui.notifications.warn("Cole a chave da mesa nas configurações do módulo");
 		if (!e) return ui.notifications.warn("Configure a URL do backend nas configurações do módulo primeiro.");
 		let r = n.getFlag("runarcana-sync", "draftId");
@@ -881,11 +925,11 @@ var $, ne = e((() => {
 				yes: { label: "Desvincular" },
 				no: { label: "Cancelar" }
 			})) return;
-			await o(n);
+			await s(n);
 		}
 		new c(e, n, t).render(!0);
 	}
-	var u = class extends FormApplication {
+	var f = class extends FormApplication {
 		constructor() {
 			super({});
 		}
@@ -920,7 +964,7 @@ var $, ne = e((() => {
 			label: "Abrir Sincronização",
 			hint: "Escolhe quais compêndios de itens do mundo sincronizar com o backend, pra alimentar o seletor de equipamento do site.",
 			icon: "fas fa-box-open",
-			type: u,
+			type: f,
 			restricted: !0
 		}), game.settings.register("runarcana-sync", "backendUrl", {
 			name: "URL do Backend Runarcana",
@@ -931,7 +975,7 @@ var $, ne = e((() => {
 			default: "https://api.runarcana.org",
 			requiresReload: !0
 		});
-	}), Hooks.once("ready", () => {
+	}), Hooks.once("ready", async () => {
 		let r = game.modules.get("runarcana-sync");
 		r && (r.api = { openCompendiumSync: a });
 		let o = i("mesaKey"), s = i("backendUrl");
@@ -947,9 +991,15 @@ var $, ne = e((() => {
 			mesaKey: o,
 			baseUrl: s,
 			syncKey: i("compendiumSyncKey")
-		}), t = new $(e), game.actors.forEach((e) => t.startListening(e)), console.log("Runarcana Sync | Backend configurado e ouvindo atores vinculados."), r && (r.api.apiClient = e, r.api.syncManager = t);
+		}), t = new $(e), await u(), game.actors.forEach((e) => t.startListening(e)), console.log("Runarcana Sync | Backend configurado e ouvindo atores vinculados."), r && (r.api.apiClient = e, r.api.syncManager = t);
 	}), Hooks.on("updateActor", (e, n, r, i) => {
 		i === game.user.id && t && t.handleActorUpdate(e, n);
+	}), Hooks.on("createActor", (e, t, n) => {
+		if (n !== game.user.id) return;
+		let r = e.getFlag("runarcana-sync", "draftId");
+		r && o(game.actors, e.id).has(r) && (e.unsetFlag("runarcana-sync", "draftId"), ui.notifications.warn(`Runarcana Sync: ${e.name} veio com um vínculo herdado (provavelmente de uma duplicação) de uma ficha já vinculada a outro Ator — desvinculado automaticamente.`));
+	}), Hooks.on("deleteActor", (e, n, r) => {
+		r === game.user.id && t && t.stopListening(e);
 	}), Hooks.on("createItem", (e, n, r) => {
 		r === game.user.id && t && e.parent && t.handleItemUpdate(e.parent);
 	}), Hooks.on("updateItem", (e, n, r, i) => {
@@ -957,21 +1007,21 @@ var $, ne = e((() => {
 	}), Hooks.on("deleteItem", (e, n, r) => {
 		r === game.user.id && t && e.parent && t.handleItemUpdate(e.parent);
 	});
-	function d(e) {
+	function p(e) {
 		let t = e?.parent;
 		return t ? t.documentName === "Actor" ? t : t.documentName === "Item" && t.parent?.documentName === "Actor" ? t.parent : null : null;
 	}
 	Hooks.on("createActiveEffect", (e, n, r) => {
 		if (r !== game.user.id || !t) return;
-		let i = d(e);
+		let i = p(e);
 		i && t.handleActorUpdate(i, {});
 	}), Hooks.on("updateActiveEffect", (e, n, r, i) => {
 		if (i !== game.user.id || !t) return;
-		let a = d(e);
+		let a = p(e);
 		a && t.handleActorUpdate(a, n);
 	}), Hooks.on("deleteActiveEffect", (e, n, r) => {
 		if (r !== game.user.id || !t) return;
-		let i = d(e);
+		let i = p(e);
 		i && t.handleActorUpdate(i, {});
 	}), Hooks.on("getActorSheetHeaderButtons", (e, t) => {
 		let n = e.object;
@@ -981,7 +1031,7 @@ var $, ne = e((() => {
 			class: "runarcana-sync-btn",
 			icon: "fas fa-sync",
 			label: r ? "Runarcana (Vinculado)" : "Runarcana Sync",
-			onclick: () => s(n)
+			onclick: () => d(n)
 		});
 	}), Hooks.on("getHeaderControlsActorSheetV2", (e, t) => {
 		let n = e.document;
@@ -992,9 +1042,9 @@ var $, ne = e((() => {
 			icon: "fas fa-sync",
 			label: r ? "Runarcana (Vinculado)" : "Runarcana Sync",
 			class: "runarcana-sync-btn",
-			onClick: () => s(n)
+			onClick: () => d(n)
 		});
 	});
 }));
 //#endregion
-export default re();
+export default se();

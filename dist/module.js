@@ -73,19 +73,56 @@ var r, i = e((() => {
 			if (!o.ok) throw n(`Falha ao salvar a ficha (HTTP ${o.status}).`, o.status);
 			return o.json();
 		}
+		async requestStreamTicket(e) {
+			let t = await fetch(`${this.baseUrl}/api/drafts/${e}/stream-ticket`, {
+				method: "POST",
+				headers: this._headers()
+			});
+			if (!t.ok) throw n(`Falha ao obter ticket do stream (HTTP ${t.status}).`, t.status);
+			let r = await t.json();
+			if (!r?.ticket) throw n("Resposta do ticket do stream sem ticket.", t.status);
+			return r.ticket;
+		}
 		async openStream(e, t, n) {
 			if (!this.mesaKey) throw Error("Chave da mesa não configurada.");
-			let r = `${this.baseUrl}/api/drafts/${e}/stream?token=${encodeURIComponent(this.mesaKey)}`, i = new EventSource(r);
-			return i.onmessage = (e) => {
+			let r = {
+				source: null,
+				timer: null,
+				closed: !1,
+				attempts: 0
+			}, i = () => {
+				if (r.closed || r.timer) return;
+				let e = Math.min(3e4, 2e3 * 2 ** Math.min(r.attempts, 4));
+				r.attempts += 1, r.timer = setTimeout(() => {
+					r.timer = null, o();
+				}, e);
+			}, a = (a) => {
+				let o = `${this.baseUrl}/api/drafts/${e}/stream?ticket=${encodeURIComponent(a)}`, s = new EventSource(o);
+				r.source = s, s.onopen = () => {
+					r.attempts = 0;
+				}, s.onmessage = (e) => {
+					try {
+						t(JSON.parse(e.data));
+					} catch (e) {
+						console.error("Runarcana Sync | Erro ao processar evento do stream:", e);
+					}
+				}, s.onerror = (e) => {
+					n?.(e), s.readyState === EventSource.CLOSED && r.source === s && !r.closed && (s.close(), r.source = null, i());
+				};
+			}, o = async () => {
+				if (r.closed) return;
+				let t;
 				try {
-					t(JSON.parse(e.data));
+					t = await this.requestStreamTicket(e);
 				} catch (e) {
-					console.error("Runarcana Sync | Erro ao processar evento do stream:", e);
+					if (r.closed || (n?.(e), e?.status === 403 || e?.status === 404)) return;
+					i();
+					return;
 				}
-			}, i.onerror = (e) => {
-				n?.(e);
-			}, { close() {
-				i.close();
+				r.closed || a(t);
+			};
+			return a(await this.requestStreamTicket(e)), { close() {
+				r.closed = !0, r.timer &&= (clearTimeout(r.timer), null), r.source?.close(), r.source = null;
 			} };
 		}
 	};

@@ -6,8 +6,15 @@ var e = (e, t, n) => () => {
 	} catch (e) {
 		throw n = [e], e;
 	}
-}, t = (e, t) => () => (t || (e((t = { exports: {} }).exports, t), e = null), t.exports), n, r = e((() => {
-	n = class {
+}, t = (e, t) => () => (t || (e((t = { exports: {} }).exports, t), e = null), t.exports);
+//#endregion
+//#region src/api-client.js
+function n(e, t) {
+	let n = Error(e);
+	return n.status = t, n;
+}
+var r, i = e((() => {
+	r = class {
 		constructor({ mesaKey: e, baseUrl: t, syncKey: n } = {}) {
 			this.mesaKey = typeof e == "string" ? e.trim() : "", this.baseUrl = String(t || "").replace(/\/+$/, ""), this.syncKey = typeof n == "string" ? n.trim() : "", this.clientId = foundry.utils.randomID();
 		}
@@ -21,7 +28,7 @@ var e = (e, t, n) => () => {
 		}
 		async listDrafts() {
 			let e = await fetch(`${this.baseUrl}/api/drafts`, { headers: this._headers() });
-			if (!e.ok) throw Error(`Falha ao listar fichas (HTTP ${e.status}).`);
+			if (!e.ok) throw n(`Falha ao listar fichas (HTTP ${e.status}).`, e.status);
 			return e.json();
 		}
 		async getDraft(e) {
@@ -44,16 +51,27 @@ var e = (e, t, n) => () => {
 			return t.json();
 		}
 		async saveDraft(e, t) {
-			let { assignedUserId: n, ...r } = t || {}, i = await fetch(`${this.baseUrl}/api/drafts/${e}`, {
+			let { assignedUserId: r, ...i } = t || {}, a = typeof i.updatedAt == "string" ? i.updatedAt.trim() : "", o = await fetch(`${this.baseUrl}/api/drafts/${e}`, {
 				method: "PUT",
 				headers: this._headers({
 					"Content-Type": "application/json",
-					"X-Client-Id": this.clientId
+					"X-Client-Id": this.clientId,
+					...a ? { "If-Match": a } : {}
 				}),
-				body: JSON.stringify(r)
+				body: JSON.stringify(i)
 			});
-			if (!i.ok) throw Error(`Falha ao salvar a ficha (HTTP ${i.status}).`);
-			return i.json();
+			if (o.status === 409) {
+				let e = null;
+				try {
+					e = await o.json();
+				} catch {
+					e = null;
+				}
+				let t = n(e?.error || "Ficha foi modificada por outra origem desde a última leitura.", 409);
+				throw t.current = e?.current ?? null, t;
+			}
+			if (!o.ok) throw n(`Falha ao salvar a ficha (HTTP ${o.status}).`, o.status);
+			return o.json();
 		}
 		async openStream(e, t, n) {
 			if (!this.mesaKey) throw Error("Chave da mesa não configurada.");
@@ -74,13 +92,13 @@ var e = (e, t, n) => () => {
 }));
 //#endregion
 //#region src/draft-selector.js
-function i(e) {
+function a(e) {
 	return String(e ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&#39;");
 }
-function a(e) {
-	return `${e?.concept?.name || e?.title || "Sem Nome"} (${e?.classBuild?.classId || "Sem Classe"})${e?.assignedUserId ? ` — ${e.assignedUserId}` : ""}`;
+function o(e) {
+	return `${e?.concept?.name || e?.title || "Sem Nome"} (${e?.classBuild?.classId || "Sem Classe"})${e?.assignedUserId ? " — atribuída a um jogador" : ""}`;
 }
-function o(e, t) {
+function s(e, t) {
 	let n = /* @__PURE__ */ new Set();
 	for (let r of e ?? []) {
 		if (r.id === t) continue;
@@ -89,23 +107,23 @@ function o(e, t) {
 	}
 	return n;
 }
-function s(e) {
-	return `<p>Erro ao carregar fichas: ${i(e?.message || "Erro desconhecido.")}</p>
+function c(e) {
+	return e?.status === 401 ? "<p>Chave da mesa inválida ou revogada.</p>\n      <p>Gere uma nova na página da mesa no site e cole em Configurações do módulo &rsaquo; Chave da mesa.</p>" : `<p>Erro ao carregar fichas: ${a(e?.message || "Erro desconhecido.")}</p>
     <p>Verifique se a chave da mesa e a URL do backend estão configuradas corretamente nas configurações do módulo e
     se o servidor (runarcana-api) está no ar.</p>`;
 }
-var c, l = e((() => {
-	c = class {
+var l, u = e((() => {
+	l = class {
 		constructor(e, t, n) {
 			this.apiClient = e, this.actor = t, this.syncManager = n;
 		}
 		async render(e = !0) {
 			let { DialogV2: t } = foundry.applications.api;
 			try {
-				let e = await this.apiClient.listDrafts(), n = o(game.actors, this.actor.id), r = "<form><div class=\"form-group\"><label>Ficha:</label><select name=\"draftId\">";
+				let e = await this.apiClient.listDrafts(), n = s(game.actors, this.actor.id), r = "<form><div class=\"form-group\"><label>Ficha:</label><select name=\"draftId\">";
 				return e.length === 0 ? r += "<option value=\"\">Nenhuma ficha encontrada</option>" : e.forEach((e) => {
-					let t = n.has(e.id), o = t ? `${a(e)} (vinculado a outro Ator)` : a(e);
-					r += `<option value="${i(e.id)}" ${t ? "disabled" : ""}>${i(o)}</option>`;
+					let t = n.has(e.id), i = t ? `${o(e)} (vinculado a outro Ator)` : o(e);
+					r += `<option value="${a(e.id)}" ${t ? "disabled" : ""}>${a(i)}</option>`;
 				}), r += "</select></div></form>", t.wait({
 					window: { title: "Vincular Ficha Runarcana" },
 					content: r,
@@ -122,7 +140,7 @@ var c, l = e((() => {
 			} catch (e) {
 				return t.prompt({
 					window: { title: "Erro" },
-					content: s(e),
+					content: c(e),
 					ok: { label: "Fechar" }
 				});
 			}
@@ -131,13 +149,13 @@ var c, l = e((() => {
 }));
 //#endregion
 //#region src/compendium-sync.js
-function u() {
+function d() {
 	return game.packs.filter((e) => e.documentName === "Item");
 }
-async function d(e) {
+async function f(e) {
 	let t = new Set((e || []).filter(Boolean)), n = /* @__PURE__ */ new Map();
 	if (t.size === 0) return n;
-	for (let e of u()) {
+	for (let e of d()) {
 		let r;
 		try {
 			r = await e.getIndex({ fields: ["flags.runarcana-sync.catalogKey"] });
@@ -155,7 +173,7 @@ async function d(e) {
 	}
 	return n;
 }
-function f(e) {
+function p(e) {
 	if (!e) return e;
 	try {
 		return new URL(e, window.location.origin).href;
@@ -163,12 +181,12 @@ function f(e) {
 		return e;
 	}
 }
-function p(e, t) {
+function m(e, t) {
 	let n = [];
 	for (let r = 0; r < e.length; r += t) n.push(e.slice(r, r + t));
 	return n;
 }
-async function m(e, t, n) {
+async function h(e, t, n) {
 	let r = [], i = [];
 	for (let e of t) {
 		let t = game.packs.get(e);
@@ -177,7 +195,7 @@ async function m(e, t, n) {
 			packId: e,
 			foundryId: t.id,
 			name: t.name,
-			img: f(t.img),
+			img: p(t.img),
 			itemType: t.type,
 			catalogKey: t.getFlag("runarcana-sync", "catalogKey") ?? null,
 			system: t.toObject().system
@@ -188,22 +206,22 @@ async function m(e, t, n) {
 			count: n.length
 		});
 	}
-	let a = p(r, h);
+	let a = m(r, g);
 	for (let t = 0; t < a.length; t++) await e.putCompendiumItemsBatch(a[t]), n?.(t + 1, a.length);
 	return {
 		totalSynced: r.length,
 		packSummaries: i
 	};
 }
-var h, g = e((() => {
-	h = 50;
+var g, _ = e((() => {
+	g = 50;
 }));
 //#endregion
 //#region src/compendium-sync-dialog.js
-function _(e) {
+function v(e) {
 	return String(e ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&#39;");
 }
-function v(e) {
+function y(e) {
 	let t = e.metadata ?? {};
 	if (t.packageType === "module") {
 		let e = typeof game < "u" ? game.modules?.get(t.packageName) : void 0;
@@ -224,10 +242,10 @@ function v(e) {
 		label: "Compêndios do mundo"
 	};
 }
-function y(e) {
+function b(e) {
 	let t = /* @__PURE__ */ new Map();
 	for (let n of e) {
-		let e = v(n);
+		let e = y(n);
 		t.has(e.id) || t.set(e.id, {
 			id: e.id,
 			label: e.label,
@@ -239,13 +257,13 @@ function y(e) {
 		packs: e.packs.slice().sort((e, t) => (e.metadata.label ?? "").localeCompare(t.metadata.label ?? "", "pt-BR"))
 	})).sort((e, t) => e.label.localeCompare(t.label, "pt-BR"));
 }
-function b(e) {
+function ee(e) {
 	let t = e.querySelector("input[data-action=\"toggleGroup\"]");
 	if (!t) return;
 	let n = Array.from(e.querySelectorAll("input[data-action=\"toggleItem\"]")), r = n.filter((e) => e.checked).length;
 	t.checked = r > 0 && r === n.length, t.indeterminate = r > 0 && r < n.length;
 }
-function ee(e, t) {
+function x(e, t) {
 	let n = t.closest("[data-pack-group]");
 	if (!n) return;
 	let r = t.checked;
@@ -255,15 +273,15 @@ function ee(e, t) {
 }
 function te(e, t) {
 	let n = t.closest("[data-pack-group]");
-	n && b(n);
+	n && ee(n);
 }
-var x, S, C, w = e((() => {
-	g(), x = "compendiumSyncSelection", S = "\n  .rs-compendium-sync .rs-group-toggle {\n    position: relative;\n    width: 16px;\n    height: 16px;\n    flex: 0 0 auto;\n    border: 1px solid var(--color-border-light-tertiary, #7a7971);\n    border-radius: 3px;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .rs-compendium-sync .rs-group-toggle input[type=\"checkbox\"] {\n    position: absolute;\n    inset: 0;\n    margin: 0;\n    opacity: 0;\n    cursor: pointer;\n  }\n  .rs-compendium-sync .rs-group-toggle::after {\n    content: \"\";\n    font-weight: 900;\n    font-size: 12px;\n    line-height: 1;\n    color: #1b1a17;\n    pointer-events: none;\n  }\n  .rs-compendium-sync .rs-group-toggle:has(input:checked),\n  .rs-compendium-sync .rs-group-toggle:has(input:indeterminate) {\n    background: #c9a227;\n  }\n  .rs-compendium-sync .rs-group-toggle:has(input:checked)::after {\n    content: \"\\2713\";\n  }\n  .rs-compendium-sync .rs-group-toggle:has(input:indeterminate)::after {\n    content: \"\\2212\";\n  }\n", C = class {
+var S, C, w, T = e((() => {
+	_(), S = "compendiumSyncSelection", C = "\n  .rs-compendium-sync .rs-group-toggle {\n    position: relative;\n    width: 16px;\n    height: 16px;\n    flex: 0 0 auto;\n    border: 1px solid var(--color-border-light-tertiary, #7a7971);\n    border-radius: 3px;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .rs-compendium-sync .rs-group-toggle input[type=\"checkbox\"] {\n    position: absolute;\n    inset: 0;\n    margin: 0;\n    opacity: 0;\n    cursor: pointer;\n  }\n  .rs-compendium-sync .rs-group-toggle::after {\n    content: \"\";\n    font-weight: 900;\n    font-size: 12px;\n    line-height: 1;\n    color: #1b1a17;\n    pointer-events: none;\n  }\n  .rs-compendium-sync .rs-group-toggle:has(input:checked),\n  .rs-compendium-sync .rs-group-toggle:has(input:indeterminate) {\n    background: #c9a227;\n  }\n  .rs-compendium-sync .rs-group-toggle:has(input:checked)::after {\n    content: \"\\2713\";\n  }\n  .rs-compendium-sync .rs-group-toggle:has(input:indeterminate)::after {\n    content: \"\\2212\";\n  }\n", w = class {
 		constructor(e) {
 			this.apiClient = e;
 		}
 		async render() {
-			let { DialogV2: e } = foundry.applications.api, t = u();
+			let { DialogV2: e } = foundry.applications.api, t = d();
 			if (t.length === 0) return e.prompt({
 				window: { title: "Sincronizar Compêndio de Itens" },
 				content: "<p>Nenhum compêndio do tipo Item foi encontrado neste mundo.</p>",
@@ -271,12 +289,12 @@ var x, S, C, w = e((() => {
 			});
 			let n = [];
 			try {
-				n = game.settings.get("runarcana-sync", x) ?? [];
+				n = game.settings.get("runarcana-sync", S) ?? [];
 			} catch {
 				n = [];
 			}
-			let r = new Set(n), i = y(t), a = `
-      <style>${S}</style>
+			let r = new Set(n), i = b(t), a = `
+      <style>${C}</style>
       <form class="rs-compendium-sync">
         <p>Escolha os compêndios de itens a sincronizar (ex: um compêndio próprio,
         curado com os itens liberados na sua mesa):</p>
@@ -289,15 +307,15 @@ var x, S, C, w = e((() => {
               <span class="rs-group-toggle">
                 <input type="checkbox" data-action="toggleGroup" ${n ? "checked" : ""} />
               </span>
-              ${_(e.label)}
+              ${v(e.label)}
             </label>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;">`;
 				for (let t of e.packs) {
 					let e = r.has(t.collection) ? "checked" : "";
 					a += `
               <label style="display:block;margin:2px 0;">
-                <input type="checkbox" name="pack" data-action="toggleItem" value="${_(t.collection)}" ${e} />
-                ${_(t.metadata.label)}
+                <input type="checkbox" name="pack" data-action="toggleItem" value="${v(t.collection)}" ${e} />
+                ${v(t.metadata.label)}
               </label>`;
 				}
 				a += "\n            </div>\n          </fieldset>";
@@ -308,7 +326,7 @@ var x, S, C, w = e((() => {
 				window: { title: "Sincronizar Compêndio de Itens" },
 				content: a,
 				actions: {
-					toggleGroup: ee,
+					toggleGroup: x,
 					toggleItem: te
 				},
 				buttons: [{
@@ -322,9 +340,9 @@ var x, S, C, w = e((() => {
 							ui.notifications.warn("Runarcana Sync: selecione ao menos um compêndio.");
 							return;
 						}
-						await game.settings.set("runarcana-sync", x, i);
+						await game.settings.set("runarcana-sync", S, i);
 						try {
-							let e = await m(o, i, (e, t) => {
+							let e = await h(o, i, (e, t) => {
 								ui.notifications.info(`Runarcana Sync: sincronizando lote ${e} de ${t}...`);
 							});
 							ui.notifications.info(`Runarcana Sync: ${e.totalSynced} itens sincronizados de ${e.packSummaries.length} compêndio(s).`);
@@ -342,12 +360,12 @@ var x, S, C, w = e((() => {
 }));
 //#endregion
 //#region src/data-mapper.js
-function T(e) {
+function ne(e) {
 	return e ? Array.isArray(e) ? e.filter(Boolean).map(String) : e instanceof Set ? [...e].filter(Boolean).map(String) : typeof e == "object" ? Object.keys(e).filter((t) => e[t]) : [] : [];
 }
 function E(e) {
 	if (!e) return [];
-	let t = T(e.value ?? (Array.isArray(e) || e instanceof Set ? e : null)), n = typeof e.custom == "string" ? e.custom.split(/[;,\n]/).map((e) => e.trim()).filter(Boolean) : [];
+	let t = ne(e.value ?? (Array.isArray(e) || e instanceof Set ? e : null)), n = typeof e.custom == "string" ? e.custom.split(/[;,\n]/).map((e) => e.trim()).filter(Boolean) : [];
 	return [.../* @__PURE__ */ new Set([...t, ...n])];
 }
 function D(e) {
@@ -389,7 +407,7 @@ function M(e) {
 	}
 	return "";
 }
-function ne(e) {
+function N(e) {
 	let t = e.system?.attributes?.hd;
 	if (!t) return {
 		value: 0,
@@ -401,13 +419,13 @@ function ne(e) {
 		max: Number.isFinite(r) ? r : 0
 	};
 }
-function N(e) {
+function P(e) {
 	let t = A(e, "class"), n = k(e.classes), r = /* @__PURE__ */ new Set(), i = [];
 	for (let e of [...t, ...n]) {
 		let t = e?.id || e?.name;
 		t && !r.has(t) && (r.add(t), i.push(e));
 	}
-	let a = A(e, "race")[0], o = A(e, "background")[0], s = A(e, "subclass")[0], c = ne(e), l = e.system?.traits?.size || "";
+	let a = A(e, "race")[0], o = A(e, "background")[0], s = A(e, "subclass")[0], c = N(e), l = e.system?.traits?.size || "";
 	return {
 		classes: i.map((e) => ({
 			name: e.name || "",
@@ -424,22 +442,22 @@ function N(e) {
 		hitDiceMax: c.max
 	};
 }
-function P(e) {
+function F(e) {
 	return typeof e == "string" ? e.trim() : "";
 }
-function F(e) {
-	let t = e.system?.details ?? {}, n = {}, r = {}, i = P(t.appearance), a = P(t.age), o = P(t.gender), s = P(t.height), c = P(t.weight), l = P(t.eyes), u = P(t.hair), d = P(t.skin);
+function re(e) {
+	let t = e.system?.details ?? {}, n = {}, r = {}, i = F(t.appearance), a = F(t.age), o = F(t.gender), s = F(t.height), c = F(t.weight), l = F(t.eyes), u = F(t.hair), d = F(t.skin);
 	i && (n.appearance = i), a && (n.age = a), o && (n.sex = o), s && (n.height = s), c && (n.weight = c), l && (n.eyes = l), u && (n.hair = u), d && (n.skin = d);
-	let f = P(t.alignment), p = P(t.faith), m = P(t.ideal), h = P(t.bond), g = P(t.flaw), _ = P(t.trait), v = P(t.biography?.value);
+	let f = F(t.alignment), p = F(t.faith), m = F(t.ideal), h = F(t.bond), g = F(t.flaw), _ = F(t.trait), v = F(t.biography?.value);
 	return f && (r.alignment = f), p && (r.faith = p), m && (r.ideal = m), h && (r.bond = h), g && (r.flaw = g), _ && (r.trait = _), v && (r.backstory = v), {
 		identity: n,
 		description: r
 	};
 }
-function I(e) {
+function ie(e) {
 	return e >= 2 ? "expertise" : e >= 1;
 }
-function re(e) {
+function I(e) {
 	return e === "expertise" ? 2 : +!!e;
 }
 var L, R, z, B, V, H = e((() => {
@@ -621,7 +639,7 @@ function G(e) {
 	return e;
 }
 function K(e) {
-	let t = f(e);
+	let t = p(e);
 	return !t || String(t).includes("mystery-man") || String(t).includes("icons/svg/item-bag") ? "" : t;
 }
 function q(e) {
@@ -636,24 +654,24 @@ function J(e) {
 function Y(e) {
 	return e.type === "enchantment" || e.isAppliedEnchantment === !0;
 }
-function ie(e) {
+function ae(e) {
 	let t = e.duration?.label;
 	if (!t) return "";
 	let n = String(t).trim();
 	return !n || /^(none|nenhum|permanent|permanente|indefinid)/i.test(n) ? "" : n;
 }
-function ae(e, t) {
+function oe(e, t) {
 	let n = e.parent;
 	return n && n !== t && n.name ? n.name : "";
 }
 function X(e, t) {
-	let n = { name: e.name }, r = f(e.img || e.icon);
+	let n = { name: e.name }, r = p(e.img || e.icon);
 	r && (n.img = r), e.disabled && (n.disabled = !0), e.isSuppressed && (n.isSuppressed = !0), e.isTemporary && (n.isTemporary = !0);
 	let i = q(e);
 	i.length && (n.statuses = i);
-	let a = ie(e);
+	let a = ae(e);
 	a && (n.durationLabel = a);
-	let o = ae(e, t);
+	let o = oe(e, t);
 	return o && (n.source = o), n;
 }
 function Z(e) {
@@ -671,8 +689,8 @@ function Z(e) {
 function Q(e) {
 	return J(e).filter((e) => e?.name && !Y(e)).map((t) => X(t, e));
 }
-var $, oe = e((() => {
-	H(), g(), $ = class {
+var $, se = e((() => {
+	H(), _(), $ = class {
 		constructor(e) {
 			this.apiClient = e, this.streams = /* @__PURE__ */ new Map(), this.activeSyncs = /* @__PURE__ */ new Set(), this.lastKnownDraft = /* @__PURE__ */ new Map(), this.debouncedActorUpdate = U(this._executeActorUpdate.bind(this), 1e3), this.debouncedItemUpdate = U(this._executeItemUpdate.bind(this), 1e3);
 		}
@@ -732,7 +750,7 @@ var $, oe = e((() => {
 			}), V.forEach(({ foundry: r, id: i }) => {
 				let a = foundry.utils.getProperty(t, `proficiencies.skills.${i}`);
 				if (a === void 0) return;
-				let o = re(a);
+				let o = I(a);
 				(e.system.skills?.[r]?.value ?? 0) !== o && (n[`system.skills.${r}.value`] = o);
 			}), Object.keys(n).length > 0 && await e.update(n), t.items && Array.isArray(t.items)) {
 				let n = t.items, r = e.items.contents, i = [], a = [], o = [];
@@ -766,7 +784,7 @@ var $, oe = e((() => {
 			if (n.length === 0) return;
 			let r;
 			try {
-				r = await d(n);
+				r = await f(n);
 			} catch (e) {
 				console.warn("Runarcana Sync | Falha ao procurar itens de equipamento no compêndio:", e);
 				return;
@@ -787,64 +805,44 @@ var $, oe = e((() => {
 			let n = e.getFlag("runarcana-sync", "draftId");
 			n && this.debouncedActorUpdate(e, n);
 		}
-		async _executeActorUpdate(e, t) {
-			if (!this.lastKnownDraft.has(e.id)) {
-				console.warn(`Runarcana Sync | Ignorando atualização de ${e.name}: ainda não temos uma cópia da ficha vinda do backend.`);
-				return;
+		_overlayActorOntoDraft(e, t) {
+			for (let [n, r] of Object.entries(L)) {
+				if (n.startsWith("system.abilities")) continue;
+				let i = foundry.utils.getProperty(e, n);
+				i !== void 0 && foundry.utils.setProperty(t, r, i);
 			}
-			let n = foundry.utils.deepClone(this.lastKnownDraft.get(e.id));
-			for (let [t, r] of Object.entries(L)) {
-				if (t.startsWith("system.abilities")) continue;
-				let i = foundry.utils.getProperty(e, t);
-				i !== void 0 && foundry.utils.setProperty(n, r, i);
-			}
-			B.forEach(({ foundry: t, firebase: r }) => {
-				let i = e.system.abilities?.[t]?.value;
+			B.forEach(({ foundry: n, firebase: r }) => {
+				let i = e.system.abilities?.[n]?.value;
 				if (i === void 0) return;
-				let a = foundry.utils.getProperty(n, `attributes.originBonuses.${r}`) || 0;
-				foundry.utils.setProperty(n, `attributes.scores.${r}`, i - a);
-			}), B.forEach(({ foundry: t, firebase: r }) => {
-				let i = e.system.abilities?.[t]?.proficient;
-				i !== void 0 && foundry.utils.setProperty(n, `proficiencies.savingThrows.${r}`, i >= 1);
-			}), V.forEach(({ foundry: t, id: r }) => {
-				let i = e.system.skills?.[t]?.value;
-				i !== void 0 && foundry.utils.setProperty(n, `proficiencies.skills.${r}`, I(i));
+				let a = foundry.utils.getProperty(t, `attributes.originBonuses.${r}`) || 0;
+				foundry.utils.setProperty(t, `attributes.scores.${r}`, i - a);
+			}), B.forEach(({ foundry: n, firebase: r }) => {
+				let i = e.system.abilities?.[n]?.proficient;
+				i !== void 0 && foundry.utils.setProperty(t, `proficiencies.savingThrows.${r}`, i >= 1);
+			}), V.forEach(({ foundry: n, id: r }) => {
+				let i = e.system.skills?.[n]?.value;
+				i !== void 0 && foundry.utils.setProperty(t, `proficiencies.skills.${r}`, ie(i));
 			});
-			let r = e.system.attributes?.spellcasting;
-			if (r) {
-				let e = B.find(({ foundry: e }) => e === r);
-				e && foundry.utils.setProperty(n, "spellcasting.ability", e.firebase);
+			let n = e.system.attributes?.spellcasting;
+			if (n) {
+				let e = B.find(({ foundry: e }) => e === n);
+				e && foundry.utils.setProperty(t, "spellcasting.ability", e.firebase);
 			}
-			foundry.utils.setProperty(n, "concept.portraitUrl", K(e.img)), n.conditions = Z(e), n.effects = Q(e), n.traits = O(e), n.foundryIdentity = N(e);
-			let i = F(e);
-			n.identity = {
-				...n.identity ?? {},
-				...i.identity
-			}, n.description = {
-				...n.description ?? {},
-				...i.description
+			foundry.utils.setProperty(t, "concept.portraitUrl", K(e.img)), t.conditions = Z(e), t.effects = Q(e), t.traits = O(e), t.foundryIdentity = P(e);
+			let r = re(e);
+			t.identity = {
+				...t.identity ?? {},
+				...r.identity
+			}, t.description = {
+				...t.description ?? {},
+				...r.description
 			};
-			try {
-				let r = await this.apiClient.saveDraft(t, n);
-				this.lastKnownDraft.set(e.id, r);
-			} catch (t) {
-				throw this.notifyApiError("salvar", t, e), t;
-			}
 		}
-		async handleItemUpdate(e) {
-			if (this.activeSyncs.has(e.id)) return;
-			let t = e.getFlag("runarcana-sync", "draftId");
-			t && this.debouncedItemUpdate(e, t);
-		}
-		async _executeItemUpdate(e, t) {
-			if (!this.lastKnownDraft.has(e.id)) {
-				console.warn(`Runarcana Sync | Ignorando atualização de itens de ${e.name}: ainda não temos uma cópia da ficha vinda do backend.`);
-				return;
-			}
+		_overlayItemsOntoDraft(e, t) {
 			let n = [];
 			for (let t of e.items) try {
 				let e = t.toObject();
-				e._id = t.getFlag("runarcana-sync", "sourceId") || e._id, e.img = f(e.img);
+				e._id = t.getFlag("runarcana-sync", "sourceId") || e._id, e.img = p(e.img);
 				let r = W(e);
 				[
 					"class",
@@ -857,49 +855,88 @@ var $, oe = e((() => {
 					_id: t.getFlag("runarcana-sync", "sourceId") || t.id,
 					name: t.name,
 					type: t.type,
-					img: f(t.img),
+					img: p(t.img),
 					system: t.type === "class" ? { levels: t.system?.levels } : {}
 				});
 			}
-			let r = foundry.utils.deepClone(this.lastKnownDraft.get(e.id));
-			r.items = n, r.foundryIdentity = N(e), r.conditions = Z(e), r.effects = Q(e);
+			t.items = n, t.foundryIdentity = P(e), t.conditions = Z(e), t.effects = Q(e);
+		}
+		async _saveDraftFromActor(e, t, n, r) {
+			let i = async () => {
+				if (!this.lastKnownDraft.has(e.id)) return console.warn(`Runarcana Sync | Ignorando atualização de ${e.name}: ainda não temos uma cópia da ficha vinda do backend.`), null;
+				let r = foundry.utils.deepClone(this.lastKnownDraft.get(e.id));
+				return n(e, r), this.apiClient.saveDraft(t, r);
+			};
 			try {
-				let n = await this.apiClient.saveDraft(t, r);
-				this.lastKnownDraft.set(e.id, n);
+				let t = await i();
+				t && this.lastKnownDraft.set(e.id, t);
 			} catch (t) {
-				throw this.notifyApiError("salvar os itens de", t, e), t;
+				if (t?.status === 409 && t.current) {
+					this.lastKnownDraft.set(e.id, t.current);
+					try {
+						let t = await i();
+						t && this.lastKnownDraft.set(e.id, t);
+						return;
+					} catch (t) {
+						throw this.notifyApiError(r, t, e), t;
+					}
+				}
+				throw this.notifyApiError(r, t, e), t;
 			}
 		}
+		async _executeActorUpdate(e, t) {
+			if (!this.lastKnownDraft.has(e.id)) {
+				console.warn(`Runarcana Sync | Ignorando atualização de ${e.name}: ainda não temos uma cópia da ficha vinda do backend.`);
+				return;
+			}
+			await this._saveDraftFromActor(e, t, (e, t) => {
+				this._overlayActorOntoDraft(e, t);
+			}, "salvar");
+		}
+		async handleItemUpdate(e) {
+			if (this.activeSyncs.has(e.id)) return;
+			let t = e.getFlag("runarcana-sync", "draftId");
+			t && this.debouncedItemUpdate(e, t);
+		}
+		async _executeItemUpdate(e, t) {
+			if (!this.lastKnownDraft.has(e.id)) {
+				console.warn(`Runarcana Sync | Ignorando atualização de itens de ${e.name}: ainda não temos uma cópia da ficha vinda do backend.`);
+				return;
+			}
+			await this._saveDraftFromActor(e, t, (e, t) => {
+				this._overlayItemsOntoDraft(e, t);
+			}, "salvar os itens de");
+		}
 	};
-})), se = /* @__PURE__ */ t((() => {
-	r(), l(), w(), oe();
+})), ce = /* @__PURE__ */ t((() => {
+	i(), u(), T(), se();
 	var e = null, t = null;
-	function i(e) {
+	function n(e) {
 		let t = game.settings.get("runarcana-sync", e);
 		return typeof t == "string" ? t.trim() : "";
 	}
 	function a() {
-		let e = i("compendiumSyncKey");
+		let e = n("compendiumSyncKey");
 		if (!e) {
 			ui.notifications.warn("Cole a chave de sincronização de compêndio nas configurações do módulo.");
 			return;
 		}
-		let t = i("backendUrl");
+		let t = n("backendUrl");
 		if (!t) {
 			ui.notifications.warn("Configure a URL do backend nas configurações do módulo primeiro.");
 			return;
 		}
-		let r = new n({
-			mesaKey: i("mesaKey"),
+		let i = new r({
+			mesaKey: n("mesaKey"),
 			baseUrl: t,
 			syncKey: e
 		});
-		new C(r).render();
+		new w(i).render();
 	}
-	async function s(e, n) {
+	async function o(e, n) {
 		t?.stopListening(e), await e.unsetFlag("runarcana-sync", "draftId"), ui.notifications.info(n ?? `${e.name}: desvinculado da ficha.`);
 	}
-	async function u() {
+	async function c() {
 		if (!game.user.isGM) return;
 		let e = /* @__PURE__ */ new Map();
 		for (let t of game.actors) {
@@ -909,25 +946,25 @@ var $, oe = e((() => {
 		for (let t of e.values()) {
 			if (t.length <= 1) continue;
 			let [e, ...n] = [...t].sort((e, t) => (e._stats?.createdTime ?? 0) - (t._stats?.createdTime ?? 0));
-			for (let t of n) await s(t, `Runarcana Sync: ${t.name} estava vinculado à mesma ficha que ${e.name} — desvinculado automaticamente (limpeza de duplicata).`);
+			for (let t of n) await o(t, `Runarcana Sync: ${t.name} estava vinculado à mesma ficha que ${e.name} — desvinculado automaticamente (limpeza de duplicata).`);
 		}
 	}
-	async function d(n) {
-		if (!i("mesaKey")) return ui.notifications.warn("Cole a chave da mesa nas configurações do módulo");
+	async function d(r) {
+		if (!n("mesaKey")) return ui.notifications.warn("Cole a chave da mesa nas configurações do módulo");
 		if (!e) return ui.notifications.warn("Configure a URL do backend nas configurações do módulo primeiro.");
-		let r = n.getFlag("runarcana-sync", "draftId");
-		if (r) {
+		let i = r.getFlag("runarcana-sync", "draftId");
+		if (i) {
 			let { DialogV2: e } = foundry.applications.api;
 			if (!await e.confirm({
 				window: { title: "Ator já vinculado" },
-				content: `<p><strong>${n.name}</strong> já está vinculado à ficha <code>${r}</code>.</p>
+				content: `<p><strong>${r.name}</strong> já está vinculado à ficha <code>${i}</code>.</p>
         <p>Desvincular agora para escolher outra ficha? A sincronização com a ficha atual para.</p>`,
 				yes: { label: "Desvincular" },
 				no: { label: "Cancelar" }
 			})) return;
-			await s(n);
+			await o(r);
 		}
-		new c(e, n, t).render(!0);
+		new l(e, r, t).render(!0);
 	}
 	var f = class extends FormApplication {
 		constructor() {
@@ -976,9 +1013,9 @@ var $, oe = e((() => {
 			requiresReload: !0
 		});
 	}), Hooks.once("ready", async () => {
-		let r = game.modules.get("runarcana-sync");
-		r && (r.api = { openCompendiumSync: a });
-		let o = i("mesaKey"), s = i("backendUrl");
+		let i = game.modules.get("runarcana-sync");
+		i && (i.api = { openCompendiumSync: a });
+		let o = n("mesaKey"), s = n("backendUrl");
 		if (!o) {
 			console.warn("Runarcana Sync | Chave da mesa não configurada nas configurações do módulo.");
 			return;
@@ -987,17 +1024,17 @@ var $, oe = e((() => {
 			console.warn("Runarcana Sync | URL do backend não configurada nas configurações do módulo.");
 			return;
 		}
-		e = new n({
+		e = new r({
 			mesaKey: o,
 			baseUrl: s,
-			syncKey: i("compendiumSyncKey")
-		}), t = new $(e), await u(), game.actors.forEach((e) => t.startListening(e)), console.log("Runarcana Sync | Backend configurado e ouvindo atores vinculados."), r && (r.api.apiClient = e, r.api.syncManager = t);
+			syncKey: n("compendiumSyncKey")
+		}), t = new $(e), await c(), game.actors.forEach((e) => t.startListening(e)), console.log("Runarcana Sync | Backend configurado e ouvindo atores vinculados."), i && (i.api.apiClient = e, i.api.syncManager = t);
 	}), Hooks.on("updateActor", (e, n, r, i) => {
 		i === game.user.id && t && t.handleActorUpdate(e, n);
 	}), Hooks.on("createActor", (e, t, n) => {
 		if (n !== game.user.id) return;
 		let r = e.getFlag("runarcana-sync", "draftId");
-		r && o(game.actors, e.id).has(r) && (e.unsetFlag("runarcana-sync", "draftId"), ui.notifications.warn(`Runarcana Sync: ${e.name} veio com um vínculo herdado (provavelmente de uma duplicação) de uma ficha já vinculada a outro Ator — desvinculado automaticamente.`));
+		r && s(game.actors, e.id).has(r) && (e.unsetFlag("runarcana-sync", "draftId"), ui.notifications.warn(`Runarcana Sync: ${e.name} veio com um vínculo herdado (provavelmente de uma duplicação) de uma ficha já vinculada a outro Ator — desvinculado automaticamente.`));
 	}), Hooks.on("deleteActor", (e, n, r) => {
 		r === game.user.id && t && t.stopListening(e);
 	}), Hooks.on("createItem", (e, n, r) => {
@@ -1047,4 +1084,4 @@ var $, oe = e((() => {
 	});
 }));
 //#endregion
-export default se();
+export default ce();

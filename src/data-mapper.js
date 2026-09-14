@@ -86,11 +86,20 @@ export const ATTR_MAP = {
 // exatamente o que aconteceu com hp.max antes desta correção. hp.value/
 // hp.temp ficam de fora desta lista: são números que o jogador ajusta
 // direto (dano sofrido, PV temporário), não algo "calculado" que só o
-// Foundry deveria ter autoridade sobre.
+// Foundry deveria ter autoridade sobre. Mesmo raciocínio pra
+// spellSlots.*.current e resources.*.current (gasto/recuperado em jogo).
 //
 // spell.dc / spell.attack: mesma categoria (FDD-54). A ficha do dnd5e
 // mostra esses números depois de prepareSpellcastingAbility, incluindo
 // efeito ativo; 8+PB+mod no site é só fallback.
+//
+// ac.value / spellN.max / pact.max / resources.*.max (FDD-38): também
+// derivados no Foundry (escudo, efeito ativo, feat que dá slot ou recurso
+// extra) e também recalculados no site como fallback pra ficha sem Ator.
+// O builder do site ainda grava esses valores derivados no draft ao
+// salvar (ver initial-character-draft.ts / FDD-37); sem essa entrada, um
+// PUT do site rebaixava a CA ou o máximo de slot/recurso que o Foundry já
+// tinha calculado certo.
 //
 // Itens não cabem no ATTR_MAP: o bônus de ataque já resolvido mora em
 // `item.labels.modifier` (prepareFinalData da AttackActivity, a partir de
@@ -103,6 +112,20 @@ export const ONE_WAY_FOUNDRY_TO_SITE = new Set([
   'system.attributes.hp.max',
   'system.attributes.spell.dc',
   'system.attributes.spell.attack',
+  'system.attributes.ac.value',
+  'system.spells.spell1.max',
+  'system.spells.spell2.max',
+  'system.spells.spell3.max',
+  'system.spells.spell4.max',
+  'system.spells.spell5.max',
+  'system.spells.spell6.max',
+  'system.spells.spell7.max',
+  'system.spells.spell8.max',
+  'system.spells.spell9.max',
+  'system.spells.pact.max',
+  'system.resources.primary.max',
+  'system.resources.secondary.max',
+  'system.resources.tertiary.max',
 ]);
 
 // Sentidos do dnd5e 5.3+ vivem em system.attributes.senses.ranges.*; versões

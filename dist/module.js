@@ -584,7 +584,21 @@ var F, I, L, R, z, B = e((() => {
 	}, I = /* @__PURE__ */ new Set([
 		"system.attributes.hp.max",
 		"system.attributes.spell.dc",
-		"system.attributes.spell.attack"
+		"system.attributes.spell.attack",
+		"system.attributes.ac.value",
+		"system.spells.spell1.max",
+		"system.spells.spell2.max",
+		"system.spells.spell3.max",
+		"system.spells.spell4.max",
+		"system.spells.spell5.max",
+		"system.spells.spell6.max",
+		"system.spells.spell7.max",
+		"system.spells.spell8.max",
+		"system.spells.spell9.max",
+		"system.spells.pact.max",
+		"system.resources.primary.max",
+		"system.resources.secondary.max",
+		"system.resources.tertiary.max"
 	]), L = [
 		"darkvision",
 		"blindsight",

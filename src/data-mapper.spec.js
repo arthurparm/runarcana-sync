@@ -142,6 +142,20 @@ describe('ONE_WAY_FOUNDRY_TO_SITE', () => {
     expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.attributes.spell.attack')).toBe(true);
     expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.attributes.hp.value')).toBe(false);
   });
+
+  it('marca CA, slots max e recursos max como Foundry -> site só (FDD-38)', () => {
+    expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.attributes.ac.value')).toBe(true);
+    expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.spells.spell1.max')).toBe(true);
+    expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.spells.spell9.max')).toBe(true);
+    expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.spells.pact.max')).toBe(true);
+    expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.resources.primary.max')).toBe(true);
+    expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.resources.secondary.max')).toBe(true);
+    expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.resources.tertiary.max')).toBe(true);
+    // current/value continuam bidirecionais: são gasto/recuperado em jogo,
+    // não algo que só o Foundry calcula.
+    expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.spells.spell1.value')).toBe(false);
+    expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.resources.primary.value')).toBe(false);
+  });
 });
 
 describe('readItemComputedCombat', () => {

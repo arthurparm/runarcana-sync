@@ -75,6 +75,18 @@ describe('SyncManager._applyRemoteDraft — hp.max é Foundry -> site só (não 
     const updateCall = actor.update.mock.calls[0][0];
     expect(updateCall).not.toHaveProperty('system.attributes.hp.max');
   });
+
+  it('não escreve spell.dc nem spell.attack de volta no Ator (FDD-54)', async () => {
+    const actor = makeActor();
+    actor.system.attributes.spell = { dc: 15, attack: 7 };
+    const manager = new SyncManager({});
+
+    await manager._applyRemoteDraft(actor, {
+      spellcasting: { ability: 'intelligence', saveDc: 8, attackBonus: 2 },
+    });
+
+    expect(actor.update).not.toHaveBeenCalled();
+  });
 });
 
 describe('SyncManager._executeActorUpdate — If-Match / 409 (FDD-35)', () => {
@@ -192,5 +204,136 @@ describe('SyncManager.startListening — evento roll', () => {
         flags: { 'runarcana-sync': { rollId: 'roll-1', kind: 'damage' } },
       }),
     );
+  });
+});
+
+describe('SyncManager overlay — computed de combate Foundry -> site (FDD-54)', () => {
+  function makeWeapon({ id = 'w1', name = 'Espada Longa', modifier = '+7' } = {}) {
+    return {
+      id,
+      name,
+      type: 'weapon',
+      img: '',
+      labels: { modifier, toHit: modifier },
+      system: { activities: { a1: { type: 'attack', attack: { bonus: '' } } } },
+      getFlag: () => null,
+      toObject() {
+        return {
+          _id: this.id,
+          name: this.name,
+          type: this.type,
+          img: this.img,
+          system: { activities: { a1: { type: 'attack', attack: { bonus: '' } } } },
+        };
+      },
+    };
+  }
+
+  it('anexa computed.attackBonus ao serializar itens — toObject() sozinho não traz o número', () => {
+    const actor = { ...makeActor(), items: [makeWeapon()] };
+    const manager = new SyncManager({});
+    const base = {};
+
+    manager._overlayItemsOntoDraft(actor, base);
+
+    expect(base.items[0].system.activities.a1.attack).toEqual({ bonus: '' });
+    expect(base.items[0].computed).toEqual({ attackBonus: 7 });
+    expect(base.items[0].labels).toBeUndefined();
+  });
+
+  it('não anexa computed quando o item vivo não tem labels preparados', () => {
+    const item = makeWeapon();
+    delete item.labels;
+    const actor = { ...makeActor(), items: [item] };
+    const manager = new SyncManager({});
+    const base = {};
+
+    manager._overlayItemsOntoDraft(actor, base);
+
+    expect(base.items[0].computed).toBeUndefined();
+  });
+
+  it('refresca computed nos itens do draft quando o Ator muda (efeito / atributo)', () => {
+    const weapon = makeWeapon({ modifier: '+9' });
+    const actor = { ...makeActor(), items: [weapon] };
+    const manager = new SyncManager({});
+    const base = {
+      items: [{ _id: 'w1', name: 'Espada Longa', type: 'weapon', computed: { attackBonus: 5 } }],
+    };
+
+    manager._overlayActorOntoDraft(actor, base);
+
+    expect(base.items[0].computed).toEqual({ attackBonus: 9 });
+  });
+
+  it('tira computed do payload que volta pro Foundry, senão o diff de itens nunca fecha', async () => {
+    const actor = {
+      ...makeActor(),
+      items: {
+        contents: [
+          {
+            id: 'local-1',
+            getFlag: (ns, key) => (ns === 'runarcana-sync' && key === 'sourceId' ? 'w1' : undefined),
+            toObject: () => ({
+              _id: 'local-1',
+              name: 'Espada Longa',
+              type: 'weapon',
+              system: { activities: { a1: { type: 'attack', attack: { bonus: '' } } } },
+            }),
+          },
+        ],
+      },
+      createEmbeddedDocuments: vi.fn(),
+      updateEmbeddedDocuments: vi.fn(),
+      deleteEmbeddedDocuments: vi.fn(),
+    };
+    const manager = new SyncManager({});
+
+    await manager._applyRemoteDraft(actor, {
+      items: [
+        {
+          _id: 'w1',
+          name: 'Espada Longa',
+          type: 'weapon',
+          computed: { attackBonus: 7 },
+          system: { activities: { a1: { type: 'attack', attack: { bonus: '' } } } },
+        },
+      ],
+    });
+
+    expect(actor.createEmbeddedDocuments).not.toHaveBeenCalled();
+    expect(actor.updateEmbeddedDocuments).toHaveBeenCalled();
+    const updated = actor.updateEmbeddedDocuments.mock.calls[0][1][0];
+    expect(updated.computed).toBeUndefined();
+    expect(updated._id).toBe('local-1');
+  });
+
+  it('não manda computed no createEmbeddedDocuments de item novo vindo do site', async () => {
+    const actor = {
+      ...makeActor(),
+      items: { contents: [] },
+      createEmbeddedDocuments: vi.fn(),
+      updateEmbeddedDocuments: vi.fn(),
+      deleteEmbeddedDocuments: vi.fn(),
+    };
+    const manager = new SyncManager({});
+
+    await manager._applyRemoteDraft(actor, {
+      items: [
+        {
+          _id: 'w1',
+          name: 'Espada Longa',
+          type: 'weapon',
+          computed: { attackBonus: 7 },
+          system: { activities: { a1: { type: 'attack', attack: { bonus: '' } } } },
+        },
+      ],
+    });
+
+    expect(actor.createEmbeddedDocuments).toHaveBeenCalledTimes(1);
+    const created = actor.createEmbeddedDocuments.mock.calls[0][1][0];
+    expect(created.computed).toBeUndefined();
+    expect(created.name).toBe('Espada Longa');
+    expect(created.flags['runarcana-sync'].sourceId).toBe('w1');
   });
 });

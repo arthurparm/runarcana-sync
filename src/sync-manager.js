@@ -7,6 +7,7 @@ import {
   readActorTraits,
   readFoundryBiography,
   readFoundryIdentity,
+  readItemComputedCombat,
   foundrySkillValueToProficiencyLevel,
   proficiencyLevelToFoundrySkillValue,
 } from './data-mapper.js';
@@ -29,6 +30,10 @@ function cleanItemData(itemData) {
   delete cleaned.sort;
   delete cleaned.ownership;
   delete cleaned.folder;
+  // computed é Foundry -> site só (FDD-54). Sem isso o diff de itens
+  // nunca estabiliza (toObject() local não tem labels) e o create/update
+  // do Item no Foundry receberia um campo que não existe no schema.
+  delete cleaned.computed;
   if (cleaned.flags) {
     delete cleaned.flags.core;
     delete cleaned.flags.exportSource;
@@ -309,6 +314,7 @@ export class SyncManager {
 
         // Sanitiza e formata o item (Especialmente as Activities de magias como Marca da Presa)
         const sanitizedRemoteItem = sanitizeActivities(foundry.utils.deepClone(rItem));
+        delete sanitizedRemoteItem.computed;
 
         if (!lItem) {
           // Criação de novo item vindo do backend
@@ -466,6 +472,30 @@ export class SyncManager {
     const biography = readFoundryBiography(actor);
     base.identity = { ...(base.identity ?? {}), ...biography.identity };
     base.description = { ...(base.description ?? {}), ...biography.description };
+    // Ataque/CD de item dependem de atributo, efeito e estilo de luta —
+    // mudança no Ator (não no item) tem que refrescar computed sem
+    // re-serializar o array inteiro a cada tick de HP.
+    this._refreshItemComputedOntoDraft(actor, base);
+  }
+
+  // Copia labels já resolvidos do item vivo pra cima dos itens que já
+  // estão no draft. Não chama toObject() — overlay de Ator roda em HP,
+  // efeito e atributo, e o PUT full-replace não pode perder concept só
+  // porque o bônus de ataque mudou.
+  _refreshItemComputedOntoDraft(actor, base) {
+    if (!Array.isArray(base.items) || !actor.items) return;
+    const liveById = new Map();
+    for (const item of actor.items) {
+      const id = item.getFlag?.('runarcana-sync', 'sourceId') || item.id;
+      if (id) liveById.set(id, item);
+    }
+    for (const draftItem of base.items) {
+      const live = liveById.get(draftItem._id);
+      if (!live) continue;
+      const computed = readItemComputedCombat(live);
+      if (computed) draftItem.computed = computed;
+      else delete draftItem.computed;
+    }
   }
 
   _overlayItemsOntoDraft(actor, base) {
@@ -481,16 +511,21 @@ export class SyncManager {
         if (['class', 'subclass', 'race', 'background'].includes(cleaned.type) && cleaned.system) {
           delete cleaned.system.advancement;
         }
+        const computed = readItemComputedCombat(item);
+        if (computed) cleaned.computed = computed;
         itemsData.push(cleaned);
       } catch (error) {
         console.warn(`Runarcana Sync | Não foi possível serializar ${item.name} (${item.type}):`, error);
-        itemsData.push({
+        const stub = {
           _id: item.getFlag('runarcana-sync', 'sourceId') || item.id,
           name: item.name,
           type: item.type,
           img: absoluteImg(item.img),
           system: item.type === 'class' ? { levels: item.system?.levels } : {},
-        });
+        };
+        const computed = readItemComputedCombat(item);
+        if (computed) stub.computed = computed;
+        itemsData.push(stub);
       }
     }
 

@@ -5,7 +5,9 @@ import {
   readActorSenses,
   readActorTraits,
   readFoundryIdentity,
+  readItemComputedCombat,
   readTraitValues,
+  ONE_WAY_FOUNDRY_TO_SITE,
 } from './data-mapper.js';
 
 describe('foundrySkillValueToProficiencyLevel', () => {
@@ -130,5 +132,75 @@ describe('readFoundryIdentity', () => {
       hitDiceValue: 3,
       hitDiceMax: 5,
     });
+  });
+});
+
+describe('ONE_WAY_FOUNDRY_TO_SITE', () => {
+  it('marca hp.max, CD e bônus de magia como Foundry -> site só (FDD-54)', () => {
+    expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.attributes.hp.max')).toBe(true);
+    expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.attributes.spell.dc')).toBe(true);
+    expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.attributes.spell.attack')).toBe(true);
+    expect(ONE_WAY_FOUNDRY_TO_SITE.has('system.attributes.hp.value')).toBe(false);
+  });
+});
+
+describe('readItemComputedCombat', () => {
+  it('lê o to-hit numérico de item.labels.modifier (o que a ficha do dnd5e mostra)', () => {
+    expect(readItemComputedCombat({
+      labels: { modifier: '+7', toHit: '+7' },
+      toObject: () => ({ name: 'Espada' }),
+    })).toEqual({ attackBonus: 7 });
+  });
+
+  it('aceita labels.modifier negativo e zero', () => {
+    expect(readItemComputedCombat({ labels: { modifier: '-1' } })).toEqual({ attackBonus: -1 });
+    expect(readItemComputedCombat({ labels: { modifier: '0' } })).toEqual({ attackBonus: 0 });
+  });
+
+  it('não trunca fórmula residual — sem número pronto, não manda computed', () => {
+    expect(readItemComputedCombat({ labels: { modifier: '2+@mod' } })).toBeUndefined();
+  });
+
+  it('cai nos labels da activity de ataque quando o item ainda não copiou pro topo', () => {
+    expect(readItemComputedCombat({
+      system: {
+        activities: { a1: { type: 'attack', labels: { modifier: '+8' } } },
+      },
+    })).toEqual({ attackBonus: 8 });
+  });
+
+  it('lê activities como Collection iterável (formato vivo do dnd5e)', () => {
+    const activities = {
+      [Symbol.iterator]: function* () {
+        yield { type: 'attack', labels: { modifier: '6' } };
+      },
+    };
+    expect(readItemComputedCombat({ system: { activities } })).toEqual({ attackBonus: 6 });
+  });
+
+  it('lê save.dc.value preparado da activity de salvaguarda', () => {
+    expect(readItemComputedCombat({
+      system: {
+        activities: { s1: { type: 'save', save: { dc: { value: 15 } } } },
+      },
+    })).toEqual({ saveDc: 15 });
+  });
+
+  it('combina ataque e CD no mesmo item', () => {
+    expect(readItemComputedCombat({
+      labels: { modifier: '+5' },
+      system: {
+        activities: { s1: { type: 'save', save: { dc: { value: 13 } } } },
+      },
+    })).toEqual({ attackBonus: 5, saveDc: 13 });
+  });
+
+  it('devolve undefined quando não há derivado (toObject puro, sem prepare)', () => {
+    expect(readItemComputedCombat({
+      name: 'Adaga',
+      type: 'weapon',
+      system: { activities: { a1: { type: 'attack', attack: { bonus: '' } } } },
+    })).toBeUndefined();
+    expect(readItemComputedCombat(null)).toBeUndefined();
   });
 });

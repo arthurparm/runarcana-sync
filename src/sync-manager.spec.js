@@ -160,6 +160,86 @@ describe('SyncManager._executeActorUpdate — If-Match / 409 (FDD-35)', () => {
   });
 });
 
+describe('SyncManager — corrida entre atualização de Ator e de item (FDD-36)', () => {
+  function conflict(current) {
+    return Object.assign(new Error('Ficha foi modificada por outra origem desde a última leitura.'), {
+      status: 409,
+      current,
+    });
+  }
+
+  it('não perde HP nem item quando os dois PUTs clonam a mesma base e o do item chega depois no servidor', async () => {
+    const actor = makeActor();
+    actor.name = 'Lyra';
+    actor.img = '';
+    actor.items = [];
+    actor.system.attributes.hp.value = 7;
+
+    // Base que os dois debounces (Ator e item) clonam antes de qualquer um
+    // dos dois PUTs retornar — exatamente o cenário do FDD-36.
+    const stale = {
+      id: 'draft-1',
+      updatedAt: '2026-01-01T10:00:00.000Z',
+      concept: { name: 'Lyra' },
+      items: [],
+      derivedStats: { currentHp: 12, maxHp: 12 },
+    };
+    // O PUT do Ator "ganha" a corrida no servidor.
+    const afterActor = {
+      ...stale,
+      updatedAt: '2026-01-01T10:01:00.000Z',
+      derivedStats: { currentHp: 7, maxHp: 12 },
+    };
+    // Retry do item, agora em cima do que o Ator acabou de salvar.
+    const afterItem = {
+      ...afterActor,
+      updatedAt: '2026-01-01T10:02:00.000Z',
+      items: [{ _id: 'sword-1', name: 'Espada', type: 'weapon' }],
+    };
+
+    let resolveActorPut;
+    const actorPutPromise = new Promise((resolve) => {
+      resolveActorPut = resolve;
+    });
+
+    const apiClient = {
+      saveDraft: vi
+        .fn()
+        // 1ª chamada: PUT do Ator (base "stale"), fica pendente até resolveActorPut().
+        .mockImplementationOnce(() => actorPutPromise)
+        // 2ª chamada: PUT do item, clonado da mesma base "stale" — servidor já
+        // está em afterActor quando esse PUT chega, então 409.
+        .mockImplementationOnce(() => Promise.reject(conflict(afterActor)))
+        // 3ª chamada: retry do item em cima do current do 409 — sucesso.
+        .mockImplementationOnce(() => Promise.resolve(afterItem)),
+    };
+
+    const manager = new SyncManager(apiClient);
+    manager.lastKnownDraft.set(actor.id, stale);
+
+    const actorUpdate = manager._executeActorUpdate(actor, 'draft-1');
+    // Deixa o PUT do Ator disparar (e ficar pendente) antes do item clonar
+    // lastKnownDraft — ainda assim os dois partem da mesma base "stale",
+    // porque lastKnownDraft só atualiza depois que o saveDraft do Ator volta.
+    await Promise.resolve();
+    const itemUpdate = manager._executeItemUpdate(actor, 'draft-1');
+
+    resolveActorPut(afterActor);
+    await Promise.all([actorUpdate, itemUpdate]);
+
+    expect(apiClient.saveDraft).toHaveBeenCalledTimes(3);
+    expect(apiClient.saveDraft.mock.calls[0][1].updatedAt).toBe('2026-01-01T10:00:00.000Z');
+    expect(apiClient.saveDraft.mock.calls[1][1].updatedAt).toBe('2026-01-01T10:00:00.000Z');
+    const retryPayload = apiClient.saveDraft.mock.calls[2][1];
+    expect(retryPayload.updatedAt).toBe('2026-01-01T10:01:00.000Z');
+    // O retry do item parte do que o Ator já salvou — HP não se perde.
+    expect(retryPayload.derivedStats.currentHp).toBe(7);
+    // Estado final tem HP do Ator E o item novo — nenhum dos dois some.
+    expect(manager.lastKnownDraft.get(actor.id)).toEqual(afterItem);
+    expect(ui.notifications.error).not.toHaveBeenCalled();
+  });
+});
+
 describe('SyncManager.startListening — evento roll', () => {
   it('não trata payload de roll como atualização de ficha', async () => {
     global.game = { user: { isGM: true }, messages: { contents: [] } };

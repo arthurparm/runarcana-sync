@@ -696,7 +696,7 @@ function H(e) {
 	return l._evaluated = !0, l._total = e.total, l;
 }
 async function U(e, t) {
-	if (!e || !t?.id || !game.user?.isGM || V(t.id)) return;
+	if (!e || !t?.id || game.user?.id !== game.users?.activeGM?.id || V(t.id)) return;
 	let n = R(t), r = { "runarcana-sync": {
 		rollId: t.id,
 		kind: t.kind
@@ -740,6 +740,39 @@ var W, ue = e((() => {
 	};
 }));
 //#endregion
+//#region src/consume-hit-die.js
+function de(e, t) {
+	let n = e.system?.attributes?.hd?.classes;
+	return !n || typeof n.find != "function" ? null : n.find((e) => e.system?.hd?.denomination === t && e.system?.hd?.value) ?? null;
+}
+async function fe(e, t) {
+	if (!e || t?.kind !== "hit-die" || game.user?.id !== game.users?.activeGM?.id) return;
+	let n = e.system?.attributes?.hd;
+	if (!n) return;
+	let r = `d${Number(t.dieSize) || 0}`, i = {}, a = null, o = null;
+	if (e.system?.isNPC) {
+		if (!n.value) return;
+		i["system.attributes.hd.spent"] = (n.spent ?? 0) + 1;
+	} else {
+		if (a = de(e, r), !a) return;
+		o = { "system.hd.spent": a.system.hd.spent + 1 };
+	}
+	let s = e.system?.attributes?.hp, c = Math.max(0, Number(t.total) || 0);
+	if (s) {
+		let t = typeof e.calculateDamage == "function" ? e.calculateDamage([{
+			type: "healing",
+			value: c
+		}], { invertHealing: !1 }) : null, n = t ? t.amount : c, r = Math.max(0, (s.effectiveMax ?? s.max ?? 0) - (s.value ?? 0)), a = Math.min(r, n);
+		a > 0 && (i["system.attributes.hp.value"] = (s.value ?? 0) + a);
+	}
+	try {
+		Object.keys(i).length > 0 && await e.update(i), a && o && await a.update(o);
+	} catch (e) {
+		console.error("Runarcana Sync | Falha ao descontar dado de vida no Ator:", e);
+	}
+}
+var pe = e((() => {}));
+//#endregion
 //#region src/sync-manager.js
 function G(e, t) {
 	let n;
@@ -751,7 +784,7 @@ function K(e) {
 	let t = foundry.utils.deepClone(e);
 	return delete t._stats, delete t.sort, delete t.ownership, delete t.folder, t.flags && (delete t.flags.core, delete t.flags.exportSource), t;
 }
-function de(e) {
+function me(e) {
 	if (!e.system || !e.system.activities) return e;
 	let t = e.system.activities;
 	if (Array.isArray(t)) {
@@ -763,11 +796,11 @@ function de(e) {
 	} else if (typeof t == "object") for (let [e, n] of Object.entries(t)) n._id ||= e;
 	return e;
 }
-function fe(e) {
+function he(e) {
 	let t = p(e);
 	return !t || String(t).includes("mystery-man") || String(t).includes("icons/svg/item-bag") ? "" : t;
 }
-function pe(e) {
+function ge(e) {
 	let t = e.statuses;
 	return t ? typeof t.size == "number" ? [...t].map(String) : Array.isArray(t) ? t.map(String) : typeof t == "object" ? Object.keys(t) : [] : [];
 }
@@ -779,24 +812,24 @@ function q(e) {
 function J(e) {
 	return e.type === "enchantment" || e.isAppliedEnchantment === !0;
 }
-function Y(e) {
+function _e(e) {
 	let t = e.duration?.label;
 	if (!t) return "";
 	let n = String(t).trim();
 	return !n || /^(none|nenhum|permanent|permanente|indefinid)/i.test(n) ? "" : n;
 }
-function me(e, t) {
+function Y(e, t) {
 	let n = e.parent;
 	return n && n !== t && n.name ? n.name : "";
 }
 function X(e, t) {
 	let n = { name: e.name }, r = p(e.img || e.icon);
 	r && (n.img = r), e.disabled && (n.disabled = !0), e.isSuppressed && (n.isSuppressed = !0), e.isTemporary && (n.isTemporary = !0);
-	let i = pe(e);
+	let i = ge(e);
 	i.length && (n.statuses = i);
-	let a = Y(e);
+	let a = _e(e);
 	a && (n.durationLabel = a);
-	let o = me(e, t);
+	let o = Y(e, t);
 	return o && (n.source = o), n;
 }
 function Z(e) {
@@ -814,8 +847,8 @@ function Z(e) {
 function Q(e) {
 	return q(e).filter((e) => e?.name && !J(e)).map((t) => X(t, e));
 }
-var $, he = e((() => {
-	L(), _(), ue(), $ = class {
+var $, ve = e((() => {
+	L(), _(), ue(), pe(), $ = class {
 		constructor(e) {
 			this.apiClient = e, this.streams = /* @__PURE__ */ new Map(), this.activeSyncs = /* @__PURE__ */ new Set(), this.lastKnownDraft = /* @__PURE__ */ new Map(), this.debouncedActorUpdate = G(this._executeActorUpdate.bind(this), 1e3), this.debouncedItemUpdate = G(this._executeItemUpdate.bind(this), 1e3);
 		}
@@ -835,7 +868,7 @@ var $, he = e((() => {
 					}
 					let n = await this.apiClient.openStream(t, async (t) => {
 						if (t.roll) {
-							await U(e, t.roll);
+							await U(e, t.roll), await fe(e, t.roll);
 							return;
 						}
 						if (t.sourceClientId === this.apiClient.clientId) {
@@ -884,7 +917,7 @@ var $, he = e((() => {
 			}), Object.keys(n).length > 0 && await e.update(n), t.items && Array.isArray(t.items)) {
 				let n = t.items, r = e.items.contents, i = [], a = [], o = [];
 				for (let e of n) {
-					let t = r.find((t) => t.getFlag("runarcana-sync", "sourceId") === e._id || t.id === e._id), n = de(foundry.utils.deepClone(e));
+					let t = r.find((t) => t.getFlag("runarcana-sync", "sourceId") === e._id || t.id === e._id), n = me(foundry.utils.deepClone(e));
 					if (t) {
 						let r = K(t.toObject()), i = K(n);
 						if (i._id = r._id, r.flags?.["runarcana-sync"] && delete r.flags["runarcana-sync"], i.flags?.["runarcana-sync"] && delete i.flags["runarcana-sync"], JSON.stringify(r) !== JSON.stringify(i)) {
@@ -957,7 +990,7 @@ var $, he = e((() => {
 				let e = F.find(({ foundry: e }) => e === n);
 				e && foundry.utils.setProperty(t, "spellcasting.ability", e.firebase);
 			}
-			foundry.utils.setProperty(t, "concept.portraitUrl", fe(e.img)), t.conditions = Z(e), t.effects = Q(e), t.traits = T(e), t.foundryIdentity = A(e);
+			foundry.utils.setProperty(t, "concept.portraitUrl", he(e.img)), t.conditions = Z(e), t.effects = Q(e), t.traits = T(e), t.foundryIdentity = A(e);
 			let r = se(e);
 			t.identity = {
 				...t.identity ?? {},
@@ -1037,8 +1070,8 @@ var $, he = e((() => {
 			}, "salvar os itens de");
 		}
 	};
-})), ge = /* @__PURE__ */ t((() => {
-	i(), u(), re(), he();
+})), ye = /* @__PURE__ */ t((() => {
+	i(), u(), re(), ve();
 	var e = null, t = null;
 	function n(e) {
 		let t = game.settings.get("runarcana-sync", e);
@@ -1213,4 +1246,4 @@ var $, he = e((() => {
 	});
 }));
 //#endregion
-export default ge();
+export default ye();

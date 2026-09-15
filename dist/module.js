@@ -38,17 +38,16 @@ var r, i = e((() => {
 			return t.json();
 		}
 		async putCompendiumItemsBatch(e) {
-			if (!this.syncKey) throw Error("Chave de sincronização de compêndio não configurada.");
-			let t = await fetch(`${this.baseUrl}/api/compendium/items`, {
+			if (!this.syncKey && !this.mesaKey) throw Error("Configure a chave de sincronização de compêndio ou a chave da mesa.");
+			let t = { "Content-Type": "application/json" };
+			this.mesaKey && (t["X-Mesa-Key"] = this.mesaKey), this.syncKey && (t["X-Sync-Key"] = this.syncKey);
+			let n = await fetch(`${this.baseUrl}/api/compendium/items`, {
 				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-					"X-Sync-Key": this.syncKey
-				},
+				headers: t,
 				body: JSON.stringify({ items: e })
 			});
-			if (!t.ok) throw Error(`Falha ao sincronizar itens de compêndio (HTTP ${t.status}).`);
-			return t.json();
+			if (!n.ok) throw Error(`Falha ao sincronizar itens de compêndio (HTTP ${n.status}).`);
+			return n.json();
 		}
 		async saveDraft(e, t) {
 			let { assignedUserId: r, ...i } = t || {}, a = typeof i.updatedAt == "string" ? i.updatedAt.trim() : "", o = await fetch(`${this.baseUrl}/api/drafts/${e}`, {
@@ -498,10 +497,10 @@ function se(e) {
 	};
 }
 function ce(e) {
-	return e >= 2 ? "expertise" : e >= 1;
+	return e >= 2 ? "expertise" : e >= 1 || e >= .5 && "half";
 }
 function le(e) {
-	return e === "expertise" ? 2 : +!!e;
+	return e === "expertise" ? 2 : e === "half" ? .5 : +!!e;
 }
 var M, N, P, F, I, L = e((() => {
 	M = {
@@ -551,8 +550,9 @@ var M, N, P, F, I, L = e((() => {
 		"system.resources.tertiary.label": "resources.tertiary.name",
 		"system.attributes.death.success": "derivedStats.deathSaveSuccesses",
 		"system.attributes.death.failure": "derivedStats.deathSaveFailures",
-		"system.attributes.exhaustion": "derivedStats.exhaustion"
-	}, N = /* @__PURE__ */ new Set(["system.attributes.hp.max"]), P = [
+		"system.attributes.exhaustion": "derivedStats.exhaustion",
+		"system.attributes.movement.walk": "identity.movementSpeed"
+	}, N = /* @__PURE__ */ new Set(["system.attributes.hp.max", "system.attributes.movement.walk"]), P = [
 		"darkvision",
 		"blindsight",
 		"tremorsense",
@@ -1045,22 +1045,22 @@ var $, he = e((() => {
 		return typeof t == "string" ? t.trim() : "";
 	}
 	function a() {
-		let e = n("compendiumSyncKey");
-		if (!e) {
-			ui.notifications.warn("Cole a chave de sincronização de compêndio nas configurações do módulo.");
+		let e = n("compendiumSyncKey"), t = n("mesaKey");
+		if (!e && !t) {
+			ui.notifications.warn("Cole a chave de sincronização de compêndio (catálogo compartilhado) ou a chave da mesa (homebrew da sua mesa) nas configurações do módulo.");
 			return;
 		}
-		let t = n("backendUrl");
-		if (!t) {
+		let i = n("backendUrl");
+		if (!i) {
 			ui.notifications.warn("Configure a URL do backend nas configurações do módulo primeiro.");
 			return;
 		}
-		let i = new r({
-			mesaKey: n("mesaKey"),
-			baseUrl: t,
+		let a = new r({
+			mesaKey: t,
+			baseUrl: i,
 			syncKey: e
 		});
-		new C(i).render();
+		new C(a).render();
 	}
 	async function o(e, n) {
 		t?.stopListening(e), await e.unsetFlag("runarcana-sync", "draftId"), ui.notifications.info(n ?? `${e.name}: desvinculado da ficha.`);
@@ -1115,7 +1115,7 @@ var $, he = e((() => {
 			requiresReload: !0
 		}), game.settings.register("runarcana-sync", "compendiumSyncKey", {
 			name: "Chave de Sincronização de Compêndio",
-			hint: "Só para enviar itens ao catálogo compartilhado do site (COMPENDIUM_SYNC_KEY). Não é a chave da mesa nem login.",
+			hint: "Só para enviar itens ao catálogo compartilhado do site (COMPENDIUM_SYNC_KEY). Não é a chave da mesa nem login. Deixe em branco e use só a Chave da mesa (acima) para sincronizar homebrew restrito à sua mesa, em vez do catálogo público.",
 			scope: "world",
 			config: !0,
 			type: String,
